@@ -1,0 +1,97 @@
+/* Style the task boxes */
+.taskboxes {
+  display: flex;
+  flex-direction: column;
+}
+
+.taskbox {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.taskbox:hover {
+  background-color: #f0f0f0;
+}
+
+.taskbox.active {
+  background-color: #007bff;
+  color: white;
+}
+
+.background {
+  /* background-image: url('/back.png');
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+  flex-grow: 1; */
+
+  display: flex;
+  flex-grow: 1; /* This ensures the background div grows to occupy the available space */
+  justify-content: center;
+  align-items: center;
+  background-image: url('/back.png');
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+}
+
+.parafont {
+  font-size: 1.5vw;
+}
+
+.landfont {
+  font-size: 4vw;
+}
+
+.fontp {
+  font-size: 1.2vw;
+}
+
+.fonth {
+  font-size: 2vw;
+}
+
+
+.sidebartoggle {
+  height: fit-content;
+  top: 110px;
+  right: 10px;
+  z-index: 1100;
+  width: fit-content;
+  font-size: 1.5vw;
+
+}
+
+.occupy {
+  width: 100vw;
+}
+
+
+@media (min-width: 768px) {
+  .sidebartoggle {
+    display: none;
+  }
+
+  
+  .occupy {
+    width: 70vw;
+  }
+
+  .sidebar {
+    /* width: 250px;
+    position: fixed;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color: #f8f9fa;
+    padding: 20px;*/
+    /* z-index: 1000;  */
+    width: 30vw;
+    padding-left: 3vw
+  }
+
+}
