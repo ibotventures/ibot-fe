@@ -89,7 +89,7 @@ export default function CourseList() {
             courseData.map((course, index) => (
               <>
                 <div style={{ display: "flex", justifyContent: "space-between", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", borderRadius: "2vw", backgroundColor: "white", cursor: "pointer" }} onClick={() => handleclick(course.id)}>
-                  <img src={`http://127.0.0.1:8000${course.course_cover_image}`} alt={'undefined'} style={{ width: "40vw", borderRadius: "2vw 0 0 2vw", height: "28vh" }} className='img-fluid' />
+                  <Image src={`http://127.0.0.1:8000${course.course_cover_image}`} alt={'undefined'} style={{ width: "40vw", borderRadius: "2vw 0 0 2vw", height: "28vh" }} className='img-fluid' />
                   <div style={{ width: "60vw", display: "flex", flexDirection: "column", justifyContent: "space-between", padding: "2vw" }}>
                     <div>
                       <h2 style={{ fontSize: "2vw" }}>{course.course_name}</h2>

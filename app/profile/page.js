@@ -113,7 +113,7 @@ const MyComponent = () => {
                     {isLargeScreen && (
                         <Col xs="12" md="3" className="border-end" style={{ flex: "1", backgroundColor: "whitesmoke", width: "20vw", fontSize: "1.5vw" }}>
                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                                <Image width={160} height={170} src={'/profile.png'} className="img-fluid" />
+                                <Image alt='dum' width={160} height={170} src={'/profile.png'} className="img-fluid" />
                                 <p style={{ fontSize: "1.8vw" }}>Username</p>
                             </div>
 
