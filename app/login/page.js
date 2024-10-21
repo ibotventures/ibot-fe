@@ -77,7 +77,7 @@ const LoginPage = () => {
                         <br />
                         <br />
 
-                        <p style={{ textAlign: "center" }}>Don't have an account?<a href='/signup'><span>Signup/Register</span></a></p>
+                        <p style={{ textAlign: "center" }}>Don&apos;t have an account?<a href='/signup'><span>Signup/Register</span></a></p>
 
                     </form>
 

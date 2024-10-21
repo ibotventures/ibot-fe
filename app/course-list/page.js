@@ -9,6 +9,7 @@ import { FaHourglass, FaFile, FaChartBar, FaCoins, FaListAlt } from 'react-icons
 import { useRouter } from "next/navigation";
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import Image from 'next/image';
 export default function CourseList() {
 
   const [isOpen, setIsOpen] = useState(false);
