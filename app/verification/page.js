@@ -21,15 +21,19 @@ const Verification = () => {
         }
     }, [router]);
 
+
     const handleResend = async (e) => {
         e.preventDefault();
         const email = sessionStorage.getItem('email');
+
         const username = sessionStorage.getItem('username');
         settype('resend');
         try {
             const { data, status } = await axios.post('http://127.0.0.1:8000/app/sendotp/', { email, username, type });
             if (status === 201) {
                 const message = `OTP resent successfully to this email address - ${data.email}`;
+
+
                 toast.success(message);
             } else {
                 toast.error('Unsuccessful, please try again.');
@@ -43,6 +47,7 @@ const Verification = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
+
             const forget = sessionStorage.getItem('forget');
             const email = sessionStorage.getItem('email');
             const code = code1 + code2 + code3 + code4;
@@ -87,6 +92,7 @@ const Verification = () => {
             toast.error('something went wrong - Try Again');
         }
     };
+
 
     return (
         <>

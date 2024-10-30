@@ -10,34 +10,34 @@ export default function FilterCourse() {
     const [age3to5, set3to5] = useState('');
     const [age5to9, set5to9] = useState('');
     const [age9to15, set9to15] = useState('');
-    const [toggle3to5,settoggle3to5] = useState(false);
-    const [toggle5to9,settoggle5to9] = useState(false);
-    const [toggle9to15,settoggle9to15] = useState(false);
+    const [toggle3to5, settoggle3to5] = useState(false);
+    const [toggle5to9, settoggle5to9] = useState(false);
+    const [toggle9to15, settoggle9to15] = useState(false);
     const handlefilter3to5 = (filter) => {
-        if(toggle3to5 == false){
+        if (toggle3to5 == false) {
             settoggle3to5(true);
             set3to5(filter);
-        }else{
+        } else {
             settoggle3to5(false);
             set3to5('');
         }
 
     }
-    const handlefilter5to9 = (filter) =>{
-        if(toggle5to9 == false){
+    const handlefilter5to9 = (filter) => {
+        if (toggle5to9 == false) {
             settoggle5to9(true);
             set5to9(filter);
-        }else{
+        } else {
             settoggle5to9(false);
             set5to9('');
         }
     }
 
     const handlefilter9to15 = (filter) => {
-        if(toggle9to15 == false){
+        if (toggle9to15 == false) {
             settoggle9to15(true);
             set9to15(filter);
-        }else{
+        } else {
             settoggle9to15(false);
             set9to15('');
         }
@@ -51,8 +51,7 @@ export default function FilterCourse() {
                 <h2 className={styles.fonth}>Course Categories</h2>
                 <div>
                     <Input type="checkbox"
-
-                        onChange={e=>(e.target.value)={handlefilter3to5}}
+                        onChange={e => (e.target.value) = { handlefilter3to5 }}
                         value={'Age 3-5'}
                         id="3to5"
                     />
@@ -65,7 +64,9 @@ export default function FilterCourse() {
                 <div>
                     <Input type="checkbox"
 
-                        onChange={e=>(e.target.value)={handlefilter5to9}}
+
+                        onChange={e => (e.target.value) = { handlefilter5to9 }}
+
                         value={'Age 5-9'}
                         id="5to9"
                     />
@@ -77,8 +78,7 @@ export default function FilterCourse() {
                 </div>
                 <div>
                     <Input type="checkbox"
-
-                        onChange={e=>(e.target.value)={handlefilter9to15}}
+                        onChange={e => (e.target.value) = { handlefilter9to15 }}
                         value={'Age 9-15'}
                         id="9to15"
                     />
@@ -88,7 +88,6 @@ export default function FilterCourse() {
                     </Label>
                     <br />
                 </div>
-
             </div>
             <br />
             <br />

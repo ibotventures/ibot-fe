@@ -15,10 +15,10 @@ import {
     NavLink,
 } from 'reactstrap';
 
+
 const Example = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
-
     const [token, setToken] = useState('');
     const router = useRouter();
 
@@ -26,8 +26,6 @@ const Example = () => {
         const cookieToken = Cookies.get('token');
         setToken(cookieToken || '');
     }, []);
-
-
     const [isadmin, setisadmin] = useState('');
     useEffect(() => {
         setisadmin(Cookies.get('username'));
@@ -38,14 +36,16 @@ const Example = () => {
         Cookies.remove('email');
         Cookies.remove('userid');
         setToken('');
+
         router.push('/login');
     };
 
     return (
+
         <>
             <Navbar color="light" light expand="md" className="px-4 container-fluid">
                 <NavbarBrand href="/">
-                    <Image src="/IBOT.png" width={100} height={90} alt="Logo" className='img-fluid'/>
+                    <Image src="/IBOT.png" width={100} height={90} alt="Logo" className='img-fluid' />
                 </NavbarBrand>
 
                 <NavbarToggler onClick={toggle} />
@@ -132,6 +132,7 @@ const Example = () => {
                 </Collapse>
             </Navbar >
         </>
+
     );
 };
 
