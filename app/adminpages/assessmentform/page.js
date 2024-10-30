@@ -40,7 +40,7 @@ const Assessment = () => {
                 return;
             }
 
-            const module = sessionStorage.getItem('module');
+            const Mymodule = sessionStorage.getItem('module');
             const formData = new FormData();
             formData.append('question', question);
             formData.append('option1', option1);
@@ -48,7 +48,7 @@ const Assessment = () => {
             formData.append('option3', option3);
             formData.append('option4', option4);
             formData.append('answer', answer);
-            formData.append('module', module);
+            formData.append('module', Mymodule);
 
             const res = await axios.post('http://127.0.0.1:8000/app/assessmentquestion/', formData);
             if (res && res.data) {
