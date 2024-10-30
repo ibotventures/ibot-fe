@@ -9,6 +9,7 @@ import { FaHourglass, FaFile, FaChartBar, FaCoins, FaListAlt } from 'react-icons
 import { useRouter } from "next/navigation";
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import Image from 'next/image';
 export default function CourseList() {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -99,12 +100,16 @@ export default function CourseList() {
                   }}
                   onClick={() => handleclick(course.id)}
                 >
-                  <img
+                  {/* <img
                     src={`http://127.0.0.1:8000${course.course_cover_image}`}
                     alt="Course Cover"
                     style={{ width: "40vw", borderRadius: "2vw 0 0 2vw", height: "28vh" }}
                     className="img-fluid"
-                  />
+                  /> */}
+                  <Image src={`http://127.0.0.1:8000${course.course_cover_image}`}
+                    alt="Course Cover"
+                    style={{ width: "40vw", borderRadius: "2vw 0 0 2vw", height: "28vh" }}
+                    className="img-fluid" width={500} height={300} />
                   <div style={{ width: "60vw", padding: "2vw", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                     <div>
                       <h2 style={{ fontSize: "2vw" }}>{course.course_name}</h2>
