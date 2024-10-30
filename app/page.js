@@ -1,4 +1,3 @@
-
 'use client';
 import { useEffect, useState } from 'react';
 import Landingpage from '@/component/landingpage';
@@ -23,4 +22,3 @@ export default function Render() {
         </>
     );
 }
-

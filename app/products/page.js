@@ -1,12 +1,8 @@
 'use client'
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Cards from "@/component/Card";
 import Cookies from 'js-cookie';
 import {
-  Card,
-  CardImg,
-  CardImgOverlay,
-  CardText,
   InputGroup,
   Input,
   ButtonDropdown,
@@ -16,7 +12,7 @@ import {
 } from 'reactstrap';
 export default function Products() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [inputValue, setInputValue] = useState('All Products'); // Set default value to 'All Products'
+  const [inputValue, setInputValue] = useState('All Products'); 
 
   const toggleDropdown = () => {
     setDropdownOpen(prevState => !prevState);
@@ -32,7 +28,6 @@ export default function Products() {
   }, []);
   return (
     <>
-   
       <h1 style={{ textAlign: "center", margin: "20px" }}>Our Products</h1>
       <br />
       <div style={{ display: "flex", justifyContent: 'space-evenly' }}>
@@ -46,6 +41,7 @@ export default function Products() {
               <DropdownItem onClick={() => handleDropdownClick("All Products")}>
                 All Products
               </DropdownItem>
+
               <DropdownItem onClick={() => handleDropdownClick("Age 3-5")}>
                 Age 3-5
               </DropdownItem>
@@ -82,8 +78,6 @@ export default function Products() {
       <br />
       <br />
       <br />
-
-
     </>
 
   );

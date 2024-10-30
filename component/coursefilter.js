@@ -2,7 +2,7 @@
 'use client';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "@/app/page.module.css";
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Sidebar from '@/component/filtercourse';
 import Cookies from 'js-cookie';
 export default function CourseFilter() {

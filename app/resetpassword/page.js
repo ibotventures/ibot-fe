@@ -1,7 +1,7 @@
 'use client';
 import styles from "@/app/page.module.css";
 import { useRouter } from "next/navigation";
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import classNames from 'classnames';
 import Cookies from 'js-cookie';
