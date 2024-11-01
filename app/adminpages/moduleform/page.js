@@ -10,7 +10,7 @@ import { Input } from 'reactstrap';
 
 const Module = () => {
     const [module_name, setmodulename] = useState('');
-    const [module_description,setmoduledescription] = useState('');
+    const [module_description, setmoduledescription] = useState('');
     const [assessment_ques_count, setquestioncount] = useState('');
     const [overview, setoverview] = useState('');
     const [content, setcontent] = useState('');
@@ -19,9 +19,9 @@ const Module = () => {
     const router = useRouter();
 
     useEffect(() => {
-        const initialModcount = sessionStorage.getItem('modcount');
+        const initialModcount = parseInt(sessionStorage.getItem('modcount'), 10);
         if (initialModcount === null || initialModcount == 0) {
-            const modcounts = sessionStorage.getItem('module_count');
+            const modcounts = parseInt(sessionStorage.getItem('module_count'), 10);
             sessionStorage.setItem('modcount', modcounts);
             setModcount(modcounts);
         } else {
@@ -68,7 +68,7 @@ const Module = () => {
             const formData1 = new FormData();
             formData1.append('course', courseid);
             formData1.append('module_name', module_name);
-            formData1.append('module_description',module_description);
+            formData1.append('module_description', module_description);
             formData1.append('intro', overview);
             formData1.append('content', content);
             formData1.append('activity', activity);
@@ -103,7 +103,8 @@ const Module = () => {
             <div className={classNames(styles.background, styles.parafont)} style={{ display: "flex", justifyContent: "center" }} >
                 <div style={{ backgroundColor: "whitesmoke", width: "50vw", padding: "3vw", borderRadius: "20px", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", margin: "20px", height: "fit-content" }} className='container-fluid'>
                     <h2 style={{ paddingBottom: "2vw" }} className={styles.fonth}>
-                        {sessionStorage.getItem('course_names')} - module {modcount - sessionStorage.getItem('module_count') + 1} of {modcount}
+                        {/* {sessionStorage.getItem('course_names')} - module {modcount - sessionStorage.getItem('module_count') + 1} of {modcount} */}
+                        {sessionStorage.getItem('course_names')} - module {modcount - parseInt(sessionStorage.getItem('module_count'), 10) + 1} of {modcount}
                     </h2>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
@@ -119,7 +120,7 @@ const Module = () => {
                             />
                         </div><br />
                         <div className="form-group">
-                            
+
                             <Input
                                 type="textarea"
                                 onChange={e => setmoduledescription(e.target.value)}

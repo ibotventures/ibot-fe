@@ -42,7 +42,7 @@ const MyComponent = () => {
       try {
         const courseIds = sessionStorage.getItem('course');
 
-        const response = await axios.post('http://127.0.0.1:8000/app/course-preview/',
+        const response = await axios.post('http://127.0.0.1:8000/app/coursepreview/',
           { courseid: courseIds },
         );
         console.log(courseIds);
@@ -99,7 +99,7 @@ const MyComponent = () => {
     if (res.status == 200 || res.status == 201) {
       toast.success('confirmed successfully');
       sessionStorage.getItem('course', 0);
-      router.push('/course-list');
+      router.push('/courselist');
     } else {
       toast.error('Can not able to confirm, try again');
     }
