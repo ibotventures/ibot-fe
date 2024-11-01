@@ -10,12 +10,14 @@ import { useRouter } from "next/navigation";
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Image from 'next/image';
+import Cookies from 'js-cookie';
 export default function CourseList() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(true);
   const [courseData, setCourseData] = useState([]);
+  const [access, setaccess] = useState('no');
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -44,22 +46,53 @@ export default function CourseList() {
 
   useEffect(() => {
     const handlecourse = async () => {
-
+      setLoading(true);  // Start loading state
       try {
+        // Fetch course list
         const courses = await axios.get('http://127.0.0.1:8000/app/courselist/');
-        setCourseData(courses.data.data);
-        setLoading(false);
+        console.log('Courses:', courses.data);  // Log course data
+  
+        // Fetch access control
+        const userid = Cookies.get('userid');
+        
+        if (!userid) {
+          router.push('/login');
+          setLoading(false);
+          return;
+        }
+  
+        const res = await axios.get('http://127.0.0.1:8000/app/canaccesscourse/', {
+          params: { userid }
+        });
+  
+        // Check if access is allowed
+        console.log('Access response:', res.data);  // Log the access response
+        if (res.status === 200 && res.data.data === 'allow') {
+          setaccess('yes');
+        } 
+  
+        setCourseData(courses.data.data);  // Set course data
       } catch (error) {
+        console.error("Error:", error);  // Log the error
         toast.error("Something went wrong while loading course data.");
-        setLoading(false);
+      } finally {
+        setLoading(false);  // Ensure loading state is reset
       }
     }
-    handlecourse()
+  
+    handlecourse();
   }, []);
+  
 
-  const handleclick = (courseid) => {
-    sessionStorage.setItem('course', courseid)
-    router.push('/coursepreview');
+  const handleclick = async (courseid) => {
+
+    if (access == 'yes') {
+      sessionStorage.setItem('course', courseid)
+      router.push('/coursepreview');
+    } else {
+      toast.error('get subscription to access course');
+    }
+
 
   };
   const router = useRouter();
@@ -76,7 +109,19 @@ export default function CourseList() {
       <div style={{ display: "flex", justifyContent: "space-between", padding: "3.5vw" }}>
         <div className={styles.occupy}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <h1 className={styles.landfont}>Our Courses</h1>
+            <div>
+              <h1 className={styles.landfont}>Our Courses</h1>
+              {
+                access == 'no' ? (<>
+                  <p>You haven't get Subscription yet. To access course hurry up buy subscription and get access to all of our courses</p>
+                  <button className="btn btn-primary" style={{ fontSize: "1.4vw" }}>
+                    Buy Subscription
+                  </button>
+                </>) : null
+              }
+            </div>
+
+
             {/* Sidebar toggle button for mobile */}
             {isMobile && (
               <Button onClick={toggleSidebar} className={styles.sidebartoggle}>
@@ -142,9 +187,9 @@ export default function CourseList() {
                         <FaCoins style={{ color: "gold" }} size="1.5vw" />
                         <p className={styles.fontp}>{course.course_price}$</p>
                       </div>
-                      <button className="btn btn-primary" style={{ fontSize: "1.4vw" }}>
+                      {/* <button className="btn btn-primary" style={{ fontSize: "1.4vw" }}>
                         Buy
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                 </div>
