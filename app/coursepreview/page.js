@@ -182,12 +182,19 @@ const MyComponent = () => {
           <div style={{ margin: "20px" }}>
             {/* <h2 style={{ textAlign: "center" }}>Module - {selectedModule.module_name}</h2> */}
             {selectedModule.type_activity == '.pptx' || selectedModule.type_activity == '.ppt' ? (
+              //   <iframe
+              //   src={`https://view.officeapps.live.com/op/embed.aspx?src=${selectedModule.activity}`}
+              //   width="100%"
+              //   height="600px"
+              //   allowFullScreen
+              // />
               <iframe
                 src={selectedModule.activity}
                 width="100%"
                 height="600px"
                 allowFullScreen
               />
+
             ) : (
 
               <DocViewer

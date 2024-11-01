@@ -49,6 +49,7 @@ const Assessment = () => {
             formData.append('option4', option4);
             formData.append('answer', answer);
             formData.append('module', Mymodule);
+            // formData.append('module_id', Mymodule);
 
             const res = await axios.post('http://127.0.0.1:8000/app/assessmentquestion/', formData);
             if (res && res.data) {

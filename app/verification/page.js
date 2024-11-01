@@ -66,6 +66,7 @@ const Verification = () => {
                 const password = sessionStorage.getItem('password');
                 const email = sessionStorage.getItem('email');
                 const username = sessionStorage.getItem('username');
+                const mobile = sessionStorage.getItem('mobile');
                 const { data, status } = await axios.get('http://127.0.0.1:8000/app/sendotp/', {
                     params: { email, code }
                 });
@@ -73,7 +74,7 @@ const Verification = () => {
                 if (data.data == 'matched' && status == 201) {
                     const { data } = await axios.post(
                         'http://127.0.0.1:8000/app/signup/',
-                        { username, email, password }
+                        { username, email, password,mobile }
                     );
 
                     if (data) {
