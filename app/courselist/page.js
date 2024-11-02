@@ -113,7 +113,7 @@ export default function CourseList() {
               <h1 className={styles.landfont}>Our Courses</h1>
               {
                 access == 'no' ? (<>
-                  <p>You haven't get Subscription yet. To access course hurry up buy subscription and get access to all of our courses</p>
+                  <p>You haven&apos;t get Subscription yet. To access course hurry up buy subscription and get access to all of our courses</p>
                   <button className="btn btn-primary" style={{ fontSize: "1.4vw" }}>
                     Buy Subscription
                   </button>
