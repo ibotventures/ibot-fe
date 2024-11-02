@@ -18,6 +18,7 @@ export default function CourseList() {
   const [loading, setLoading] = useState(true);
   const [courseData, setCourseData] = useState([]);
   const [access, setaccess] = useState('no');
+  const router = useRouter();
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -95,7 +96,7 @@ export default function CourseList() {
 
 
   };
-  const router = useRouter();
+  
 
 
   if (loading) {
