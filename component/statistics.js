@@ -1,51 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import axios from 'axios';  
-// import CourseBarChart from '@/component/coursebarchart';
-// import UserStatusReport from "@/component/userstatusreport";
-// import CourseReport from "@/component/coursereport";
-// import '@/app/page.module.css';
-// import { toast } from 'react-toastify';
-
-// const Statistics = () => {
-//     const [statdata, setstatdata] = useState(null); // Change initial state to null
-
-//     useEffect(() => {
-//         const handlecount = async () => {
-//             try {
-//                 const res = await axios.get('http://127.0.0.1:8000/app/statistics/');
-//                 if (res.status === 200) {
-//                     console.log(res.data.data);
-//                     setstatdata(res.data.data);
-//                     toast.success('success');
-//                 }
-//             } catch (error) {
-//                 console.error("Error:", error);  // Log the error
-//                 toast.error("Something went wrong - try again");
-//             }
-//         }
-//         handlecount();
-//     }, []);
-
-//     return (
-//         <>
-//             <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-//                 <div className="chartContainer">
-//                     <UserStatusReport statdata={statdata} /> {/* Pass statdata as a prop */}
-//                 </div>
-//                 <div className="chartContainer">
-//                     <CourseReport statdata={statdata} /> {/* Pass statdata as a prop */}
-//                 </div>
-//             </div>
-//             <br/>
-//             <br/>
-//             <div className="chartContainer">
-//                 <CourseBarChart statdata={statdata} /> {/* Pass statdata as a prop */}
-//             </div>
-//         </>
-//     );
-// };
-
-// export default Statistics;
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';  
@@ -65,7 +17,6 @@ const Statistics = () => {
                 if (res.status === 200) {
                     console.log(res.data);
                     setstatdata(res.data.data); 
-                    toast.success('success');
                 }
             } catch (error) {  // Capture the error here
                 console.error("Error:", error);  // Log the error
