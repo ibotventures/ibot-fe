@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Caurosal from "@/component/carousal";
 const MyComponent = () => {
     const [selectedTask, setSelectedTask] = useState(null); // For displaying task content
     const [sidebarOpen, setSidebarOpen] = useState(false); // To handle sidebar visibility

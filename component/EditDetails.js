@@ -18,40 +18,40 @@ export default function Home() {
     const [phone, setNumber] = useState('1234567890');
     return (
         <>
-<h1 style={{ fontSize: "3vw", margin: "2vw" }}>Edit Details</h1>
-            <div style={{ display: "flex",flexDirection:"column", alignItems: "center",paddingBottom:"2vw" }}>
-                
-                <Image width={200} height={200} src={'/profile.png'} className="img-fluid" />
+            <h1 style={{ fontSize: "3vw", margin: "2vw" }}>Edit Details</h1>
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingBottom: "2vw" }}>
+
+                <Image width={200} height={200} src={'/profile.png'} className="img-fluid" alt="Description of the image" />
             </div>
 
-            
-            <form className={styles.fontp} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                <div style={{display:"flex",justifyContent:"space-between"}}>
-                <div className="form-group" style={{marginRight:"1.5vw"}}>
-                    <label htmlFor="username">FullName</label>
-                    <input
-                        type="text"
-                        onChange={e => setname(e.target.value)}
-                        value={fullname}
-                        className={classNames("form-control", styles.fontp)}
-                        id="fullname"
-                        placeholder="FullName"
-                        style={{ padding: "0.5vw",width:"24vw" }}
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="username">Username</label>
-                    <input
-                        type="text"
-                        onChange={e => setUsername(e.target.value)}
-                        value={username}
-                        className={classNames("form-control", styles.fontp)}
-                        id="username"
-                        placeholder="Username"
-                        style={{ padding: "0.5vw",width:"24vw"}}
 
-                    />
-                </div>
+            <form className={styles.fontp} style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <div className="form-group" style={{ marginRight: "1.5vw" }}>
+                        <label htmlFor="username">FullName</label>
+                        <input
+                            type="text"
+                            onChange={e => setname(e.target.value)}
+                            value={fullname}
+                            className={classNames("form-control", styles.fontp)}
+                            id="fullname"
+                            placeholder="FullName"
+                            style={{ padding: "0.5vw", width: "24vw" }}
+                        />
+                    </div>
+                    <div className="form-group">
+                        <label htmlFor="username">Username</label>
+                        <input
+                            type="text"
+                            onChange={e => setUsername(e.target.value)}
+                            value={username}
+                            className={classNames("form-control", styles.fontp)}
+                            id="username"
+                            placeholder="Username"
+                            style={{ padding: "0.5vw", width: "24vw" }}
+
+                        />
+                    </div>
                 </div>
                 <br />
                 <div className="form-group">
@@ -103,7 +103,7 @@ export default function Home() {
                     />
                 </div><br />
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div className="form-group" style={{marginRight:"1.5vw"}}>
+                    <div className="form-group" style={{ marginRight: "1.5vw" }}>
                         <label htmlFor="username">State</label>
                         <input
                             type="text"
@@ -112,7 +112,7 @@ export default function Home() {
                             className={classNames("form-control", styles.fontp)}
                             id="state"
                             placeholder="State"
-                            style={{ padding: "0.5vw",width:"24vw"}}
+                            style={{ padding: "0.5vw", width: "24vw" }}
                         />
                     </div>
                     <div className="form-group">
@@ -124,13 +124,13 @@ export default function Home() {
                             className={classNames("form-control", styles.fontp)}
                             id="city"
                             placeholder="City"
-                            style={{ padding: "0.5vw",width:"24vw"}}
+                            style={{ padding: "0.5vw", width: "24vw" }}
                         />
                     </div>
                 </div>
                 <br />
                 <div style={{ display: "flex", justifyContent: "space-between", width: "inherit" }}>
-                    <div className="form-group" style={{marginRight:"1.5vw"}}>
+                    <div className="form-group" style={{ marginRight: "1.5vw" }}>
                         <label htmlFor="username">Country</label>
                         <input
                             type="text"
@@ -139,7 +139,7 @@ export default function Home() {
                             className={classNames("form-control", styles.fontp)}
                             id="country"
                             placeholder="Country"
-                            style={{ padding: "0.5vw",width:"24vw"}}
+                            style={{ padding: "0.5vw", width: "24vw" }}
                         />
                     </div>
                     <div className="form-group">
@@ -151,22 +151,22 @@ export default function Home() {
                             placeholder="Pincode"
                             className={classNames("form-control", styles.fontp)}
                             id="pincode"
-                            style={{ padding: "0.5vw",width:"24vw"}}
+                            style={{ padding: "0.5vw", width: "24vw" }}
                         />
                     </div>
                 </div>
                 <br />
-                <div style={{display:"flex",width:"50vw",gap:"1vw"}}>
-                <button type="submit" className={classNames("btn btn-primary btn-block", styles.fontp)} style={{  borderRadius: "1vw" }}>
-                    Cancel
-                    {/* {loading ? "Loading..." : "Login"} */}
-                </button>
-                <button type="submit" className={classNames("btn btn-primary btn-block", styles.fontp)} style={{  borderRadius: "1vw" }}>
-                    Save
-                    {/* {loading ? "Loading..." : "Login"} */}
-                </button>
+                <div style={{ display: "flex", width: "50vw", gap: "1vw" }}>
+                    <button type="submit" className={classNames("btn btn-primary btn-block", styles.fontp)} style={{ borderRadius: "1vw" }}>
+                        Cancel
+                        {/* {loading ? "Loading..." : "Login"} */}
+                    </button>
+                    <button type="submit" className={classNames("btn btn-primary btn-block", styles.fontp)} style={{ borderRadius: "1vw" }}>
+                        Save
+                        {/* {loading ? "Loading..." : "Login"} */}
+                    </button>
                 </div>
-               
+
                 <br />
                 <br />
 
