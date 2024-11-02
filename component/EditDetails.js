@@ -24,9 +24,9 @@ export default function Home() {
     const [pincode, setPincode] = useState();
     const [city, setCity] = useState('');
     const [country, setCountry] = useState('');
-    const [phone, setNumber] = useState('');
+    const [mobile, setNumber] = useState('');
     const [loading, setLoading] = useState(true);
-    const [image, setimage] = useState(null);
+    const [profile, setimage] = useState(null);
     const [profileImageUrl, setProfileImageUrl] = useState('');
     const router = useRouter();
 
@@ -72,35 +72,70 @@ export default function Home() {
 
     // Handle setting object URL when `image` changes
     useEffect(() => {
-        if (image) {
-            const newImageUrl = URL.createObjectURL(image);
+        if (profile) {
+            const newImageUrl = URL.createObjectURL(profile);
             setProfileImageUrl(newImageUrl);
 
             return () => {
                 URL.revokeObjectURL(newImageUrl); // Clean up the object URL
             };
         }
-    }, [image]);
+    }, [profile]);
 
     const handlecancel = () => {
         router.push('/profile');
     }
 
+    // const handlesubmit = async (e) => {
+    //     e.preventDefault();
+    //     if (image) {
+    //         const extension = image.name.split('.').pop().toLowerCase();
+    //         if (!(['jpg', 'jpeg', 'png', 'gif'].includes(extension))) {
+    //             toast.error(`Please upload Image file like jpg,jpeg,png but you have uploaded ${extension}`);
+    //             return;
+    //         }
+    //     }
+    //     const formData = new FormData();
+    //     formData.append('id', Cookies.get('userid'));
+
+    //     const fields = ['email', 'username', 'first_name', 'last_name', 'middle_name', 'age', 'address', 'pincode', 'city', 'country', 'phone', 'state', 'image'];
+    //     fields.forEach(field => {
+    //         if (eval(field) !== userdetails[field]) {
+    //             formData.append(field, eval(field));
+    //         }
+    //     });
+
+    //     try {
+    //         const response = await axios.post(`http://127.0.0.1:8000/app/updatedetails/`, formData, {
+    //             headers: {
+    //                 'Accept': 'application/json',
+    //                 'Content-Type': 'multipart/form-data',
+    //             }
+    //         });
+    //         if (response.status === 200) {
+    //             setuserdetails(response.data.data);
+    //             toast.success('Updated successfully');
+    //         }
+    //     } catch (error) {
+    //         console.error("Error details:", error);
+    //         toast.error("Something went wrong while updating.");
+    //     }
+    // };
     const handlesubmit = async (e) => {
         e.preventDefault();
-        if (image) {
-            const extension = image.name.split('.').pop().toLowerCase();
+        if (profile) {
+            const extension = profile.name.split('.').pop().toLowerCase();
             if (!(['jpg', 'jpeg', 'png', 'gif'].includes(extension))) {
-                toast.error(`Please upload Image file like jpg,jpeg,png but you have uploaded ${extension}`);
+                toast.error(`Please upload an image file in jpg, jpeg, or png format. You uploaded a ${extension} file.`);
                 return;
             }
         }
         const formData = new FormData();
         formData.append('id', Cookies.get('userid'));
 
-        const fields = ['email', 'username', 'first_name', 'last_name', 'middle_name', 'age', 'address', 'pincode', 'city', 'country', 'phone', 'state', 'image'];
+        const fields = ['email', 'username', 'first_name', 'last_name', 'middle_name', 'age', 'address', 'pincode', 'city', 'country', 'mobile', 'state', 'profile'];
         fields.forEach(field => {
-            if (eval(field) !== userdetails[field]) {
+            if (eval(field) !== userdetails[field] && eval(field)!=null) {
                 formData.append(field, eval(field));
             }
         });
@@ -149,7 +184,7 @@ export default function Home() {
 
                     <input
                         type="file"
-                        accept="image/*"
+                        accept="profile/*"
                         onChange={e => setimage(e.target.files[0])}
                         style={{ display: "none" }}
                         id="fileUpload"
@@ -232,9 +267,9 @@ export default function Home() {
                     <input
                         type="text"
                         onChange={e => setNumber(e.target.value)}
-                        value={phone}
+                        value={mobile}
                         className={classNames("form-control", styles.fontp)}
-                        id="phone"
+                        id="mobile"
                         placeholder="Phone Number"
                         style={{ padding: "0.5vw", width: "50vw" }}
                     />
