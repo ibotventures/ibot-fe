@@ -167,7 +167,7 @@ const AddCourse = () => {
                                 <option>Select Age Category</option>
                                 <option>Age 3-5</option>
                                 <option>Age 5-9</option>
-                                <option>Age 9-15</option>
+                                <option>Age 9+</option>
                             </Input>
 
                         </div><br />
