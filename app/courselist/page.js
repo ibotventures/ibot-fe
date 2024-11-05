@@ -49,11 +49,7 @@ export default function CourseList() {
     const handlecourse = async () => {
       setLoading(true);  // Start loading state
       try {
-<<<<<<< HEAD
-        const courses = await axios.get('http://127.0.0.1:8000/app/courselist/');
-        setCourseData(courses.data.data);
-        setLoading(false);
-=======
+
         // Fetch course list
         const courses = await axios.get('http://127.0.0.1:8000/app/courselist/');
         console.log('Courses:', courses.data);  // Log course data
@@ -76,7 +72,7 @@ export default function CourseList() {
 
 
         setCourseData(courses.data.data);  // Set course data
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
+
       } catch (error) {
         console.error("Error:", error);  // Log the error
         toast.error("Something went wrong while loading course data.");
@@ -100,13 +96,6 @@ export default function CourseList() {
       toast.error("You haven't logged in yet");
       router.push('/login');
     }
-
-<<<<<<< HEAD
-  const handleclick = (courseid) => {
-    sessionStorage.setItem('course', courseid)
-    router.push('/coursepreview');
-=======
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
 
   };
 
@@ -202,15 +191,11 @@ export default function CourseList() {
                         <FaCoins style={{ color: "gold" }} size="1.5vw" />
                         <p className={styles.fontp}>{course.course_price}$</p>
                       </div>
-<<<<<<< HEAD
-                      <button className="btn btn-primary" style={{ fontSize: "1.4vw" }}>
-                        Buy
-                      </button>
-=======
+
                       {/* <button className="btn btn-primary" style={{ fontSize: "1.4vw" }}>
                         Buy
                       </button> */}
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
+
                     </div>
                   </div>
                 </div>
