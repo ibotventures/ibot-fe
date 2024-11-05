@@ -77,16 +77,12 @@ const AddCourse = () => {
             formData.append('product_price', product_price);
             formData.append('product_quantity', quantity);
             formData.append('status', toggle);
-<<<<<<< HEAD
-            formData.append('email', Cookies.get('email'));
-            formData.append('password', admin_pass);
 
-=======
             formData.append('id', Cookies.get('userid'));
             formData.append('password', admin_pass);
 
             // const res = await axios.post('http://127.0.0.1:8000/app/offlinepurchase/', formData);
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
+
             const res = await axios.post('http://127.0.0.1:8000/app/offlinepurchase/', formData);
             if (res && res.data) {
                 if (res.status === 200 || res.status === 201) {
