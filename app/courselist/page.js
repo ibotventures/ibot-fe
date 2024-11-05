@@ -57,26 +57,24 @@ export default function CourseList() {
         // Fetch course list
         const courses = await axios.get('http://127.0.0.1:8000/app/courselist/');
         console.log('Courses:', courses.data);  // Log course data
-  
+
         // Fetch access control
         const userid = Cookies.get('userid');
-        
-        if (!userid) {
-          router.push('/login');
-          setLoading(false);
-          return;
+
+        if (userid) {
+          const res = await axios.get('http://127.0.0.1:8000/app/canaccesscourse/', {
+            params: { userid }
+          });
+
+          // Check if access is allowed
+          console.log('Access response:', res.data);  // Log the access response
+          if (res.status === 200 && res.data.data === 'allow') {
+            setaccess('yes');
+          }
+
         }
-  
-        const res = await axios.get('http://127.0.0.1:8000/app/canaccesscourse/', {
-          params: { userid }
-        });
-  
-        // Check if access is allowed
-        console.log('Access response:', res.data);  // Log the access response
-        if (res.status === 200 && res.data.data === 'allow') {
-          setaccess('yes');
-        } 
-  
+
+
         setCourseData(courses.data.data);  // Set course data
 >>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
       } catch (error) {
@@ -86,18 +84,21 @@ export default function CourseList() {
         setLoading(false);  // Ensure loading state is reset
       }
     }
-  
+
     handlecourse();
   }, []);
-  
+
 
   const handleclick = async (courseid) => {
-
+    const userid = Cookies.get('userid');
     if (access == 'yes') {
       sessionStorage.setItem('course', courseid)
       router.push('/coursepreview');
-    } else {
+    } else if (userid && access == 'no') {
       toast.error('get subscription to access course');
+    } else {
+      toast.error("You haven't logged in yet");
+      router.push('/login');
     }
 
 <<<<<<< HEAD
@@ -108,7 +109,7 @@ export default function CourseList() {
 >>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
 
   };
-  
+
 
 
 
