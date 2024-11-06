@@ -85,7 +85,7 @@ const Module = () => {
                 setmodulename('');
                 setmoduledescription('');
                 setoverview('');
-                setquestioncount(null);
+                setquestioncount('');
                 console.log(response.data.data);
                 router.push('/adminpages/assessmentform');
             }
