@@ -63,14 +63,10 @@ const Module = () => {
 
             const courseid = sessionStorage.getItem('course');
             sessionStorage.setItem('assess_ques_count', assessment_ques_count);
-
-
             const formData1 = new FormData();
             formData1.append('course', courseid);
             formData1.append('module_name', module_name);
-
             formData1.append('module_description', module_description);
-
             formData1.append('intro', overview);
             formData1.append('content', content);
             formData1.append('activity', activity);

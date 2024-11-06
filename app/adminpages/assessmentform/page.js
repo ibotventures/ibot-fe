@@ -1,7 +1,7 @@
 "use client";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "@/app/page.module.css";
-import { useRouter } from "next/navigation";
+import { useRouter,useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import classNames from 'classnames';
@@ -16,7 +16,8 @@ const Assessment = () => {
     const [answer, setanswer] = useState('');
     const [asscount, setAsscount] = useState('');
     const router = useRouter();
-
+    // const searchParams = useSearchParams();
+    // const ided = searchParams.get('id'); // Retrieve `id` from query parameters
     useEffect(() => {
         const initialAsscount = sessionStorage.getItem('asscount');
         if (initialAsscount === null || initialAsscount == 0) {
