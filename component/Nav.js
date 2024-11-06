@@ -15,7 +15,6 @@ import {
     NavLink,
 } from 'reactstrap';
 
-
 const Example = () => {
     const [isOpen, setIsOpen] = useState(false);
     const toggle = () => setIsOpen(!isOpen);
