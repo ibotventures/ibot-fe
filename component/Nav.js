@@ -33,8 +33,9 @@ const Example = () => {
 
     const handleSubmit = () => {
         Cookies.remove('token');
-        Cookies.remove('email');
+        Cookies.remove('username');
         Cookies.remove('userid');
+        // Cookies.remove('subscription');
         setToken('');
 
         router.push('/login');
@@ -115,7 +116,7 @@ const Example = () => {
                                             </NavLink>
                                         </NavItem>
                                         <NavItem onClick={handleSubmit} style={{ cursor: "pointer" }}>
-                                            <NavLink className={classNames(styles.parafont, 'mx-3')}>Logout / SignOut</NavLink>
+                                            <NavLink className={classNames(styles.parafont, 'mx-3')}>Logout</NavLink>
                                         </NavItem>
 
                                     </>

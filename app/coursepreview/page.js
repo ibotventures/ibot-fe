@@ -89,7 +89,7 @@ const MyComponent = () => {
     const courseId = sessionStorage.getItem('course');
     const res = await axios.post('http://127.0.0.1:8000/app/confirm/', { courseid: courseId });
     if (res.status == 200 || res.status == 201) {
-      if (!courseData.isconfirmed) {
+      if (courseData.isconfirmed) {
         toast.success("removed successfully")
       } else {
         toast.success('confirmed successfully');
