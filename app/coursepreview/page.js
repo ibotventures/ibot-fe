@@ -129,8 +129,10 @@ const MyComponent = () => {
     sessionStorage.setItem('course', id);
     router.push('/adminpages/moduleform');
   }
-  const handleedit = (id) => {
-
+  const handleedit = (id, type) => {
+    sessionStorage.setItem('tasktype', type);
+    sessionStorage.setItem('modupdateid', id);
+    router.push('/adminpages/edittask');
   }
 
   const handleassdel = async (modid, quesid) => {
@@ -437,7 +439,7 @@ const MyComponent = () => {
                       <div>{module.module_name}</div>
                       {Cookies.get('username') === 'Administrator' ? (
                         <div style={{ paddingLeft: "50px" }}>
-                          <FaEdit style={{ color: 'blue', cursor: 'pointer', marginLeft: '20px' }} onClick={() => handleedit(module.id)} />
+
                           <FaTrash onClick={() => confirmDelete(module.id)} className="text-danger cursor-pointer" style={{ cursor: 'pointer', marginLeft: '50px' }} />
                         </div>
                       ) : null}
@@ -446,14 +448,26 @@ const MyComponent = () => {
                   </AccordionHeader>
                   <AccordionBody accordionId={`${module.id}`}>
                     <div className={styles.taskboxes}>
-                      <div className={styles.taskbox} onClick={() => handleTaskClick("intro")}>
+                      <div className={styles.taskbox} onClick={() => handleTaskClick("intro")} style={{ display: "flex", justifyContent: "space-between" }}>
                         Overview
+                        <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                          e.stopPropagation();
+                          handleedit(module.id, 'overview');
+                        }} />
                       </div>
-                      <div className={styles.taskbox} onClick={() => handleTaskClick("main")}>
+                      <div className={styles.taskbox} onClick={() => handleTaskClick("main")} style={{ display: "flex", justifyContent: "space-between" }}>
                         Main Content
+                        <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                          e.stopPropagation();
+                          handleedit(module.id, 'content');
+                        }} />
                       </div>
-                      <div className={styles.taskbox} onClick={() => handleTaskClick("activity")}>
+                      <div className={styles.taskbox} onClick={() => handleTaskClick("activity")} style={{ display: "flex", justifyContent: "space-between" }}>
                         Activity
+                        <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                          e.stopPropagation();
+                          handleedit(module.id, 'activity');
+                        }} />
                       </div>
                       <div className={styles.taskbox} onClick={() => handleTaskClick("assessment")}>
                         Assessment
@@ -490,12 +504,12 @@ const MyComponent = () => {
                   {courseData.modules.map((module, index) => (
                     <AccordionItem key={module.id}>
                       <AccordionHeader targetId={`${module.id}`} onClick={() => handleModuleClick(module)}>
-                        <div style={{ display: 'flex', justifyContent: "space-between",width:"100%",paddingRight:"20px" }}>
+                        <div style={{ display: 'flex', justifyContent: "space-between", width: "100%", paddingRight: "20px" }}>
                           <div>{module.module_name}</div>
                           {Cookies.get('username') === 'Administrator' ? (
-                          
+
                             <div>
-                              <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={() => handleedit(module.id)} />
+
                               <FaTrash onClick={() => confirmDelete(module.id)} className="text-danger cursor-pointer" style={{ cursor: 'pointer', marginLeft: '20px' }} />
                             </div>
                           ) : null}
@@ -503,14 +517,26 @@ const MyComponent = () => {
                       </AccordionHeader>
                       <AccordionBody accordionId={`${module.id}`}>
                         <div className={styles.taskboxes}>
-                          <div className={styles.taskbox} onClick={() => handleTaskClick("intro")}>
+                          <div className={styles.taskbox} onClick={() => handleTaskClick("intro")} style={{ display: "flex", justifyContent: "space-between" }}>
                             Overview
+                            <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                              e.stopPropagation();
+                              handleedit(module.id, 'overview');
+                            }} />
                           </div>
-                          <div className={styles.taskbox} onClick={() => handleTaskClick("main")}>
+                          <div className={styles.taskbox} onClick={() => handleTaskClick("main")} style={{ display: "flex", justifyContent: "space-between" }}>
                             Main Content
+                            <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                              e.stopPropagation();
+                              handleedit(module.id, 'content');
+                            }} />
                           </div>
-                          <div className={styles.taskbox} onClick={() => handleTaskClick("activity")}>
+                          <div className={styles.taskbox} onClick={() => handleTaskClick("activity")} style={{ display: "flex", justifyContent: "space-between" }}>
                             Activity
+                            <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                              e.stopPropagation();
+                              handleedit(module.id, 'activity');
+                            }} />
                           </div>
                           <div className={styles.taskbox} onClick={() => handleTaskClick("assessment")}>
                             Assessment
