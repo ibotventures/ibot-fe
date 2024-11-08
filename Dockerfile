@@ -20,4 +20,4 @@ RUN yarn build
 EXPOSE 3000
 
 # Start the Next.js server
-CMD ["yarn", "run", "dev"]
+CMD ["yarn", "start"]
