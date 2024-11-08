@@ -47,7 +47,7 @@ const AddCourse = () => {
             formData.append('age_category', age_category);
             formData.append('product_cover_image', product_image);
 
-            const res = await axios.post('http://127.0.0.1:8000/app/addproduct/', formData, config);
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/addproduct/`, formData, config);
 
             if (res && res.data) {
                 if (res.status === 200 || res.status === 201) {

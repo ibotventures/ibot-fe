@@ -15,7 +15,7 @@ const Statistics = () => {
     useEffect(() => {
         const handlecount = async () => {
             try {
-                const res = await axios.get('http://127.0.0.1:8000/app/statistics/');
+                const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/statistics`);
                 if (res.status === 200) {
                     console.log(res.data);
                     setstatdata(res.data.data); 
