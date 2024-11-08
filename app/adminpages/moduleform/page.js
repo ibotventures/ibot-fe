@@ -10,11 +10,7 @@ import { Input } from 'reactstrap';
 
 const Module = () => {
     const [module_name, setmodulename] = useState('');
-<<<<<<< HEAD
-    const [module_description,setmoduledescription] = useState('');
-=======
     const [module_description, setmoduledescription] = useState('');
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
     const [assessment_ques_count, setquestioncount] = useState('');
     const [overview, setoverview] = useState('');
     const [content, setcontent] = useState('');
@@ -67,16 +63,10 @@ const Module = () => {
 
             const courseid = sessionStorage.getItem('course');
             sessionStorage.setItem('assess_ques_count', assessment_ques_count);
-
-
             const formData1 = new FormData();
             formData1.append('course', courseid);
             formData1.append('module_name', module_name);
-<<<<<<< HEAD
-            formData1.append('module_description',module_description);
-=======
             formData1.append('module_description', module_description);
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
             formData1.append('intro', overview);
             formData1.append('content', content);
             formData1.append('activity', activity);
@@ -95,7 +85,7 @@ const Module = () => {
                 setmodulename('');
                 setmoduledescription('');
                 setoverview('');
-                setquestioncount(null);
+                setquestioncount('');
                 console.log(response.data.data);
                 router.push('/adminpages/assessmentform');
             }
@@ -128,11 +118,9 @@ const Module = () => {
                             />
                         </div><br />
                         <div className="form-group">
-<<<<<<< HEAD
-                            
-=======
 
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
+
+
                             <Input
                                 type="textarea"
                                 onChange={e => setmoduledescription(e.target.value)}

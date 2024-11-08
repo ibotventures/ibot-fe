@@ -25,7 +25,7 @@ const LoginPage = () => {
                 Cookies.set('username',data.username,{expires: 7});
                 Cookies.set('token', token, { expires: 7 });
                 Cookies.set('userid',data.user_id,{expires: 7});
-                Cookies.set('subscription',data.subscription,{expires: 7});
+                // Cookies.set('subscription',data.subscription,{expires: 7});
                 toast.success(`Logged in successfully`);
                 router.push('/');
             } else {

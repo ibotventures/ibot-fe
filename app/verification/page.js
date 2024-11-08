@@ -66,10 +66,9 @@ const Verification = () => {
                 const password = sessionStorage.getItem('password');
                 const email = sessionStorage.getItem('email');
                 const username = sessionStorage.getItem('username');
-<<<<<<< HEAD
-=======
+
                 const mobile = sessionStorage.getItem('mobile');
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
+
                 const { data, status } = await axios.get('http://127.0.0.1:8000/app/sendotp/', {
                     params: { email, code }
                 });
@@ -77,11 +76,9 @@ const Verification = () => {
                 if (data.data == 'matched' && status == 201) {
                     const { data } = await axios.post(
                         'http://127.0.0.1:8000/app/signup/',
-<<<<<<< HEAD
-                        { username, email, password }
-=======
+
                         { username, email, password,mobile }
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
+
                     );
 
                     if (data) {

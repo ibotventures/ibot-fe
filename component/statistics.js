@@ -1,17 +1,12 @@
-<<<<<<< HEAD
-import React from 'react';
-=======
+
 
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';  
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
 import CourseBarChart from '@/component/coursebarchart';
 import UserStatusReport from "@/component/userstatusreport";
 import CourseReport from "@/component/coursereport";
 import '@/app/page.module.css';
-<<<<<<< HEAD
-const Statistics = () => {
-=======
+
 import { toast } from 'react-toastify';
 
 const Statistics = () => {
@@ -60,30 +55,11 @@ const Statistics = () => {
         },
     ];
 
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
     return (
         <>
             <div style={{ display: "flex", justifyContent: "space-evenly" }}>
                 <div className="chartContainer">
-<<<<<<< HEAD
-                    <UserStatusReport />
-                </div>
-                <div className="chartContainer">
-                    <CourseReport />
-                </div>
-            </div>
-            <br/>
-            <br/>
-            <div className="chartContainer">
-                <CourseBarChart />
-            </div>
-        </>
-    );
 
-};
-
-export default Statistics;
-=======
                     <UserStatusReport statdata={statdata} />
                 </div>
                 <div className="chartContainer">
@@ -102,4 +78,3 @@ export default Statistics;
 export default Statistics;
 
 
->>>>>>> 95b21899eb8bbe8c6f189d2f063bd10152d6a990
