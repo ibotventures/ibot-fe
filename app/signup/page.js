@@ -25,13 +25,10 @@ const SignUpPage = () => {
         try {
             if (password === confPassword) {
                 if (!(password.length < 6)) {
-
-                    sessionStorage.setItem('password', password);
                     sessionStorage.setItem('email', email);
-                    sessionStorage.setItem('mobile', mobile);
                     sessionStorage.setItem('username', username);
                     const type = 'send';
-                    const response = await axios.post('http://127.0.0.1:8000/app/sendotp/', { email,username,type });
+                    const response = await axios.post('http://127.0.0.1:8000/app/sendotp/', { email,username,mobile,password });
                     const { data, status } = response;
 
                     if (data.data === 'email_found') {
@@ -46,12 +43,10 @@ const SignUpPage = () => {
 
                     if ((status === 200 || status === 201) && data.data.isfound === 'notfound') {
                         const message = `Email sent to ${data.data.email}. If this email is wrong, go back and sign up again, or if the OTP is not received, click resend OTP.`;
-                        sessionStorage.setItem('type', data.data.type);
+                        sessionStorage.setItem('type', type);
                         toast.success(message);
                         router.push('/verification');
-                    } else {
-                        toast.error(`Email does not exist. Status: ${status}`);
-                    }
+                    } 
                 } else {
                     toast.error("The password should be atleast 6 characters long");
                 }

@@ -18,7 +18,6 @@ const UserStatusReport = ({ statdata }) => {
       {
 
         data: [purchasedUsers, subscribedUsers, visitors, admins], // Use the initialized values
-
         backgroundColor: ['#4CAF50', '#F44336', '#FF9800', '#2196F3'],
         borderWidth: 2,
       },

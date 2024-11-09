@@ -25,7 +25,7 @@ export default function Home() {
         if (!courseIdToDelete) return;
 
         try {
-            const response = await axios.delete(`http://127.0.0.1:8000/app/deletecourse/${courseIdToDelete}/`);
+            const response = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/deletecourse/${courseIdToDelete}/`);
             if (response.status === 200) {
                 toast.success('Course deleted successfully');
                 setcoursedata(prevData => prevData.filter(course => course.id !== courseIdToDelete));
@@ -58,7 +58,7 @@ export default function Home() {
     useEffect(() => {
         const handleCourse = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/app/uploadcourse/');
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/uploadcourse/`);
                 if (response.status === 200) {
                     if (response.data.data !== 'empty') {
                         const data = response.data.data;
@@ -93,7 +93,7 @@ export default function Home() {
                             onClick={() => handleClick(course.id)}
                         >
                             <Image
-                                src={`http://127.0.0.1:8000${course.course_cover_image}`}
+                                src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${course.course_cover_image}`}
                                 alt="Course Cover"
                                 style={{ width: "40vw", borderRadius: "2vw 0 0 2vw", height: "28vh" }}
                                 className="img-fluid"

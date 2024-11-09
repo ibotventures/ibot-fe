@@ -6,8 +6,6 @@ import PurchasedCourse from '@/component/PurchasedCourse';
 import EditDetails from '@/component/EditDetails';
 import Statistics from "@/component/statistics.js";
 import '@/app/page.module.css';
-import Details from '@/component/Details';
-import Product from "@/component/productcaurosal";
 import Delete from '@/component/DeleteAccount';
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -19,9 +17,14 @@ const MyComponent = () => {
     const [sidebarOpen, setSidebarOpen] = useState(false); // To handle sidebar visibility
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768); // For responsive handling
     const [isadmin, setisadmin] = useState('');
+    const [upadteuser, setuser] = useState(Cookies.get('username'));
+    
     useEffect(() => {
-        setisadmin(Cookies.get('username'));
+        const username = Cookies.get('username');
+        setisadmin(username);
     }, []);
+
+
 
     useEffect(() => {
         // Update screen size on window resize
@@ -44,14 +47,12 @@ const MyComponent = () => {
         if (isadmin != 'Administrator') {
             if (!selectedTask) return (
                 <>
-                    <EditDetails />
-
+                    <EditDetails upadteuser={upadteuser} setuser={setuser} />
                 </>
-
             );
 
             switch (selectedTask) {
-              
+
                 case 'delete':
                     return (
                         <div className='container-fluid'>
@@ -73,7 +74,7 @@ const MyComponent = () => {
                 case 'edit':
                     return (
                         <div>
-                            <EditDetails />
+                            <EditDetails upadteuser={upadteuser} setuser={setuser} />
                         </div>
                     );
                 default:
@@ -82,13 +83,12 @@ const MyComponent = () => {
         } else {
             if (!selectedTask) return (
                 <>
-                    <EditDetails />
-
+                    <EditDetails upadteuser={upadteuser} setuser={setuser} />
                 </>
 
             );
             switch (selectedTask) {
-               
+
                 case 'coursedetails':
                     return (
                         <div>
@@ -98,13 +98,13 @@ const MyComponent = () => {
                 case 'statistics':
                     return (
                         <div>
-                            <Statistics/>
+                            <Statistics />
                         </div>
                     );
                 case 'edit':
                     return (
                         <div>
-                            <EditDetails />
+                            <EditDetails upadteuser={upadteuser} setuser={setuser} />
                         </div>
                     );
                 default:
@@ -140,7 +140,7 @@ const MyComponent = () => {
 
                     {isadmin == 'Administrator' ? (
                         <>
-                            
+
                             <p onClick={() => handleTaskClick('edit')}>Edit your Details</p>
                             <p onClick={() => handleTaskClick('statistics')}>Statistics</p>
                             <p onClick={() => handleTaskClick('coursedetails')}>Course details</p>
@@ -148,8 +148,8 @@ const MyComponent = () => {
                         </>
                     ) : (
                         <>
-                            
-                            <p onClick={() => handleTaskClick('purcourse')}>Purchased Courses</p>
+
+                           
                             <p onClick={() => handleTaskClick('purhistory')}>purchase history</p>
                             <p onClick={() => handleTaskClick('edit')}>Edit  Details</p>
                             <p onClick={() => handleTaskClick('delete')}>delete Account</p>
@@ -162,14 +162,14 @@ const MyComponent = () => {
                     {isLargeScreen && (
                         <Col xs="12" md="3" className="border-end" style={{ flex: "1", backgroundColor: "whitesmoke", width: "20vw", fontSize: "1.5vw" }}>
                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                                <Image width={160} height={170} src={'/profile.png'} className="img-fluid" alt="Description of the image"/>
-                                <p style={{ fontSize: "1.8vw" }}>Username</p>
+                                <Image width={160} height={170} src={'/profile.png'} className="img-fluid" alt="Description of the image" />
+                                <p style={{ fontSize: "1.8vw" }}>{upadteuser}</p>
                             </div>
 
                             <br />
                             {isadmin == 'Administrator' ? (
                                 <>
-                                    
+
                                     <p onClick={() => handleTaskClick('edit')}>Edit your Details</p>
                                     <p onClick={() => handleTaskClick('statistics')}>Statistics</p>
                                     <p onClick={() => handleTaskClick('coursedetails')}>Course details</p>
@@ -177,8 +177,8 @@ const MyComponent = () => {
                                 </>
                             ) : (
                                 <>
-                                    
-                                    <p onClick={() => handleTaskClick('purcourse')}>Purchased Courses</p>
+
+                                  
                                     <p onClick={() => handleTaskClick('purhistory')}>purchase history</p>
                                     <p onClick={() => handleTaskClick('edit')}>Edit  Details</p>
                                     <p onClick={() => handleTaskClick('delete')}>delete Account</p>
@@ -195,7 +195,7 @@ const MyComponent = () => {
                         </div>
                     </Col>
                 </Row >
-                
+
             </Container >
 
         </>
@@ -203,3 +203,6 @@ const MyComponent = () => {
 };
 
 export default MyComponent;
+
+
+

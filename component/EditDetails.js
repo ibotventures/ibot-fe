@@ -11,11 +11,11 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-export default function Home() {
+export default function Home({ upadteuser, setuser }) {
     const [userdetails, setuserdetails] = useState(null);
     const [email, setemail] = useState('');
     const [state, setState] = useState('');
-    const [username, setUsername] = useState('');
+    const [username, setUsername] = useState(upadteuser);
     const [first_name, setfirstname] = useState('');
     const [last_name, setlastname] = useState('');
     const [middle_name, setmiddlename] = useState('');
@@ -58,7 +58,7 @@ export default function Home() {
                 setmiddlename(data.middle_name || '');
                 setAddress(data.address || '');
                 setAge(data.age || '');
-                if (data.profile) setProfileImageUrl(`http://127.0.0.1:8000${data.profile}`); // Use server-provided image URL if available
+                if (data.profile) setProfileImageUrl(`http://127.0.0.1:8000${data.profile}`); 
 
                 setLoading(false);
             } catch (error) {
@@ -69,7 +69,10 @@ export default function Home() {
         };
         handleDetail();
     }, []);
-
+    useEffect(() => {
+        setUsername(upadteuser); // Initialize the username if it changes
+    }, [upadteuser]);
+   
     // Handle setting object URL when `image` changes
     useEffect(() => {
         if (profile) {
@@ -86,41 +89,6 @@ export default function Home() {
         router.push('/profile');
     }
 
-    // const handlesubmit = async (e) => {
-    //     e.preventDefault();
-    //     if (image) {
-    //         const extension = image.name.split('.').pop().toLowerCase();
-    //         if (!(['jpg', 'jpeg', 'png', 'gif'].includes(extension))) {
-    //             toast.error(`Please upload Image file like jpg,jpeg,png but you have uploaded ${extension}`);
-    //             return;
-    //         }
-    //     }
-    //     const formData = new FormData();
-    //     formData.append('id', Cookies.get('userid'));
-
-    //     const fields = ['email', 'username', 'first_name', 'last_name', 'middle_name', 'age', 'address', 'pincode', 'city', 'country', 'phone', 'state', 'image'];
-    //     fields.forEach(field => {
-    //         if (eval(field) !== userdetails[field]) {
-    //             formData.append(field, eval(field));
-    //         }
-    //     });
-
-    //     try {
-    //         const response = await axios.post(`http://127.0.0.1:8000/app/updatedetails/`, formData, {
-    //             headers: {
-    //                 'Accept': 'application/json',
-    //                 'Content-Type': 'multipart/form-data',
-    //             }
-    //         });
-    //         if (response.status === 200) {
-    //             setuserdetails(response.data.data);
-    //             toast.success('Updated successfully');
-    //         }
-    //     } catch (error) {
-    //         console.error("Error details:", error);
-    //         toast.error("Something went wrong while updating.");
-    //     }
-    // };
     const handlesubmit = async (e) => {
         e.preventDefault();
         if (profile) {
@@ -149,6 +117,8 @@ export default function Home() {
             });
             if (response.status === 200) {
                 setuserdetails(response.data.data);
+                Cookies.set('username',username);
+                setuser(username);  
                 toast.success('Updated successfully');
             }
         } catch (error) {
