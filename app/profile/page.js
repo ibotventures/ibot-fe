@@ -38,7 +38,6 @@ const MyComponent = () => {
         };
     }, []);
 
-
     const handleTaskClick = (task) => {
         setSelectedTask(task); // Set selected task to display content
     };

@@ -43,7 +43,7 @@ const MyComponent = () => {
     const fetchCoursePreview = async () => {
       try {
         const courseIds = sessionStorage.getItem('course');
-        const response = await axios.post('http://127.0.0.1:8000/app/coursepreview/',
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/coursepreview/`,
           { courseid: courseIds },
         );
         console.log(courseIds);
@@ -78,16 +78,16 @@ const MyComponent = () => {
   const handleModuleClick = (module) => {
     setSelectedModule(module);
     setSelectedTask("intro");
-    setOverviewDocs([{ uri: `http://127.0.0.1:8000/${module.intro}` }]);
-    setContentDocs([{ uri: `http://127.0.0.1:8000/${module.content}` }]);
-    setActivityDocs([{ uri: `http://127.0.0.1:8000/${module.activity}` }]);
+    setOverviewDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.intro}` }]);
+    setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.content}` }]);
+    setActivityDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.activity}` }]);
   };
   const handleTaskClick = (task) => {
     setSelectedTask(task);
   };
   const handleclick = async () => {
     const courseId = sessionStorage.getItem('course');
-    const res = await axios.post('http://127.0.0.1:8000/app/confirm/', { courseid: courseId });
+    const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/confirm/`, { courseid: courseId });
     if (res.status == 200 || res.status == 201) {
       if (courseData.isconfirmed) {
         toast.success("removed successfully")
@@ -106,7 +106,7 @@ const MyComponent = () => {
       answers: selectedOptions,
     };
     try {
-      const response = await axios.post('http://127.0.0.1:8000/app/submitanswers/', submissionData);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/submitanswers/`, submissionData);
 
       if (response.status === 200) {
         const results = response.data.data; // assuming data is an array of { taskId: 'correct' or 'wrong' }
@@ -139,7 +139,7 @@ const MyComponent = () => {
     try {
       console.log(`Attempting to delete question with ID: ${quesid} in module: ${modid}`);
 
-      const response = await axios.delete(`http://127.0.0.1:8000/app/deleteques/${quesid}/`);
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/deleteques/${quesid}/`);
 
       if (response.status === 200) {
         console.log("Successfully deleted question. Updating course data...");
@@ -214,7 +214,7 @@ const MyComponent = () => {
     if (!moduleIdToDelete) return;
 
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/app/deletemodule/${moduleIdToDelete}/`);
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/deletemodule/${moduleIdToDelete}/`);
       if (response.status === 200) {
         toast.success('Module deleted successfully');
         // Filter out the deleted module from the courseData state
@@ -239,7 +239,7 @@ const MyComponent = () => {
       return (
         <div style={{ margin: "20px" }}>
           <Image
-            src={`http://127.0.0.1:8000${courseData.course_cover_image}`}
+            src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${courseData.course_cover_image}`}
             width={200}
             height={200}
             className='img-fluid'

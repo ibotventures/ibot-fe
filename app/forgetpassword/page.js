@@ -13,7 +13,7 @@ const ForgetPass = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { data, status } = await axios.post('http://127.0.0.1:8000/app/forget/', { email });
+            const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/forget/`, { email });
 
             if (status === 201) {
                 if (data.data.isexists === 'no') {

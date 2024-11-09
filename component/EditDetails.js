@@ -40,7 +40,7 @@ export default function Home({ upadteuser, setuser }) {
                     return;
                 }
 
-                const response = await axios.get(`http://127.0.0.1:8000/app/getdetail`, {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail`, {
                     params: { id: userId },
                 });
 
@@ -58,7 +58,9 @@ export default function Home({ upadteuser, setuser }) {
                 setmiddlename(data.middle_name || '');
                 setAddress(data.address || '');
                 setAge(data.age || '');
-                if (data.profile) setProfileImageUrl(`http://127.0.0.1:8000${data.profile}`); 
+
+                if (data.profile) setProfileImageUrl(`${process.env.NEXT_PUBLIC_BASE_API_URL}${data.profile}`); 
+
 
                 setLoading(false);
             } catch (error) {
@@ -109,7 +111,7 @@ export default function Home({ upadteuser, setuser }) {
         });
 
         try {
-            const response = await axios.post(`http://127.0.0.1:8000/app/updatedetails/`, formData, {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/updatedetails/`, formData, {
                 headers: {
                     'Accept': 'application/json',
                     'Content-Type': 'multipart/form-data',

@@ -83,7 +83,7 @@ const AddCourse = () => {
 
             // const res = await axios.post('http://127.0.0.1:8000/app/offlinepurchase/', formData);
 
-            const res = await axios.post('http://127.0.0.1:8000/app/offlinepurchase/', formData);
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/offlinepurchase/`, formData);
             if (res && res.data) {
                 if (res.status === 200 || res.status === 201) {
                     toast.success('Successfully added the offline purchase bill');

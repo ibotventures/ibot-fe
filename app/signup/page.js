@@ -28,7 +28,9 @@ const SignUpPage = () => {
                     sessionStorage.setItem('email', email);
                     sessionStorage.setItem('username', username);
                     const type = 'send';
-                    const response = await axios.post('http://127.0.0.1:8000/app/sendotp/', { email,username,mobile,password });
+
+                    const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/sendotp/`, { email,username,mobile,password });
+
                     const { data, status } = response;
 
                     if (data.data === 'email_found') {

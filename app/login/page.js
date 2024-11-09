@@ -15,7 +15,7 @@ const LoginPage = () => {
         e.preventDefault();
         try {
             const datas = await axios.post(
-                'http://127.0.0.1:8000/app/signin/',
+                `${process.env.NEXT_PUBLIC_BASE_API_URL}/app/signin/`,
                 { email, password }
             );
             const { session, data, status } = datas.data;

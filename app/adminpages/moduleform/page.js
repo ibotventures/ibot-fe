@@ -71,7 +71,7 @@ const Module = () => {
             formData1.append('content', content);
             formData1.append('activity', activity);
 
-            const response = await axios.post('http://127.0.0.1:8000/app/uploadmodule/', formData1, config);
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/uploadmodule/`, formData1, config);
             console.log(response.data.data);
             if (response.status === 200 || response.status === 201) {
                 sessionStorage.setItem('modulename', module_name);

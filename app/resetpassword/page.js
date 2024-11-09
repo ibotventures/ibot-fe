@@ -22,7 +22,7 @@ const ResetPass = () => {
         try {
             if (password === confPassword) {
                 const email = sessionStorage.getItem('email');
-                const { data, status } = await axios.post('http://127.0.0.1:8000/app/updatepassword/', { email, password });
+                const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/updatepassword/`, { email, password });
                 if (status == 201 || status == 200) {
                     toast.success('Password successfully updated');
                     sessionStorage.clear();
