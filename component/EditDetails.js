@@ -58,10 +58,7 @@ export default function Home({ upadteuser, setuser }) {
                 setmiddlename(data.middle_name || '');
                 setAddress(data.address || '');
                 setAge(data.age || '');
-
-                if (data.profile) setProfileImageUrl(`${process.env.NEXT_PUBLIC_BASE_API_URL}${data.profile}`); 
-
-
+                if (data.profile) setProfileImageUrl(`${process.env.NEXT_PUBLIC_BASE_API_URL}${data.profile}`);
                 setLoading(false);
             } catch (error) {
                 console.error("Error details:", error);
@@ -74,7 +71,7 @@ export default function Home({ upadteuser, setuser }) {
     useEffect(() => {
         setUsername(upadteuser); // Initialize the username if it changes
     }, [upadteuser]);
-   
+
     // Handle setting object URL when `image` changes
     useEffect(() => {
         if (profile) {
@@ -105,7 +102,7 @@ export default function Home({ upadteuser, setuser }) {
 
         const fields = ['email', 'username', 'first_name', 'last_name', 'middle_name', 'age', 'address', 'pincode', 'city', 'country', 'mobile', 'state', 'profile'];
         fields.forEach(field => {
-            if (eval(field) !== userdetails[field] && eval(field)!=null) {
+            if (eval(field) !== userdetails[field] && eval(field) != null) {
                 formData.append(field, eval(field));
             }
         });
@@ -119,8 +116,8 @@ export default function Home({ upadteuser, setuser }) {
             });
             if (response.status === 200) {
                 setuserdetails(response.data.data);
-                Cookies.set('username',username);
-                setuser(username);  
+                Cookies.set('username', username);
+                setuser(username);
                 toast.success('Updated successfully');
             }
         } catch (error) {
@@ -341,13 +338,9 @@ export default function Home({ upadteuser, setuser }) {
                         Save
                     </button>
                 </div>
-
                 <br />
                 <br />
-
             </form>
-
-
         </>
 
     );

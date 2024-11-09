@@ -14,7 +14,6 @@ const ForgetPass = () => {
         e.preventDefault();
         try {
             const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/forget/`, { email });
-
             if (status === 201) {
                 if (data.data.isexists === 'no') {
                     toast.error('This email address is not found in our database.');

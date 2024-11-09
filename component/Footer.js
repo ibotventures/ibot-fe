@@ -6,8 +6,8 @@ const Footer = () => {
     return (
         <footer style={{ backgroundColor: "#384B70", color: "white", padding: "20px" }} className='container-fluid'>
             <div style={{ display: "flex", justifyContent: "center", flexDirection: "column", gap: "20px" }} >
-                <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", gap: "20px",flexWrap:"wrap" }}>
-                    <div style={{textAlign:"center"}}>
+                <div style={{ display: "flex", justifyContent: "space-evenly", alignItems: "center", gap: "20px", flexWrap: "wrap" }}>
+                    <div style={{ textAlign: "center" }}>
                         <Image src="/IBOT.png" width={200} height={200} className='img-fluid' alt='logo'></Image>
                         <h3>IBOT Ventures</h3>
                     </div>
@@ -20,7 +20,7 @@ const Footer = () => {
                     </div>
                     <div>
                         <h4 className={styles.fonth}>Connect With Us</h4>
-                        <div style={{ display: 'flex', gap: '10px',paddingTop:'1vw' }}>
+                        <div style={{ display: 'flex', gap: '10px', paddingTop: '1vw' }}>
 
                             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
                                 <FaFacebookF size={'1.5vw'} color='white' />
