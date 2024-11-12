@@ -18,8 +18,6 @@ export default function LandingPage() {
           <Image src="/image.png" width={500} height={600} style={{ padding: "20px" }} className="img-fluid" alt='sample image'></Image>
         </div>
       </div >
-
-
     </>
 
   );

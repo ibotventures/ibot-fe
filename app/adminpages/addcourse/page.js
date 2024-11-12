@@ -65,7 +65,7 @@ const AddCourse = () => {
             formData.append('module_count', module_count);
             formData.append('course_cover_image', course_cover_image);
 
-            const res = await axios.post('http://127.0.0.1:8000/app/uploadcourse/', formData, config);
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/uploadcourse/`, formData, config);
 
             if (res && res.data) {
                 if (res.status === 200 || res.status === 201) {

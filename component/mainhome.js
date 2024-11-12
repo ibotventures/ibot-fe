@@ -8,9 +8,7 @@ import classNames from 'classnames';
 import Cookies from 'js-cookie';
 
 export default function Home() {
-    
     const username = Cookies.get('username') || 'Guest';
-
     return (
         <>
             <div style={{ padding: "3.5vw" }}>

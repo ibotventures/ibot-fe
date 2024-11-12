@@ -1,8 +1,6 @@
 
 'use client';
 import Image from "next/image";
-import LandingCaurosal from "@/component/productcaurosal";
-import classNames from 'classnames';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "@/app/page.module.css";
 import { FaHourglass, FaFile, FaChartBar, FaCoins, FaListAlt } from 'react-icons/fa';
@@ -11,7 +9,7 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
-import { Modal, ModalHeader, ModalBody, ModalFooter,Button } from 'reactstrap';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 export default function Home() {
     const [coursedata, setcoursedata] = useState([]);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -23,9 +21,8 @@ export default function Home() {
     };
     const handleDelete = async () => {
         if (!courseIdToDelete) return;
-
         try {
-            const response = await axios.delete(`http://127.0.0.1:8000/app/deletecourse/${courseIdToDelete}/`);
+            const response = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/deletecourse/${courseIdToDelete}/`);
             if (response.status === 200) {
                 toast.success('Course deleted successfully');
                 setcoursedata(prevData => prevData.filter(course => course.id !== courseIdToDelete));
@@ -43,7 +40,6 @@ export default function Home() {
     const handleClick = async (courseId) => {
         const userid = Cookies.get('userid');
         const access = 'yes';
-
         if (access === 'yes') {
             sessionStorage.setItem('course', courseId);
             router.push('/coursepreview');
@@ -58,20 +54,18 @@ export default function Home() {
     useEffect(() => {
         const handleCourse = async () => {
             try {
-                const response = await axios.get('http://127.0.0.1:8000/app/uploadcourse/');
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/uploadcourse/`);
                 if (response.status === 200) {
                     if (response.data.data !== 'empty') {
                         const data = response.data.data;
                         setcoursedata(Array.isArray(data) ? data : [data]); // Wrap in array if single object
                     }
-
                 }
             } catch (error) {
                 console.error("Error:", error);
                 toast.error("Something went wrong while loading course data.");
             }
         };
-
         handleCourse();
     }, []);
 
@@ -93,7 +87,7 @@ export default function Home() {
                             onClick={() => handleClick(course.id)}
                         >
                             <Image
-                                src={`http://127.0.0.1:8000${course.course_cover_image}`}
+                                src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${course.course_cover_image}`}
                                 alt="Course Cover"
                                 style={{ width: "40vw", borderRadius: "2vw 0 0 2vw", height: "28vh" }}
                                 className="img-fluid"

@@ -50,11 +50,11 @@ export default function CourseList() {
     const handleCourse = async () => {
       setLoading(true);
       try {
-        const courses = await axios.get('http://127.0.0.1:8000/app/courselist/');
+        const courses = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/courselist/`);
         const userid = Cookies.get('userid');
 
         if (userid) {
-          const res = await axios.get('http://127.0.0.1:8000/app/canaccesscourse/', {
+          const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/canaccesscourse/`, {
             params: { userid }
           });
 
@@ -92,7 +92,7 @@ export default function CourseList() {
     if (!courseIdToDelete) return;
 
     try {
-      const response = await axios.delete(`http://127.0.0.1:8000/app/deletecourse/${courseIdToDelete}/`);
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/deletecourse/${courseIdToDelete}/`);
       if (response.status === 200) {
         toast.success('Course deleted successfully');
         setCourseData(prevData => prevData.filter(course => course.id !== courseIdToDelete));
@@ -157,7 +157,7 @@ export default function CourseList() {
                   onClick={() => handleClick(course.id)}
                 >
                   <Image
-                    src={`http://127.0.0.1:8000${course.course_cover_image}`}
+                    src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${course.course_cover_image}`}
                     alt="Course Cover"
                     style={{ width: "40vw", borderRadius: "2vw 0 0 2vw", height: "28vh" }}
                     className="img-fluid"

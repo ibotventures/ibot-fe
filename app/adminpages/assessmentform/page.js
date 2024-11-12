@@ -52,7 +52,7 @@ const Assessment = () => {
             formData.append('module', Mymodule);
             // formData.append('module_id', Mymodule);
 
-            const res = await axios.post('http://127.0.0.1:8000/app/assessmentquestion/', formData);
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/assessmentquestion/`, formData);
             if (res && res.data) {
                 if (res.status === 200 || res.status === 201) {
                     const count = sessionStorage.getItem('assess_ques_count') - 1;

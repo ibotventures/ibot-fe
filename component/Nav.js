@@ -34,9 +34,7 @@ const Example = () => {
         Cookies.remove('token');
         Cookies.remove('username');
         Cookies.remove('userid');
-        // Cookies.remove('subscription');
         setToken('');
-
         router.push('/login');
     };
 
@@ -47,14 +45,11 @@ const Example = () => {
                 <NavbarBrand href="/">
                     <Image src="/IBOT.png" width={100} height={90} alt="Logo" className='img-fluid' />
                 </NavbarBrand>
-
                 <NavbarToggler onClick={toggle} />
-
                 <Collapse isOpen={isOpen} navbar>
                     {isadmin == 'Administrator' ? (
                         <>
                             <Nav className="mx-auto" navbar>
-
                                 <NavItem>
                                     <NavLink href="/courselist" className={classNames(styles.parafont, 'mx-3')}>Courses</NavLink>
                                 </NavItem>
@@ -64,7 +59,6 @@ const Example = () => {
                                     </NavLink>
                                 </NavItem>
                                 {(token) ? (
-
                                     <>
                                         <NavItem>
                                             <NavLink href="/profile" className={classNames(styles.parafont, 'mx-3')}>
@@ -74,16 +68,12 @@ const Example = () => {
                                         <NavItem onClick={handleSubmit} style={{ cursor: "pointer" }}>
                                             <NavLink className={classNames(styles.parafont, 'mx-3')}>Logout</NavLink>
                                         </NavItem>
-
                                     </>
-
                                 ) : (
                                     <NavItem>
                                         <NavLink href="/login" className={classNames(styles.parafont, 'mx-3')}>Login</NavLink>
                                     </NavItem>
                                 )}
-
-
                             </Nav>
                             {(token) ? (
                                 <Nav navbar>
@@ -92,7 +82,6 @@ const Example = () => {
                                             <button className='btn btn-primary'>Offline Bill Form</button>
                                         </NavLink>
                                     </NavItem>
-
                                 </Nav>
                             ) : null}
                         </>
@@ -117,9 +106,7 @@ const Example = () => {
                                         <NavItem onClick={handleSubmit} style={{ cursor: "pointer" }}>
                                             <NavLink className={classNames(styles.parafont, 'mx-3')}>Logout</NavLink>
                                         </NavItem>
-
                                     </>
-
                                 ) : (
                                     <NavItem>
                                         <NavLink href="/login" className={classNames(styles.parafont, 'mx-3')}>Login</NavLink>
@@ -128,11 +115,9 @@ const Example = () => {
                             </Nav>
                         </>
                     )}
-
                 </Collapse>
             </Navbar >
         </>
-
     );
 };
 

@@ -42,7 +42,7 @@ const Module = () => {
         };
 
         try {
-            const response = await axios.put('http://127.0.0.1:8000/app/uploadmodule/', formData1, config);
+            const response = await axios.put(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/uploadmodule/`, formData1, config);
             if (response.status === 200 || response.status === 201) {
                 toast.success("Updated successfully");
                 router.push('/coursepreview');

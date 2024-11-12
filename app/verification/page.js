@@ -21,19 +21,15 @@ const Verification = () => {
         }
     }, [router]);
 
-
     const handleResend = async (e) => {
         e.preventDefault();
         const email = sessionStorage.getItem('email');
-
         const username = sessionStorage.getItem('username');
         settype('resend');
         try {
-            const { data, status } = await axios.post('http://127.0.0.1:8000/app/sendotp/', { email, username, type });
+            const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/sendotp/`, { email, username });
             if (status === 201) {
                 const message = `OTP resent successfully to this email address - ${data.email}`;
-
-
                 toast.success(message);
             } else {
                 toast.error('Unsuccessful, please try again.');
@@ -47,13 +43,12 @@ const Verification = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-
             const forget = sessionStorage.getItem('forget');
             const email = sessionStorage.getItem('email');
             const code = code1 + code2 + code3 + code4;
             if (forget == 'yes' || forget != undefined) {
-                const { data, status } = await axios.get('http://127.0.0.1:8000/app/sendotp/', {
-                    params: { email, code }
+                const { data, status } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/sendotp/`, {
+                    params: { email, code ,forget}
                 });
                 if (data.data == 'matched' && status == 201) {
                     toast.success('Verified Successfully');
@@ -62,42 +57,24 @@ const Verification = () => {
                     toast.error('OTP not matching - Try Again');
                 }
             } else {
-
-                const password = sessionStorage.getItem('password');
                 const email = sessionStorage.getItem('email');
-                const username = sessionStorage.getItem('username');
-
-                const mobile = sessionStorage.getItem('mobile');
-
-                const { data, status } = await axios.get('http://127.0.0.1:8000/app/sendotp/', {
+                const { data, status } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/sendotp/`, {
                     params: { email, code }
                 });
 
                 if (data.data == 'matched' && status == 201) {
-                    const { data } = await axios.post(
-                        'http://127.0.0.1:8000/app/signup/',
-
-                        { username, email, password,mobile }
-
-                    );
-
-                    if (data) {
                         toast.success('Verified Successfully');
                         sessionStorage.clear();
                         router.push('/login');
-                    }
                 }
                 else if (data.data == 'unmatched' && status == 201) {
                     toast.error('OTP not matching - Try Again');
                 }
             }
-
-
         } catch (err) {
             toast.error('something went wrong - Try Again');
         }
     };
-
 
     return (
         <>

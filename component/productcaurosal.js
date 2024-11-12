@@ -20,7 +20,6 @@ const ImageCarousel = () => {
                 controls={false}     // Enable/Disable next/prev buttons
                 style={{ width: "100%", display: "flex", alignItems: "center" }}
                 className='container-fluid'
-
             >
                 {/* Display images in groups of 3 */}
                 <Carousel.Item>

@@ -2,7 +2,6 @@ import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import styles from '@/app/page.module.css';
-
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const UserStatusReport = ({ statdata }) => {
@@ -16,9 +15,7 @@ const UserStatusReport = ({ statdata }) => {
     labels: ['Purchased User', 'Course Subscriber', 'Visitor', 'Admin'],
     datasets: [
       {
-
         data: [purchasedUsers, subscribedUsers, visitors, admins], // Use the initialized values
-
         backgroundColor: ['#4CAF50', '#F44336', '#FF9800', '#2196F3'],
         borderWidth: 2,
       },
@@ -43,9 +40,7 @@ const UserStatusReport = ({ statdata }) => {
       <div className={styles.chartContainer}>
         <Doughnut data={data} options={options} />
         <div className={styles.chartCenter}>
-
           <h2>{statdata ? statdata.total_users : 0}</h2> {/* Display total users or default to 0 */}
-
           <p>Users</p>
         </div>
       </div>
@@ -59,11 +54,9 @@ const UserStatusReport = ({ statdata }) => {
         <div>
           <span className={styles.orange}></span> Visitor
         </div>
-
         <div>
           <span className={styles.blue}></span> Admin
         </div>
-
       </div>
     </div>
   );
