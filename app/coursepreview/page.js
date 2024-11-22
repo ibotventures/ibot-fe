@@ -11,10 +11,11 @@ import { useRouter, useParams } from "next/navigation";
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "@cyntler/react-doc-viewer/dist/index.css";
 import Cookies from 'js-cookie';
-import { FaStar, FaEdit, FaTrash } from 'react-icons/fa';
+import { FaStar, FaEdit, FaTrash, FaLock } from 'react-icons/fa';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const MyComponent = () => {
+
   const [openAccordion, setOpenAccordion] = useState(""); // For opening accordion sections
   const [openAccordion1, setOpenAccordion1] = useState('');
   const [selectedModule, setSelectedModule] = useState(''); // For displaying content on main side
@@ -22,7 +23,9 @@ const MyComponent = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false); // To handle sidebar visibility
   const [isLargeScreen, setIsLargeScreen] = useState(false); // For responsive handling
   const [courseData, setCourseData] = useState(''); // State to store course data
+  const [certifyques, setcertifyques] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [change, setchange] = useState(false);
   const [overviewDocs, setOverviewDocs] = useState([]); // Store overview document
   const [contentDocs, setContentDocs] = useState([]); // Store content document
   const [activityDocs, setActivityDocs] = useState([]); // Store activity document
@@ -31,12 +34,15 @@ const MyComponent = () => {
   const [answerResults, setAnswerResults] = useState({});
   const [showDeleteModal, setShowDeleteModal] = useState(false); // Modal visibility
   const [moduleIdToDelete, setModuleIdToDelete] = useState(''); // Track which module to delete
+  const [userallow, setuserallow] = useState('');
+
   const handleOptionChanges = (taskId, option) => {
     setSelectedOptions(prev => ({
       ...prev,
       [taskId]: option
     }));
   };
+
   useEffect(() => {
     // Set the screen size state correctly on initial render
     setIsLargeScreen(window.innerWidth >= 768);
@@ -54,8 +60,83 @@ const MyComponent = () => {
         setLoading(false);
       }
     };
-    fetchCoursePreview();
+    const track = async () => {
+      try {
+        const userid = Cookies.get('userid');
+        const courseIds = sessionStorage.getItem('course');
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
+          params: {
+            userid: userid,
+            courseid: courseIds,
+          },
+        });
+        if (response.status == 200) {
+          const trackmod = sessionStorage.getItem('moduletrack');
+          setSelectedModule(response.data.data);
+          setSelectedTask(response.data.data.task);
+          if (trackmod) {
+            setOpenAccordion(openAccordion === trackmod ? "" : trackmod);
+          }
+          setOpenAccordion(openAccordion === response.data.data.id ? "" : response.data.data.id);
+          setOverviewDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${response.data.data.intro}` }]);
+          setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${response.data.data.content}` }]);
+          setActivityDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${response.data.data.activity}` }]);
+        }
+      } catch (error) {
+        // toast.error("Something went wrong while loading.");
+      }
+    };
+
+    fetchCoursePreview()
+      .then(() => track())
+      .catch(error => console.error("Error in useEffect chain:", error));
   }, []);
+
+
+  const certifyquess = async () => {
+    try {
+      const courseIds = sessionStorage.getItem('course');
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/certifications/`, {
+        params: {
+          course_id: courseIds,
+        },
+      });
+      if (response.status === 200) {
+        setcertifyques(response.data.data[0].questions); // Update state with fetched questions
+        console.log('Certification Questions:', response.data.data[0].questions);
+      }
+    } catch (error) {
+      console.error("Error fetching certification questions:", error);
+      toast.error("Failed to load certification questions.");
+    }
+  };
+
+  const certifyquesuser = async () => {
+    try {
+      const lastmod = courseData.modules[courseData.modules.length - 1];
+      const moduleid = lastmod.id;
+      const userid = Cookies.get('userid');
+      const { data, status } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/canviewmodule/`, {
+        params: { userid, moduleid }
+      });
+      if (status == 200) {
+        certifyquess();
+        setuserallow(userid);
+      }
+    } catch (e) {
+      setuserallow('');
+    }
+  }
+  useEffect(() => {
+
+    if (Cookies.get('username') == 'Administrator') {
+      certifyquess();
+    } else {
+      certifyquesuser();
+    }
+
+  }, [courseData, change]);
+
   // Handle screen resizing
   useEffect(() => {
     const handleResize = () => {
@@ -64,27 +145,79 @@ const MyComponent = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
   const toggleAccordion = (id) => {
     setOpenAccordion(openAccordion === id ? "" : id);
   };
   const toggleAccordion1 = (id) => {
     setOpenAccordion1(openAccordion1 === id ? "" : id);
   };
+
   const handleaddques = (id) => {
     sessionStorage.setItem('module', id);
     router.push('/adminpages/assessmentform');
     // router.push(`/assessmentform?id=${id}`);
   };
-  const handleModuleClick = (module) => {
-    setSelectedModule(module);
-    setSelectedTask("intro");
-    setOverviewDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.intro}` }]);
-    setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.content}` }]);
-    setActivityDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.activity}` }]);
+
+  const handleaddcertifyques = () => {
+    sessionStorage.setItem('course', courseData.id);
+    router.push('/adminpages/certificateques');
+  }
+
+  const handleModuleClick = async (module, index) => {
+    const courseIds = sessionStorage.getItem('course');
+    const userid = Cookies.get('userid');
+    console.log(index);
+    if (index == 0 || Cookies.get('username') == 'Administrator') {
+      setSelectedModule(module);
+      setSelectedTask("intro");
+      const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
+        userid, courseIds, task: "overview", moduleid: module.id, image: courseData.course_cover_image
+      });
+      setOverviewDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.intro}` }]);
+      setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.content}` }]);
+      setActivityDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.activity}` }]);
+    } else {
+      try {
+        const previousModule = courseData.modules[index - 1];
+        // const userid = Cookies.get('userid');
+        const moduleid = previousModule.id;
+        const { data, status } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/canviewmodule/`, {
+          params: { userid, moduleid }
+        });
+        if (status == 200) {
+          setSelectedModule(module);
+          setSelectedTask("intro");
+          const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
+            userid, courseIds, task: "overview", moduleid: module.id, image: courseData.course_cover_image
+          });
+          setOverviewDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.intro}` }]);
+          setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.content}` }]);
+          setActivityDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.activity}` }]);
+        }
+      } catch {
+        toast.error('You have to score more than 65% in the previous assessment to access the next module');
+        setOpenAccordion("");
+      }
+
+
+    }
+
   };
-  const handleTaskClick = (task) => {
+
+  const handlecertify = async (task) => {
     setSelectedTask(task);
+  }
+
+  const handleTaskClick = async (task, module) => {
+    const courseIds = sessionStorage.getItem('course');
+    const userid = Cookies.get('userid');
+    setSelectedTask(task);
+    const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
+      userid, courseIds, task: task, moduleid: module, image: courseData.course_cover_image
+    });
   };
+
   const handleclick = async () => {
     const courseId = sessionStorage.getItem('course');
     const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/confirm/`, { courseid: courseId });
@@ -100,35 +233,116 @@ const MyComponent = () => {
       toast.error('Can not able to confirm, try again');
     }
   }
+
   const handleanswer = async (moduleId) => {
+    const userid = Cookies.get('userid');
     const submissionData = {
       moduleId,
       answers: selectedOptions,
+      userid,
     };
+
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/submitanswers/`, submissionData);
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/app/submitanswers/`,
+        submissionData
+      );
 
       if (response.status === 200) {
-        const results = response.data.data; // assuming data is an array of { taskId: 'correct' or 'wrong' }
+        const results = response.data.data; // assuming data is an array of results
         const newResults = {};
+
         results.forEach((result) => {
-          const taskId = Object.keys(result)[0];
-          newResults[taskId] = result[taskId];
+          const keys = Object.keys(result);
+
+          // Check if the key is a percentage
+          if (keys.includes('percentage')) {
+            const obtainedPercentage = result['percentage'];
+            console.log(obtainedPercentage);
+
+            if (obtainedPercentage < 65) {
+              setchange(false);
+              toast.error(
+                `You need to score more than 65% to pass this assessment. Your percentage: ${obtainedPercentage.toFixed(2)}%`
+              );
+            } else {
+              console.log(courseData.modules[courseData.modules.length - 1].id);
+              if (moduleId == courseData.modules[courseData.modules.length - 1].id) {
+                setchange(true);
+              }
+              toast.success(
+                `Congratulations! You passed the assessment with ${obtainedPercentage.toFixed(2)}%. You can now access the next module.`
+              );
+            }
+          }
         });
-        setAnswerResults(newResults); // update answer results state
-        toast.success('Answers submitted successfully');
+
+        setAnswerResults(newResults); // update the state with the new results
       } else {
         toast.error('Answers not submitted, something went wrong');
       }
     } catch (error) {
       console.error('Error submitting answers:', error);
+      toast.error('An error occurred while submitting your answers.');
     }
   };
+
+
+  const handlecertifyanswer = async () => {
+    const userid = Cookies.get('userid');
+    const courseid = courseData.id;
+    const submissionData = {
+      courseid,
+      answers: selectedOptions,
+      userid,
+    };
+
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_API_URL}/app/submitcertificationanswers/`,
+        submissionData
+      );
+
+      if (response.status === 200) {
+        const results = response.data.data; // assuming data is an array of results
+        const newResults = {};
+
+        results.forEach((result) => {
+          const keys = Object.keys(result);
+
+          // Check if the key is a percentage
+          if (keys.includes('percentage')) {
+            const obtainedPercentage = result['percentage'];
+            console.log(obtainedPercentage);
+
+            if (obtainedPercentage < 65) {
+              toast.error(
+                `You need to score more than 65% to pass this Course. Your percentage: ${obtainedPercentage.toFixed(2)}%`
+              );
+            } else {
+              toast.success(
+                `Congratulations! You passed the test with ${obtainedPercentage.toFixed(2)}%. If you haven't filled your profile details please fill it to get  your digital certificate with your actual
+                 Name`
+              );
+            }
+          }
+        });
+
+        setAnswerResults(newResults); // update the state with the new results
+      } else {
+        toast.error('Answers not submitted, something went wrong');
+      }
+    } catch (error) {
+      console.error('Error submitting answers:', error);
+      toast.error('An error occurred while submitting your answers.');
+    }
+  }
 
   const handleaddmod = (id) => {
     sessionStorage.setItem('course', id);
     router.push('/adminpages/moduleform');
   }
+
   const handleedit = (id, type) => {
     sessionStorage.setItem('tasktype', type);
     sessionStorage.setItem('modupdateid', id);
@@ -203,6 +417,18 @@ const MyComponent = () => {
     }
   };
 
+  const handlecertifydel = async (quesid) => {
+    try {
+
+      const response = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/deletecertificationques/${quesid}/`);
+
+
+    } catch (error) {
+      console.error("Error while deleting question:", error);
+      toast.error("An error occurred while deleting the question");
+    }
+  }
+
   // Function to open the delete confirmation modal
   const confirmDelete = (id) => {
     setModuleIdToDelete(id);
@@ -212,7 +438,6 @@ const MyComponent = () => {
   // Function to handle deletion of a module
   const handledelete = async () => {
     if (!moduleIdToDelete) return;
-
     try {
       const response = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/deletemodule/${moduleIdToDelete}/`);
       if (response.status === 200) {
@@ -297,17 +522,16 @@ const MyComponent = () => {
                 style={{ width: "100%", height: "600px", overflow: 'auto', border: '1px solid #ccc' }}
               />
 
-
             )}
 
           </div>
         );
 
-
       case 'activity':
         return (
           <div style={{ margin: "20px" }}>
             {/* <h2 style={{ textAlign: "center" }}>Module - {selectedModule.module_name}</h2> */}
+
             {selectedModule.type_activity == '.pptx' || selectedModule.type_activity == '.ppt' ? (
               <iframe
                 src={selectedModule.activity}
@@ -329,12 +553,14 @@ const MyComponent = () => {
             )}
           </div>
         );
+
       case 'assessment':
         return (
           <div style={{ backgroundColor: "whitesmoke", padding: "20px", margin: "20px" }}>
             <h1 style={{ textAlign: "center" }}>{courseData.course_name}</h1>
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               <h2>{selectedModule.module_name} - Assessment</h2>
+              <p>marks: {selectedModule.assessments.length}</p>
               {Cookies.get('username') === 'Administrator' ? (
                 <button
                   className='btn btn-primary'
@@ -394,14 +620,86 @@ const MyComponent = () => {
             </form>
           </div>
         )
+
+      case 'certifyques':
+        return (
+          <>
+            <div style={{ backgroundColor: "whitesmoke", padding: "20px", margin: "20px" }}>
+              <h1 style={{ textAlign: "center" }}>{courseData.course_name}</h1>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <h2>Certification Assessment</h2>
+                <p>marks: {certifyques.length}</p>
+                {Cookies.get('username') === 'Administrator' ? (
+                  <button
+                    className='btn btn-primary'
+                    onClick={() => handleaddcertifyques()}
+                  >
+                    Add Questions
+                  </button>
+                ) : null}
+
+              </div>
+              <br />
+
+              <form onSubmit={(e) => { e.preventDefault(); handlecertifyanswer(); }}>
+                {certifyques.map((task, idx) => (
+                  <div key={task.id}>
+                    <h3
+                      style={{ border: "1px solid #ccc", padding: "10px" }}
+                      className={styles.parafont}
+                    >
+                      <div style={{ display: "flex", justifyContent: "space-between" }}>
+                        <p>{idx + 1}. {task.question}</p>
+                        {Cookies.get('username') === 'Administrator' ? (
+                          <FaTrash onClick={() => handlecertifydel(task.id)} className="text-danger cursor-pointer" />
+                        ) : null}
+                      </div>
+                    </h3>
+                    <br />
+                    {[task.option1, task.option2, task.option3, task.option4].map((option, optIdx) => (
+                      <div key={`${task.id}-option-${optIdx}`}>
+                        <label className={styles.parafont}>
+                          {/* Unique name for each question */}
+                          <input
+                            style={{ width: '15px', height: "15px", margin: "10px" }}
+                            type="radio"
+                            name={`question-${task.id}`} // Unique name per task
+                            value={option}
+                            checked={selectedOptions[task.id] === option}
+                            onChange={() => handleOptionChanges(task.id, option)}
+                          />
+                          <span
+                            style={{
+                              color:
+                                answerResults[task.id] === 'correct' && selectedOptions[task.id] === option
+                                  ? 'green'
+                                  : answerResults[task.id] === 'wrong' && selectedOptions[task.id] === option
+                                    ? 'red'
+                                    : 'inherit',
+                            }}
+                          >
+                            {option}
+                          </span>
+                        </label>
+                      </div>
+                    ))}
+                    <br /><br />
+                  </div>
+                ))}
+                <button className="btn btn-primary" type="submit">Submit</button>
+              </form>
+
+            </div>
+          </>
+        )
       default:
         return <p>Unknown task type.</p>;
     }
   };
+
   if (loading) {
     return <p>Loading....</p>;
   }
-
 
   return (
     <>
@@ -434,42 +732,51 @@ const MyComponent = () => {
             <Accordion open={openAccordion} toggle={toggleAccordion}>
               {courseData.modules.map((module, index) => (
                 <AccordionItem key={module.id}>
-                  <AccordionHeader targetId={`${module.id}`} onClick={() => handleModuleClick(module)}>
+                  <AccordionHeader targetId={`${module.id}`} onClick={() => handleModuleClick(module, index)}>
                     <div style={{ display: 'flex', justifyContent: "space-between" }}>
                       <div>{module.module_name}</div>
                       {Cookies.get('username') === 'Administrator' ? (
                         <div style={{ paddingLeft: "50px" }}>
-
                           <FaTrash onClick={() => confirmDelete(module.id)} className="text-danger cursor-pointer" style={{ cursor: 'pointer', marginLeft: '50px' }} />
                         </div>
                       ) : null}
+                      {/* <FaLock size={24} color="black" /> */}
                     </div>
 
                   </AccordionHeader>
                   <AccordionBody accordionId={`${module.id}`}>
                     <div className={styles.taskboxes}>
-                      <div className={styles.taskbox} onClick={() => handleTaskClick("intro")} style={{ display: "flex", justifyContent: "space-between" }}>
+                      <div className={styles.taskbox} onClick={() => handleTaskClick("intro", module.id)} style={{ display: "flex", justifyContent: "space-between" }}>
                         Overview
-                        <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
-                          e.stopPropagation();
-                          handleedit(module.id, 'overview');
-                        }} />
+                        {Cookies.get('username') === 'Administrator' ? (
+                          <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                            e.stopPropagation();
+                            handleedit(module.id, 'overview');
+                          }} />
+                        ) : null}
+
                       </div>
-                      <div className={styles.taskbox} onClick={() => handleTaskClick("main")} style={{ display: "flex", justifyContent: "space-between" }}>
+                      <div className={styles.taskbox} onClick={() => handleTaskClick("main", module.id)} style={{ display: "flex", justifyContent: "space-between" }}>
                         Main Content
-                        <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
-                          e.stopPropagation();
-                          handleedit(module.id, 'content');
-                        }} />
+                        {Cookies.get('username') === 'Administrator' ? (
+                          <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                            e.stopPropagation();
+                            handleedit(module.id, 'content');
+                          }} />
+                        ) : null}
+
                       </div>
-                      <div className={styles.taskbox} onClick={() => handleTaskClick("activity")} style={{ display: "flex", justifyContent: "space-between" }}>
+                      <div className={styles.taskbox} onClick={() => handleTaskClick("activity", module.id)} style={{ display: "flex", justifyContent: "space-between" }}>
                         Activity
-                        <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
-                          e.stopPropagation();
-                          handleedit(module.id, 'activity');
-                        }} />
+                        {Cookies.get('username') === 'Administrator' ? (
+                          <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                            e.stopPropagation();
+                            handleedit(module.id, 'activity');
+                          }} />
+                        ) : null}
+
                       </div>
-                      <div className={styles.taskbox} onClick={() => handleTaskClick("assessment")}>
+                      <div className={styles.taskbox} onClick={() => handleTaskClick("assessment", module.id)}>
                         Assessment
                       </div>
                     </div>
@@ -480,6 +787,21 @@ const MyComponent = () => {
           ) : (
             <p>No modules found.</p>
           )}
+          {Cookies.get('username') === 'Administrator' || Cookies.get('userid') === userallow ? (
+            <Accordion open={openAccordion} toggle={toggleAccordion}>
+              <AccordionItem>
+                <AccordionHeader targetId="certify">
+                  Certification Test
+                </AccordionHeader>
+                <AccordionBody accordionId="certify">
+                  <div className={styles.taskbox} onClick={() => handlecertify("certifyques")}>
+                    Certificate Assessment
+                  </div>
+                </AccordionBody>
+              </AccordionItem>
+            </Accordion>
+          ) : null}
+          <br />
           {Cookies.get('username') === 'Administrator' ? (
             <div>
               <button className='btn btn-primary' onClick={() => handleaddmod(courseData.id)} style={{ width: "100%", borderRadius: "1.3vw" }}>Add Module</button>
@@ -503,42 +825,47 @@ const MyComponent = () => {
                 <Accordion open={openAccordion} toggle={toggleAccordion}>
                   {courseData.modules.map((module, index) => (
                     <AccordionItem key={module.id}>
-                      <AccordionHeader targetId={`${module.id}`} onClick={() => handleModuleClick(module)}>
+                      <AccordionHeader targetId={`${module.id}`} onClick={() => handleModuleClick(module, index)}>
                         <div style={{ display: 'flex', justifyContent: "space-between", width: "100%", paddingRight: "20px" }}>
                           <div>{module.module_name}</div>
                           {Cookies.get('username') === 'Administrator' ? (
-
                             <div>
-
                               <FaTrash onClick={() => confirmDelete(module.id)} className="text-danger cursor-pointer" style={{ cursor: 'pointer', marginLeft: '20px' }} />
                             </div>
                           ) : null}
+                          {/* <FaLock size={24} color="black" /> */}
                         </div>
                       </AccordionHeader>
                       <AccordionBody accordionId={`${module.id}`}>
                         <div className={styles.taskboxes}>
-                          <div className={styles.taskbox} onClick={() => handleTaskClick("intro")} style={{ display: "flex", justifyContent: "space-between" }}>
+                          <div className={styles.taskbox} onClick={() => handleTaskClick("intro", module.id)} style={{ display: "flex", justifyContent: "space-between" }}>
                             Overview
-                            <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
-                              e.stopPropagation();
-                              handleedit(module.id, 'overview');
-                            }} />
+                            {Cookies.get('username') === 'Administrator' ? (
+                              <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                                e.stopPropagation();
+                                handleedit(module.id, 'overview');
+                              }} />
+                            ) : null}
                           </div>
-                          <div className={styles.taskbox} onClick={() => handleTaskClick("main")} style={{ display: "flex", justifyContent: "space-between" }}>
+                          <div className={styles.taskbox} onClick={() => handleTaskClick("main", module.id)} style={{ display: "flex", justifyContent: "space-between" }}>
                             Main Content
-                            <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
-                              e.stopPropagation();
-                              handleedit(module.id, 'content');
-                            }} />
+                            {Cookies.get('username') === 'Administrator' ? (
+                              <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                                e.stopPropagation();
+                                handleedit(module.id, 'content');
+                              }} />
+                            ) : null}
                           </div>
-                          <div className={styles.taskbox} onClick={() => handleTaskClick("activity")} style={{ display: "flex", justifyContent: "space-between" }}>
+                          <div className={styles.taskbox} onClick={() => handleTaskClick("activity", module.id)} style={{ display: "flex", justifyContent: "space-between" }}>
                             Activity
-                            <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
-                              e.stopPropagation();
-                              handleedit(module.id, 'activity');
-                            }} />
+                            {Cookies.get('username') === 'Administrator' ? (
+                              <FaEdit style={{ color: 'blue', cursor: 'pointer' }} onClick={(e) => {
+                                e.stopPropagation();
+                                handleedit(module.id, 'activity');
+                              }} />
+                            ) : null}
                           </div>
-                          <div className={styles.taskbox} onClick={() => handleTaskClick("assessment")}>
+                          <div className={styles.taskbox} onClick={() => handleTaskClick("assessment", module.id)}>
                             Assessment
                           </div>
                         </div>
@@ -549,6 +876,20 @@ const MyComponent = () => {
               ) : (
                 <p>No modules found.</p>
               )}
+              {Cookies.get('username') === 'Administrator' || Cookies.get('userid') === userallow ? (
+                <Accordion open={openAccordion} toggle={toggleAccordion}>
+                  <AccordionItem>
+                    <AccordionHeader targetId="certify">
+                      Certification Test
+                    </AccordionHeader>
+                    <AccordionBody accordionId="certify">
+                      <div className={styles.taskbox} onClick={() => handlecertify("certifyques")}>
+                        Certificate Assessment
+                      </div>
+                    </AccordionBody>
+                  </AccordionItem>
+                </Accordion>
+              ) : null}
               <br />
               {Cookies.get('username') === 'Administrator' ? (
                 <div>
@@ -587,6 +928,7 @@ const MyComponent = () => {
                 ) : (
                   <p>No modules found.</p>
                 )}
+
               </div>
             </div>
           </Col>

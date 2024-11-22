@@ -74,7 +74,8 @@ const Assessment = () => {
                             router.push('/adminpages/moduleform');
                         } else {
                             sessionStorage.setItem('modcount', 0);
-                            router.push('/coursepreview');
+                            // router.push('/coursepreview');
+                            router.push('/adminpages/certificateques');
                         }
                     }
                 }

@@ -12,6 +12,7 @@ import { toast } from 'react-toastify';
 import axios from 'axios';
 import Image from 'next/image';
 import Cookies from 'js-cookie';
+import debounce from "lodash.debounce";
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 export default function CourseList() {
@@ -19,6 +20,7 @@ export default function CourseList() {
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(true);
   const [courseData, setCourseData] = useState([]);
+  const [backupcourse,setbackupcourse] = useState([]);
   const [access, setAccess] = useState('no');
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [courseIdToDelete, setCourseIdToDelete] = useState('');
@@ -26,6 +28,32 @@ export default function CourseList() {
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
+  };
+
+  // Debounced function to update filters
+  const updateFilter = debounce(async (updatedFilter) => {
+    try {
+      console.log("Updated Filters (debounced):", updatedFilter);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/courses/`, {
+        params: {
+          age_category: updatedFilter.age,
+          level: updatedFilter.level,
+          rating: updatedFilter.rating,
+        }
+      });
+
+      if (res.status === 200) {
+        console.log("Filtered Data:", res.data.data);
+        setCourseData(res.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching filtered data:", error);
+    }
+  }, 200);
+
+  const setFilters = (updatedFilter) => {
+    // Call the debounced update function
+    updateFilter(updatedFilter);
   };
 
   useEffect(() => {
@@ -64,6 +92,7 @@ export default function CourseList() {
         }
 
         setCourseData(courses.data.data);
+        setbackupcourse(courses.data.data);
       } catch (error) {
         console.error("Error:", error);
         toast.error("Something went wrong while loading course data.");
@@ -87,6 +116,10 @@ export default function CourseList() {
       router.push('/login');
     }
   };
+
+  const handleclearfilter = async () =>{
+    setCourseData(backupcourse);
+  }
 
   const handleDelete = async () => {
     if (!courseIdToDelete) return;
@@ -217,11 +250,14 @@ export default function CourseList() {
           {isMobile ? (
             <Offcanvas isOpen={isOpen} toggle={toggleSidebar} direction="right" style={{ height: "100%" }}>
               <OffcanvasBody className={classNames(styles.fontp, styles.sidebar)} style={{ width: "40vw" }}>
-                <Sidebar />
+                <Sidebar setFilters={setFilters} />
               </OffcanvasBody>
             </Offcanvas>
           ) : (
-            <Sidebar />
+            <>
+              <Sidebar setFilters={setFilters} />
+            </>
+
           )}
         </div>
 
