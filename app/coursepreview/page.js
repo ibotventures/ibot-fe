@@ -81,6 +81,8 @@ const MyComponent = () => {
           setOverviewDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${response.data.data.intro}` }]);
           setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${response.data.data.content}` }]);
           setActivityDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${response.data.data.activity}` }]);
+        }else if(response.status == 201){
+          setSelectedTask(response.data.data);
         }
       } catch (error) {
         // toast.error("Something went wrong while loading.");
@@ -206,6 +208,11 @@ const MyComponent = () => {
   };
 
   const handlecertify = async (task) => {
+    const userid = Cookies.get('userid');
+    const courseIds = sessionStorage.getItem('course');
+    const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
+      userid, courseIds, task: "certifyques", moduleid: null, image: courseData.course_cover_image
+    });
     setSelectedTask(task);
   }
 
