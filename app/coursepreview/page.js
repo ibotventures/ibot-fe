@@ -15,7 +15,7 @@ import { FaStar, FaEdit, FaTrash, FaLock } from 'react-icons/fa';
 import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
 const MyComponent = () => {
-
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(""); // For opening accordion sections
   const [openAccordion1, setOpenAccordion1] = useState('');
   const [selectedModule, setSelectedModule] = useState(''); // For displaying content on main side
@@ -81,7 +81,7 @@ const MyComponent = () => {
           setOverviewDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${response.data.data.intro}` }]);
           setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${response.data.data.content}` }]);
           setActivityDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${response.data.data.activity}` }]);
-        }else if(response.status == 201){
+        } else if (response.status == 201) {
           setSelectedTask(response.data.data);
         }
       } catch (error) {
@@ -148,6 +148,12 @@ const MyComponent = () => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  const handleRetest = () => {
+    setSelectedOptions({}); // Reset selected options
+    // setAnswerResults({}); // Clear results
+    setIsSubmitted(false); // Enable submit button
+  };
+
   const toggleAccordion = (id) => {
     setOpenAccordion(openAccordion === id ? "" : id);
   };
@@ -174,7 +180,7 @@ const MyComponent = () => {
       setSelectedModule(module);
       setSelectedTask("intro");
       const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
-        userid, courseIds, task: "overview", moduleid: module.id, image: courseData.course_cover_image
+        userid, courseIds, task: "intro", moduleid: module.id, image: courseData.course_cover_image
       });
       setOverviewDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.intro}` }]);
       setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.content}` }]);
@@ -191,7 +197,7 @@ const MyComponent = () => {
           setSelectedModule(module);
           setSelectedTask("intro");
           const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
-            userid, courseIds, task: "overview", moduleid: module.id, image: courseData.course_cover_image
+            userid, courseIds, task: "intro", moduleid: module.id, image: courseData.course_cover_image
           });
           setOverviewDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.intro}` }]);
           setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}/${module.content}` }]);
@@ -213,6 +219,13 @@ const MyComponent = () => {
     const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
       userid, courseIds, task: "certifyques", moduleid: null, image: courseData.course_cover_image
     });
+    if (status == 200) {
+      if (task == 'certifyques') {
+        if (isSubmitted) {
+          handleRetest();
+        }
+      }
+    }
     setSelectedTask(task);
   }
 
@@ -223,6 +236,14 @@ const MyComponent = () => {
     const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
       userid, courseIds, task: task, moduleid: module, image: courseData.course_cover_image
     });
+    if (status == 200) {
+      if (task == 'assessment') {
+        if (isSubmitted) {
+          handleRetest();
+        }
+      }
+    }
+
   };
 
   const handleclick = async () => {
@@ -285,6 +306,7 @@ const MyComponent = () => {
         });
 
         setAnswerResults(newResults); // update the state with the new results
+        setIsSubmitted(true);
       } else {
         toast.error('Answers not submitted, something went wrong');
       }
@@ -336,6 +358,7 @@ const MyComponent = () => {
         });
 
         setAnswerResults(newResults); // update the state with the new results
+        setIsSubmitted(true);
       } else {
         toast.error('Answers not submitted, something went wrong');
       }
@@ -347,6 +370,7 @@ const MyComponent = () => {
 
   const handleaddmod = (id) => {
     sessionStorage.setItem('course', id);
+    sessionStorage.setItem('addmod', 'addmod');
     router.push('/adminpages/moduleform');
   }
 
@@ -579,7 +603,7 @@ const MyComponent = () => {
 
             </div>
             <br />
-            <form onSubmit={(e) => { e.preventDefault(); handleanswer(selectedModule.id); }}>
+            <form>
               {selectedModule.assessments.map((task, idx) => (
                 <div key={task.id}>
                   <h3
@@ -623,7 +647,20 @@ const MyComponent = () => {
                   <br /><br />
                 </div>
               ))}
-              <button className="btn btn-primary" type="submit">Submit</button>
+              {/* <button className="btn btn-primary" type="submit">Submit</button> */}
+              {!isSubmitted ? (
+                <button className="btn btn-primary" type="button" onClick={(e) => { e.preventDefault(); handleanswer(selectedModule.id); }}>
+                  Submit
+                </button>
+              ) : (
+                <button
+                  className="btn btn-secondary"
+                  type="button"
+                  onClick={handleRetest}
+                >
+                  Take Retest
+                </button>
+              )}
             </form>
           </div>
         )
@@ -648,7 +685,7 @@ const MyComponent = () => {
               </div>
               <br />
 
-              <form onSubmit={(e) => { e.preventDefault(); handlecertifyanswer(); }}>
+              <form>
                 {certifyques.map((task, idx) => (
                   <div key={task.id}>
                     <h3
@@ -693,7 +730,20 @@ const MyComponent = () => {
                     <br /><br />
                   </div>
                 ))}
-                <button className="btn btn-primary" type="submit">Submit</button>
+                {/* <button className="btn btn-primary" type="submit">Submit</button> */}
+                {!isSubmitted ? (
+                  <button className="btn btn-primary" type="button" onClick={(e) => { e.preventDefault(); handlecertifyanswer(); }}>
+                    Submit
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-secondary"
+                    type="button"
+                    onClick={handleRetest}
+                  >
+                    Take Retest
+                  </button>
+                )}
               </form>
 
             </div>
