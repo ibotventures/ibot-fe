@@ -1,7 +1,7 @@
 "use client";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "@/app/page.module.css";
-import { useRouter,useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import classNames from 'classnames';
@@ -74,7 +74,13 @@ const Assessment = () => {
                             router.push('/adminpages/moduleform');
                         } else {
                             sessionStorage.setItem('modcount', 0);
-                            router.push('/coursepreview');
+                            const isinside = sessionStorage.getItem('addmod');
+                            if (isinside) {
+                                router.push('/coursepreview');
+                            } else {
+                                router.push('/adminpages/certificateques');
+                            }
+
                         }
                     }
                 }

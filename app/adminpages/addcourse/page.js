@@ -73,6 +73,8 @@ const AddCourse = () => {
                     sessionStorage.setItem('course', id);
                     sessionStorage.setItem('module_count', module_count);
                     sessionStorage.setItem('course_names', course_name);
+                    sessionStorage.setItem('description',course_description);
+                    sessionStorage.setItem('course_duration',course_duration);
                     sessionStorage.setItem('modcount', 0);
                     toast.success('Course initialized successfully. Proceed to create modules.');
                     console.log(res.data.data);
