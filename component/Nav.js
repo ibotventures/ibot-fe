@@ -46,6 +46,7 @@ const Example = () => {
         // setexists('');
         sessionStorage.clear();
         router.push('/login');
+        window.location.href = '/login';
     };
 
     return (

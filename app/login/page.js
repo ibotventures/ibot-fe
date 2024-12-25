@@ -28,6 +28,7 @@ const LoginPage = () => {
                 // Cookies.set('subscription',data.subscription,{expires: 7});
                 toast.success(`Logged in successfully`);
                 router.push('/');
+                window.location.href = '/';
             } else {
                 toast.error(`Check your details, login unsuccessful`);
             }
