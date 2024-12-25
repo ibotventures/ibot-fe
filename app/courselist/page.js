@@ -6,24 +6,25 @@ import styles from "@/app/page.module.css";
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/component/coursefilter';
 import { Button, Offcanvas, OffcanvasBody } from 'reactstrap';
-import { FaHourglass, FaFile, FaChartBar, FaCoins, FaListAlt } from 'react-icons/fa';
+import { FaHourglass, FaFile, FaListAlt } from 'react-icons/fa';
 import { useRouter } from "next/navigation";
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Image from 'next/image';
 import Cookies from 'js-cookie';
 import debounce from "lodash.debounce";
-import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
+import RazorpayComponent from "@/component/RazorpayComponent";
+import styler from '@/app/courselist/courselist.module.css'
 
 export default function CourseList() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(true);
   const [courseData, setCourseData] = useState([]);
-  const [backupcourse,setbackupcourse] = useState([]);
   const [access, setAccess] = useState('no');
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [courseIdToDelete, setCourseIdToDelete] = useState('');
+  const [username, setusername] = useState('');
+  const [email, setemail] = useState('');
+  const [contact, setcontact] = useState('');
   const router = useRouter();
 
   const toggleSidebar = () => {
@@ -36,18 +37,16 @@ export default function CourseList() {
       console.log("Updated Filters (debounced):", updatedFilter);
       const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/courses/`, {
         params: {
-          age_category: updatedFilter.age,
-          level: updatedFilter.level,
+          category: updatedFilter.age,
           rating: updatedFilter.rating,
         }
       });
 
       if (res.status === 200) {
-        console.log("Filtered Data:", res.data.data);
         setCourseData(res.data.data);
       }
     } catch (error) {
-      console.error("Error fetching filtered data:", error);
+      // console.error("Error fetching filtered data:", error);
     }
   }, 200);
 
@@ -92,9 +91,9 @@ export default function CourseList() {
         }
 
         setCourseData(courses.data.data);
-        setbackupcourse(courses.data.data);
+
       } catch (error) {
-        console.error("Error:", error);
+        // console.error("Error:", error);
         toast.error("Something went wrong while loading course data.");
       } finally {
         setLoading(false);
@@ -102,6 +101,27 @@ export default function CourseList() {
     };
 
     handleCourse();
+  }, []);
+
+  useEffect(() => {
+
+    const getdetails = async () => {
+      try {
+        const userId = Cookies.get('userid');
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail`, {
+          params: { id: userId },
+        });
+
+        const data = response.data.data;
+        setemail(data.email || '');
+        setusername(data.username || '');
+        setcontact(data.mobile || '');
+      } catch (error) {
+
+      }
+    }
+    getdetails();
+
   }, []);
 
   const handleClick = async (courseId) => {
@@ -117,35 +137,6 @@ export default function CourseList() {
     }
   };
 
-  const handleclearfilter = async () =>{
-    setCourseData(backupcourse);
-  }
-
-  const handleDelete = async () => {
-    if (!courseIdToDelete) return;
-
-    try {
-      const response = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/deletecourse/${courseIdToDelete}/`);
-      if (response.status === 200) {
-        toast.success('Course deleted successfully');
-        setCourseData(prevData => prevData.filter(course => course.id !== courseIdToDelete));
-      } else {
-        toast.error("Unable to delete");
-      }
-    } catch (error) {
-      console.error('Error deleting course:', error);
-      toast.error("An error occurred while deleting the course");
-    } finally {
-      setShowDeleteModal(false);
-      setCourseIdToDelete('');
-    }
-  };
-
-  const confirmDelete = (id) => {
-    setCourseIdToDelete(id);
-    setShowDeleteModal(true);
-  };
-
   if (loading) {
     return <p>Loading...</p>;
   }
@@ -156,13 +147,11 @@ export default function CourseList() {
         <div className={styles.occupy}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>
-              <h1 className={styles.landfont}>Our Courses</h1>
+              <h1>Our Courses</h1>
               {access === 'no' && (
                 <>
                   <p>You haven&apos;t got a Subscription yet. Buy one to access all of our courses.</p>
-                  <button className="btn btn-primary" style={{ fontSize: "1.4vw" }}>
-                    Buy Subscription
-                  </button>
+                  <RazorpayComponent email={email} username={username} contact={contact} />
                 </>
               )}
             </div>
@@ -177,7 +166,7 @@ export default function CourseList() {
           <br />
           {courseData.length ? (
             courseData.map((course) => (
-              <div key={course.id} style={{ marginBottom: "2rem" }}>
+              <div key={course.id} style={{ marginBottom: "2rem" }} className='container-fluid'>
                 <div
                   style={{
                     display: "flex",
@@ -187,55 +176,41 @@ export default function CourseList() {
                     backgroundColor: "white",
                     cursor: "pointer"
                   }}
+                  className={styler.courseresponsive}
                   onClick={() => handleClick(course.id)}
                 >
                   <Image
                     src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${course.course_cover_image}`}
                     alt="Course Cover"
-                    style={{ width: "40vw", borderRadius: "2vw 0 0 2vw", height: "28vh" }}
-                    className="img-fluid"
-                    width={500} height={300}
+                    className={classNames('img-fluid', styler.courseImage)}
+                    width={200} height={300}
+                    unoptimized
+
                   />
-                  <div style={{ width: "60vw", padding: "2vw", display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
+                  <div className={styler.courseDetails}>
                     <div>
-                      <h2 style={{ fontSize: "2vw" }}>{course.course_name}</h2>
+                      <h2>{course.course_name}</h2>
                       <div style={{ display: "flex", gap: "1vw", flexWrap: "wrap" }}>
                         <div style={{ display: "flex", gap: "0.5vw" }}>
-                          <FaHourglass style={{ color: "orange" }} size="1.5vw" />
-                          <p className={styles.fontp}>{course.course_duration} hrs</p>
+                          <FaHourglass style={{ color: "orange" }} />
+                          <p>{course.course_duration} hrs</p>
                         </div>
                         <div style={{ display: "flex", gap: "0.5vw" }}>
-                          <FaFile style={{ color: "orange" }} size="1.5vw" />
-                          <p className={styles.fontp}>{course.module_count} Modules</p>
+                          <FaFile style={{ color: "orange" }} />
+                          <p>{course.module_count} Modules</p>
                         </div>
                         <div style={{ display: "flex", gap: "0.5vw" }}>
-                          <FaChartBar style={{ color: "orange" }} size="1.5vw" />
-                          <p className={styles.fontp}>{course.level}</p>
-                        </div>
-                        <div style={{ display: "flex", gap: "0.5vw" }}>
-                          <FaListAlt style={{ color: "orange" }} size="1.5vw" />
-                          <p className={styles.fontp}>{course.age_category}</p>
+                          <FaListAlt style={{ color: "orange" }} />
+                          <p>{course.category}</p>
                         </div>
                       </div>
                     </div>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                       <div style={{ display: "flex", gap: "0.5vw" }}>
-                        <FaCoins style={{ color: "gold" }} size="1.5vw" />
-                        <p className={styles.fontp}>{course.course_price}$</p>
+                        <h5 className="starability-result card-text"
+                          data-rating={course.rating}>
+                        </h5>
                       </div>
-                      {Cookies.get('username') === 'Administrator' ? (
-                        <button
-                          className="btn btn-primary"
-                          style={{ fontSize: "1.4vw" }}
-                          onClick={(e) => {
-                            e.stopPropagation();  // Prevents navigation
-                            confirmDelete(course.id);
-                          }}
-                        >
-                          Delete
-                        </button>
-                      ) : null}
-
                     </div>
                   </div>
                 </div>
@@ -246,10 +221,10 @@ export default function CourseList() {
           )}
         </div>
 
-        <div className={classNames(styles.fontp, styles.sidebar)}>
+        <div className={classNames(styles.sidebar)}>
           {isMobile ? (
             <Offcanvas isOpen={isOpen} toggle={toggleSidebar} direction="right" style={{ height: "100%" }}>
-              <OffcanvasBody className={classNames(styles.fontp, styles.sidebar)} style={{ width: "40vw" }}>
+              <OffcanvasBody className={classNames(styles.sidebar)} style={{ width: "80vw" }}>
                 <Sidebar setFilters={setFilters} />
               </OffcanvasBody>
             </Offcanvas>
@@ -260,16 +235,8 @@ export default function CourseList() {
 
           )}
         </div>
-
-        <Modal isOpen={showDeleteModal} toggle={() => setShowDeleteModal(false)}>
-          <ModalHeader toggle={() => setShowDeleteModal(false)}>Confirm Deletion</ModalHeader>
-          <ModalBody>Are you sure you want to delete this course?</ModalBody>
-          <ModalFooter>
-            <Button color="danger" onClick={handleDelete}>Yes</Button>
-            <Button color="secondary" onClick={() => setShowDeleteModal(false)}>No</Button>
-          </ModalFooter>
-        </Modal>
       </div>
     </>
   );
+
 }

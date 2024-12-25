@@ -47,9 +47,10 @@ const LoginPage = () => {
     return (
         <>
 
-            <div className={classNames(styles.background, styles.parafont)} style={{ display: "flex", justifyContent: "center" }} >
-                <div style={{ backgroundColor: "whitesmoke", width: "50vw", padding: "3vw", borderRadius: "20px", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", margin: "20px", height: "fit-content" }} className='container-fluid'>
-                    <h2 style={{ paddingBottom: "2vw" }} className={styles.fonth}>Login</h2>
+            <div className={classNames(styles.background)} style={{ display: "flex", justifyContent: "center" }} >
+                {/* <div style={{ backgroundColor: "whitesmoke", width: "50vw", padding: "3vw", borderRadius: "20px", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", margin: "20px", height: "fit-content" }} className='container-fluid'> */}
+                <div className={classNames(styles.registerContainer, 'container-fluid')}>
+                    <h2 style={{ paddingBottom: "2vw" }}>Login</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
                             {/* <label htmlFor="email">Email</label> */}
@@ -57,7 +58,7 @@ const LoginPage = () => {
                                 type="email"
                                 onChange={e => setemail(e.target.value)}
                                 value={email}
-                                className={classNames("form-control", styles.fontp)}
+                                className={classNames("form-control")}
                                 id="email"
                                 placeholder="Email"
                                 style={{ padding: "1vw" }}
@@ -70,7 +71,7 @@ const LoginPage = () => {
                                 type="password"
                                 onChange={e => setPass(e.target.value)}
                                 value={password}
-                                className={classNames("form-control", styles.fontp)}
+                                className={classNames("form-control")}
                                 id="password"
                                 placeholder="Password"
                                 style={{ padding: "1vw" }}
@@ -78,7 +79,7 @@ const LoginPage = () => {
                             />
                         </div><br />
                         <a href='/forgetpassword'><p>Forget Password?</p></a>
-                        <button type="submit" className={classNames("btn btn-primary btn-block", styles.fontp)} style={{ width: "100%", borderRadius: "1.3vw" }}>
+                        <button type="submit" className={classNames("btn btn-primary btn-block")} style={{ width: "100%", borderRadius: "1.3vw" }}>
                             Login
                         </button>
                         <br />

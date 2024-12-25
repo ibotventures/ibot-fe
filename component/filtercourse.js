@@ -1,15 +1,24 @@
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Label, Input, Button } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-import styles from "@/app/page.module.css";
+// import styles from "@/app/page.module.css";
 import { FaStar } from "react-icons/fa";
-
+import axios from "axios";
 export default function FilterCourse({ onFilterChange }) {
+    const [categor, setcategor] = useState([]);
+    useEffect(() => {
+        const getcategory = async () => {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getcategory`);
+            const data = response.data.data;
+            setcategor(data);
+        }
+        getcategory();
+
+    }, []);
     const [filters, setFilters] = useState({
-        age: "",
-        rating: "",
-        level: ""
+        category: "",
+        rating: ""
     });
 
     const handleFilterChange = (category, value) => {
@@ -25,7 +34,7 @@ export default function FilterCourse({ onFilterChange }) {
     };
 
     const handleClearFilters = () => {
-        const initialFilters = { age: "", rating: "", level: "" };
+        const initialFilters = { category: "", rating: "" };
         setFilters(initialFilters);
 
         if (typeof onFilterChange === "function") {
@@ -34,9 +43,10 @@ export default function FilterCourse({ onFilterChange }) {
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.5vw" }} className={styles.fontp}>
-            <h2>Course Categories</h2>
-            {["Age 3-5", "Age 5-9", "Age 9-15"].map(age => (
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.5vw" }}>
+
+            <h2>Categories</h2>
+            {categor.map(age => (
                 <div key={age}>
                     <Input
                         type="radio"
@@ -69,24 +79,10 @@ export default function FilterCourse({ onFilterChange }) {
                     </Label>
                 </div>
             ))}
-
-            <h2>All Levels</h2>
-            {["Beginner", "Intermediate", "Expert"].map(level => (
-                <div key={level}>
-                    <Input
-                        type="radio"
-                        id={`level-${level}`}
-                        checked={filters.level === level}
-                        onChange={() => handleFilterChange("level", level)}
-                    />
-                    <Label check htmlFor={`level-${level}`}>{level}</Label>
-                </div>
-            ))}
-
-            {/* Clear Filters Button */}
             <Button color="secondary" onClick={handleClearFilters} style={{ marginTop: "1vw" }}>
                 Clear Filters
             </Button>
+
         </div>
     );
 }

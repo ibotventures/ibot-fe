@@ -1,30 +1,40 @@
-
 'use client';
 import { useState, useEffect } from "react";
 import { Container, Offcanvas, Row, Col, Button } from "reactstrap";
-import PurchasedCourse from '@/component/PurchasedCourse';
+import Purchasedproduct from '@/component/purchasehistory';
 import EditDetails from '@/component/EditDetails';
-import Statistics from "@/component/statistics.js";
 import '@/app/page.module.css';
 import Delete from '@/component/DeleteAccount';
-import { useRouter } from "next/navigation";
+import axios from "axios";
+// import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Caurosal from "@/component/carousal";
+import Courses from "@/component/courses";
+
 const MyComponent = () => {
     const [selectedTask, setSelectedTask] = useState(null); // For displaying task content
     const [sidebarOpen, setSidebarOpen] = useState(false); // To handle sidebar visibility
     const [isLargeScreen, setIsLargeScreen] = useState(window.innerWidth >= 768); // For responsive handling
-    const [isadmin, setisadmin] = useState('');
     const [upadteuser, setuser] = useState(Cookies.get('username'));
-    
+    const [profileimages, setProfileImage] = useState('/profile.png');
+    const [updateprofile, setprofile] = useState('/profile.png');
+    const userId = Cookies.get('userid');
+
     useEffect(() => {
-        const username = Cookies.get('username');
-        setisadmin(username);
+        const handledata = async () => {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail`, {
+                params: { id: userId },
+            });
+            if (response.data.data.profile) {
+                const profileUrl = `${process.env.NEXT_PUBLIC_BASE_API_URL}${response.data.data.profile}`;
+                setProfileImage(profileUrl);
+                setprofile(profileUrl);
+            }
+
+        };
+        handledata();
     }, []);
-
-
 
     useEffect(() => {
         // Update screen size on window resize
@@ -43,73 +53,41 @@ const MyComponent = () => {
     };
 
     const renderContent = () => {
-        if (isadmin != 'Administrator') {
-            if (!selectedTask) return (
-                <>
-                    <EditDetails upadteuser={upadteuser} setuser={setuser} />
-                </>
-            );
 
-            switch (selectedTask) {
+        if (!selectedTask) return (
+            <>
+                <EditDetails upadteuser={upadteuser} setuser={setuser} updateprofile={updateprofile} setprofile={setprofile} />
+            </>
+        );
 
-                case 'delete':
-                    return (
-                        <div className='container-fluid'>
-                            <Delete />
-                        </div>
-                    );
-                case 'purcourse':
-                    return (
-                        <div>
-                            <PurchasedCourse />
-                        </div>
-                    );
-                case 'purhistory':
-                    return (
-                        <div>
-                            <Caurosal />
-                        </div>
-                    );
-                case 'edit':
-                    return (
-                        <div>
-                            <EditDetails upadteuser={upadteuser} setuser={setuser} />
-                        </div>
-                    );
-                default:
-                    return <p>Unknown task type.</p>;
-            }
-        } else {
-            if (!selectedTask) return (
-                <>
-                    <EditDetails upadteuser={upadteuser} setuser={setuser} />
-                </>
+        switch (selectedTask) {
 
-            );
-            switch (selectedTask) {
-
-                case 'coursedetails':
-                    return (
-                        <div>
-                            <PurchasedCourse />
-                        </div>
-                    );
-                case 'statistics':
-                    return (
-                        <div>
-                            <Statistics />
-                        </div>
-                    );
-                case 'edit':
-                    return (
-                        <div>
-                            <EditDetails upadteuser={upadteuser} setuser={setuser} />
-                        </div>
-                    );
-                default:
-                    return <p>Unknown task type.</p>;
-            }
-
+            case 'delete':
+                return (
+                    <div className='container-fluid'>
+                        <Delete />
+                    </div>
+                );
+            case 'courses':
+                return (
+                    <div>
+                        <Courses />
+                    </div>
+                );
+            case 'purhistory':
+                return (
+                    <div>
+                        <Purchasedproduct />
+                    </div>
+                );
+            case 'edit':
+                return (
+                    <div>
+                        <EditDetails upadteuser={upadteuser} setuser={setuser} updateprofile={updateprofile} setprofile={setprofile} />
+                    </div>
+                );
+            default:
+                return <p>Unknown task type.</p>;
         }
 
     };
@@ -133,74 +111,72 @@ const MyComponent = () => {
                     isOpen={sidebarOpen}
                     toggle={() => setSidebarOpen(!sidebarOpen)}
                     className="offcanvas-start"
-                    scrollable
+                    style={{ overflowY: 'auto' }}
 
                 >
 
-                    {isadmin == 'Administrator' ? (
-                        <>
+                    <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <Image width={160} height={170} src={updateprofile || '/profile.png'} className="img-fluid" alt="Description of the image"
 
-                            <p onClick={() => handleTaskClick('edit')}>Edit your Details</p>
-                            <p onClick={() => handleTaskClick('statistics')}>Statistics</p>
-                            <p onClick={() => handleTaskClick('coursedetails')}>Course details</p>
+                            style={{
+                                borderRadius: "50%",
+                                objectFit: "cover",
+                                width: "130px",
+                                height: "130px",
+                            }}
+                        />
+                        <p>{upadteuser}</p>
+                    </div>
 
-                        </>
-                    ) : (
-                        <>
+                    <p onClick={() => { handleTaskClick('purhistory'); setSidebarOpen(!sidebarOpen) }}>purchase history</p>
+                    <p onClick={() => { handleTaskClick('courses'); setSidebarOpen(!sidebarOpen) }}>Courses</p>
+                    <p onClick={() => { handleTaskClick('edit'); setSidebarOpen(!sidebarOpen) }}>Edit  Details</p>
+                    <p onClick={() => { handleTaskClick('delete'); setSidebarOpen(!sidebarOpen) }}>delete Account</p>
 
-                           
-                            <p onClick={() => handleTaskClick('purhistory')}>purchase history</p>
-                            <p onClick={() => handleTaskClick('edit')}>Edit  Details</p>
-                            <p onClick={() => handleTaskClick('delete')}>delete Account</p>
-                        </>
-                    )}
                 </Offcanvas>
 
-                <Row>
+                <Row style={{ display: "flex", flex: "1", minHeight: "100vh" }}>
                     {/* Sidebar for large screens */}
                     {isLargeScreen && (
-                        <Col xs="12" md="3" className="border-end" style={{ flex: "1", backgroundColor: "whitesmoke", width: "20vw", fontSize: "1.5vw" }}>
+                        <Col xs="12" md="3" className="border-end" style={{ backgroundColor: "whitesmoke", width: "20vw", fontSize: "1.5vw", flexGrow: "0" }}>
                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                                <Image width={160} height={170} src={'/profile.png'} className="img-fluid" alt="Description of the image" />
-                                <p style={{ fontSize: "1.8vw" }}>{upadteuser}</p>
+                                <Image width={160} height={170} src={updateprofile || '/profile.png'} className="img-fluid" alt="Description of the image"
+
+                                    style={{
+                                        borderRadius: "50%",
+                                        objectFit: "cover",
+                                        width: "130px",
+                                        height: "130px",
+                                    }}
+                                />
+                                <p>{upadteuser}</p>
                             </div>
 
                             <br />
-                            {isadmin == 'Administrator' ? (
-                                <>
 
-                                    <p onClick={() => handleTaskClick('edit')}>Edit your Details</p>
-                                    <p onClick={() => handleTaskClick('statistics')}>Statistics</p>
-                                    <p onClick={() => handleTaskClick('coursedetails')}>Course details</p>
-
-                                </>
-                            ) : (
-                                <>
-
-                                  
-                                    <p onClick={() => handleTaskClick('purhistory')}>purchase history</p>
-                                    <p onClick={() => handleTaskClick('edit')}>Edit  Details</p>
-                                    <p onClick={() => handleTaskClick('delete')}>delete Account</p>
-                                </>
-                            )}
+                            <p onClick={() => handleTaskClick('purhistory')}>purchase history</p>
+                            <p onClick={() => handleTaskClick('courses')}>Courses</p>
+                            <p onClick={() => handleTaskClick('edit')}>Edit  Details</p>
+                            <p onClick={() => handleTaskClick('delete')}>delete Account</p>
 
                         </Col>
                     )}
 
                     {/* Main content area */}
-                    <Col xs="12" md={isLargeScreen ? "9" : "12"} className="p-3" id='main-content'>
-                        <div>
+                    <Col xs="12" md={isLargeScreen ? "9" : "12"} className="p-3" id='main-content' style={{
+                        flexGrow: "1",
+                        display: "flex",
+                        flexDirection: "column",
+                    }}>
+                        <div style={{ flex: "1", display: "flex", flexDirection: "column" }}>
                             {renderContent()}
                         </div>
                     </Col>
                 </Row >
-
             </Container >
-
         </>
     );
 };
-
 export default MyComponent;
 
 

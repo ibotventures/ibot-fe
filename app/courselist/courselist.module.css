@@ -1,0 +1,42 @@
+/* courselist.module.css */
+
+/* .course-responsive { */
+    /* display: flex;
+    justify-content: space-between;
+    box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    border-radius: 2vw;
+    background-color: white;
+    cursor: pointer;
+    flex-direction: row;
+}*/
+
+.courseresponsive .courseImage {
+    width: 40vw;
+    border-radius: 2vw 0 0 2vw;
+    max-height: 300px;
+}
+
+.courseresponsive .courseDetails {
+    width: 60vw;
+    padding: 2vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+} 
+
+/* Media query for small screens */
+@media (max-width: 600px) {
+    .courseresponsive {
+        flex-direction: column;
+    }
+
+    .courseresponsive .courseImage {
+        width: 100%;
+        max-height: auto;
+        border-radius: 2vw 2vw 0 0;
+    }
+
+    .courseresponsive .courseDetails {
+        width: 100%;
+    }
+}

@@ -2,80 +2,125 @@
 import React, { useState, useEffect } from 'react';
 import Cards from "@/component/Card";
 import Cookies from 'js-cookie';
-import {
-  InputGroup,
-  Input,
-  ButtonDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
-} from 'reactstrap';
+import axios from 'axios';
+import styles from "@/app/page.module.css";
+import Sidebar from '@/component/coursefilter';
+import { Button, Offcanvas, OffcanvasBody } from 'reactstrap';
+import classNames from 'classnames';
+import debounce from "lodash.debounce";
+import { toast } from 'react-toastify';
 export default function Products() {
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [inputValue, setInputValue] = useState('All Products'); 
 
-  const toggleDropdown = () => {
-    setDropdownOpen(prevState => !prevState);
+  const [productData, setproductData] = useState([]);
+  const [isMobile, setIsMobile] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
   };
 
-  const handleDropdownClick = (value) => {
-    setInputValue(value); // Update input field with selected dropdown value
-  };
-
-  const [isadmin, setisadmin] = useState('');
   useEffect(() => {
-    setisadmin(Cookies.get('username'));
+    const handleResize = () => {
+      if (window.innerWidth < 768) {
+        setIsMobile(true);
+      } else {
+        setIsMobile(false);
+        setIsOpen(false);
+      }
+    };
+
+    window.addEventListener("resize", handleResize);
+    handleResize();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
   }, []);
+
+  const updateFilter = debounce(async (updatedFilter) => {
+    try {
+      // console.log("Updated Filters (debounced):", updatedFilter);
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/productfilter/`, {
+        params: {
+          category: updatedFilter.age,
+        }
+      });
+
+      if (res.status === 200) {
+        setproductData(res.data.data);
+      }
+    } catch (error) {
+      console.error("Error fetching filtered data:", error);
+    }
+  }, 200);
+
+  const setFilters = (updatedFilter) => {
+    // Call the debounced update function
+    updateFilter(updatedFilter);
+  };
+
+  const handleproduct = () => {
+    Router.push('/product')
+  }
+
+  useEffect(() => {
+    const handledata = async (e) => {
+      try {
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/addproduct/`);
+        if (res.status == 200) {
+          setproductData(res.data.data);
+        }
+      } catch {
+        toast.error('something went wrong');
+      }
+    }
+    handledata();
+  }, []);
+
   return (
     <>
-      <h1 style={{ textAlign: "center", margin: "20px" }}>Our Products</h1>
-      <br />
-      <div style={{ display: "flex", justifyContent: 'space-evenly' }}>
-        <InputGroup style={{ width: "80%", height: "50px" }}>
-          <Input value={inputValue} readOnly /> {/* Input is readOnly */}
-          <ButtonDropdown isOpen={dropdownOpen} toggle={toggleDropdown}>
-            <DropdownToggle caret>
-              Filter
-            </DropdownToggle>
-            <DropdownMenu>
-              <DropdownItem onClick={() => handleDropdownClick("All Products")}>
-                All Products
-              </DropdownItem>
+      {
+        !isMobile && (
+          <h1 style={{ textAlign: "center", margin: "20px" }}>Our Products</h1>
+        )
+      }
 
-              <DropdownItem onClick={() => handleDropdownClick("Age 3-5")}>
-                Age 3-5
-              </DropdownItem>
-              <DropdownItem onClick={() => handleDropdownClick("Age 5-9")}>
-                Age 5-9
-              </DropdownItem>
-              <DropdownItem onClick={() => handleDropdownClick("Age 9-15")}>
-                Age 9-15
-              </DropdownItem>
+      {isMobile && (
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px' }}>
+          <h1 style={{ textAlign: "center", margin: "20px" }}>Our Products</h1>
+          <Button onClick={toggleSidebar} className={styles.sidebartoggle}>
+            Filter
+          </Button>
+        </div>
+      )}
 
-            </DropdownMenu>
-          </ButtonDropdown>
-        </InputGroup>
-        {isadmin == 'Administrator' ? (
-          <>
-            <a href='/adminpages/addproduct'> <button className='btn btn-primary'>Add New Product</button></a>
+      <div style={{ display: "flex", justifyContent: "space-between", padding: "3.5vw" }}>
+        <div className={classNames(styles.sidebar)}>
+          {isMobile ? (
+            <Offcanvas isOpen={isOpen} toggle={toggleSidebar} direction="right" style={{ height: "100%" }}>
+              <OffcanvasBody className={classNames(styles.sidebar)} style={{ width: "80vw" }}>
+                <Sidebar setFilters={setFilters} />
+              </OffcanvasBody>
+            </Offcanvas>
+          ) : (
+            <>
+              <Sidebar setFilters={setFilters} />
+            </>
 
-          </>
-        ) : null}
+          )}
+        </div>
+        <div className={classNames(styles.occupy, 'container-fluid')}>
+          <div className={styles.productwrap}>
+            {productData.length ? (
+              productData.map((product) => (
+                <Cards key={product.id} product={product} className='container-fluid' onClick={handleproduct} />
+              ))
+            ) : (
+              <p style={{ textAlign: 'center' }}>No products found</p>
+            )}
+          </div>
+        </div>
       </div>
-      <br />
-      <br />
-      <div style={{ display: "flex", justifyContent: "space-evenly", flexWrap: "wrap", gap: "5px" }}>
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
-        <Cards />
-      </div>
-      <br />
       <br />
       <br />
     </>

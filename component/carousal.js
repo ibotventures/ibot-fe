@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
-import { Carousel } from 'react-bootstrap'; // Update import
-import styles from '@/app/page.module.css';
+import { Carousel } from 'react-bootstrap'; 
+// import styles from '@/app/page.module.css';
 import classNames from 'classnames';
 
 const items = [
@@ -36,13 +36,13 @@ function Example(args) {
     <Carousel activeIndex={activeIndex} onSelect={handleSelect} {...args}>
       {items.map((item) => (
         <Carousel.Item key={item.key}>
-          <div style={{ display: "flex", justifyContent: "space-between", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", borderRadius: "2vw", backgroundColor: "white" }}>
-            <div style={{ width: "60vw", display: "flex", flexDirection: "column", justifyContent: "center", padding: "2vw" }}>
-              <h2 style={{ fontSize: "3vw" }}>Build your own robots</h2>
-              <p className={styles.fontp}>Unleash the power of robotics with hands-on learning. Build, code, and innovate for the future of automation!</p>
-              <button className={classNames("btn btn-primary btn-block")} style={{ width: "fit-content", padding: "0.7vw", fontSize: "1.4vw" }}>Get Started</button>
+          <div style={{ display: "flex", justifyContent: "space-between", borderRadius: "20px", backgroundColor: "white" }}>
+            <div style={{ width: "60vw", display: "flex", flexDirection: "column", justifyContent: "center", padding: "30px" }}>
+              <h2>Build your own robots</h2>
+              <p>Unleash the power of robotics with hands-on learning. Build, code, and innovate for the future of automation!</p>
+              <button className={classNames("btn btn-primary btn-block")} style={{ width: "fit-content", padding: "0.7vw" }}>Get Started</button>
             </div>
-            <img src={item.src} alt={item.altText} style={{ width: "40vw", borderRadius: "0vw 2vw 2vw 0vw", height: "40vh" }} className='img-fluid' />
+            <img src={item.src} alt={item.altText} style={{ width: "40vw", borderRadius: "0vw 2vw 2vw 0vw",maxHeight:'500px'}} className='img-fluid' />
           </div>
           <Carousel.Caption>
             <h3>{item.caption}</h3>
@@ -54,3 +54,10 @@ function Example(args) {
 }
 
 export default Example;
+
+
+
+
+
+
+

@@ -1,6 +1,8 @@
+
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Carousel, Container } from 'react-bootstrap';
+import { Carousel, Container, Row, Col } from 'react-bootstrap';
 import Image from 'next/image';
+import { useEffect, useState } from 'react';
 
 const ImageCarousel = () => {
     const images = [
@@ -12,38 +14,60 @@ const ImageCarousel = () => {
         'https://static.wixstatic.com/media/b71048_9c3375f57b61406c91d32b0d7f078702~mv2.png/v1/fill/w_346,h_365,al_c,lg_1,q_85,enc_auto/Picture67_edited.png'
     ];
 
+    const [isLargeScreen, setIsLargeScreen] = useState(true);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsLargeScreen(window.innerWidth >= 768);
+        };
+
+        // Initial check and event listener
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    if (!isLargeScreen) {
+        return null; // Do not render on small screens
+    }
+
+    const chunkArray = (arr, size) => {
+        const result = [];
+        for (let i = 0; i < arr.length; i += size) {
+            result.push(arr.slice(i, i + size));
+        }
+        return result;
+    };
+
+    const groupedImages = chunkArray(images, 3);
+
     return (
-        <Container className='container-fluid'>
-            <Carousel
-                indicators={false}  // Disable indicators if not needed
-                interval={3000}     // Set interval between slides
-                controls={false}     // Enable/Disable next/prev buttons
-                style={{ width: "100%", display: "flex", alignItems: "center" }}
-                className='container-fluid'
+        <Container className="py-4">
+            <Carousel 
+                indicators={false} 
+                interval={3000} 
+                controls={true} 
+                className="w-100"
             >
-                {/* Display images in groups of 3 */}
-                <Carousel.Item>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '50px' }}>
-                        {images.slice(0, 3).map((image, index) => (
-                            <div key={index} style={{ width: '200px' }} className='container-fluid'>
-                                <Image width={150} height={150} className="d-block"
-                                    src={image}
-                                    alt={`Slide ${index}`} />
-                            </div>
-                        ))}
-                    </div>
-                </Carousel.Item>
-                <Carousel.Item>
-                    <div style={{ display: 'flex', justifyContent: 'center', gap: '50px' }}>
-                        {images.slice(3, 6).map((image, index) => (
-                            <div key={index} style={{ width: '200px' }} className='container-fluid'>
-                                <Image width={150} height={150} className="d-block"
-                                    src={image}
-                                    alt={`Slide ${index}`} />
-                            </div>
-                        ))}
-                    </div>
-                </Carousel.Item>
+                {groupedImages.map((group, idx) => (
+                    <Carousel.Item key={idx}>
+                        <Row className="justify-content-center">
+                            {group.map((image, index) => (
+                                <Col key={index} xs={12} sm={6} md={4} className="d-flex justify-content-center">
+                                    <Image 
+                                        src={image} 
+                                        alt={`Slide ${index}`} 
+                                        width={150} 
+                                        height={150} 
+                                        className="img-fluid"
+                                    />
+                                </Col>
+                            ))}
+                        </Row>
+                    </Carousel.Item>
+                ))}
             </Carousel>
         </Container>
     );
@@ -51,4 +75,4 @@ const ImageCarousel = () => {
 
 export default ImageCarousel;
 
-
+          

@@ -78,9 +78,10 @@ const Verification = () => {
 
     return (
         <>
-            <div className={classNames(styles.background, styles.parafont)} style={{ display: "flex", justifyContent: "center", flex: '1' }} >
-                <div style={{ backgroundColor: "whitesmoke", width: "50vw", padding: "3vw", borderRadius: "20px", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", margin: "20px", height: "fit-content" }} className='container-fluid'>
-                    <h2 style={{ paddingBottom: "2vw" }} className={styles.fonth}>Verification Code</h2>
+            <div className={classNames(styles.background)} style={{ display: "flex", justifyContent: "center", flex: '1' }} >
+                {/* <div style={{ backgroundColor: "whitesmoke", width: "50vw", padding: "3vw", borderRadius: "20px", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", margin: "20px", height: "fit-content" }} className='container-fluid'> */}
+                <div className={classNames(styles.registerContainer, 'container-fluid')}>
+                    <h2 style={{ paddingBottom: "2vw" }}>Verification Code</h2>
                     <p>We have sent the verification code to your email address</p>
                     <form onSubmit={handleSubmit}>
                         <div style={{ display: "flex", justifyContent: "space-evenly", gap: "1vw" }}>
@@ -90,9 +91,9 @@ const Verification = () => {
                                     type="text"
                                     onChange={e => setcode1(e.target.value)}
                                     value={code1}
-                                    className={classNames("form-control", styles.fontp)}
+                                    className={classNames("form-control")}
                                     id="code1"
-                                    style={{ width: "8vw", height: "8vh" }}
+                                    style={{ width: "9vw", height: "8vh" }}
                                     maxLength="1"
                                     required
 
@@ -104,9 +105,9 @@ const Verification = () => {
                                     type="text"
                                     onChange={e => setcode2(e.target.value)}
                                     value={code2}
-                                    className={classNames("form-control", styles.fontp)}
+                                    className={classNames("form-control")}
                                     id="code2"
-                                    style={{ width: "8vw", height: "8vh" }}
+                                    style={{ width: "9vw", height: "8vh" }}
                                     maxLength="1"
                                     required
                                 />
@@ -117,9 +118,9 @@ const Verification = () => {
                                     type="text"
                                     onChange={e => setcode3(e.target.value)}
                                     value={code3}
-                                    className={classNames("form-control", styles.fontp)}
+                                    className={classNames("form-control")}
                                     id="code3"
-                                    style={{ width: "8vw", height: "8vh" }}
+                                    style={{ width: "9vw", height: "8vh" }}
                                     maxLength="1"
                                     required
                                 />
@@ -130,9 +131,9 @@ const Verification = () => {
                                     type="text"
                                     onChange={e => setcode4(e.target.value)}
                                     value={code4}
-                                    className={classNames("form-control", styles.fontp)}
+                                    className={classNames("form-control")}
                                     id="code4"
-                                    style={{ width: "8vw", height: "8vh" }}
+                                    style={{ width: "9vw", height: "8vh" }}
                                     maxLength="1"
                                     required
 
@@ -141,12 +142,12 @@ const Verification = () => {
                         </div>
                         <br />
 
-                        <button type="submit" className={classNames("btn btn-primary btn-block", styles.fonth)} style={{ width: "100%", borderRadius: "1.3vw" }}>
+                        <button type="submit" className={classNames("btn btn-primary btn-block")} style={{ width: "100%", borderRadius: "1.3vw" }}>
                             Continue
                         </button>
                         <br />
                         <br />
-                        <p style={{ color: "blue", textAlign: "center", cursor: "pointer", textDecorationLine: "underline" }} className={styles.fontp} onClick={handleResend}>Resend Code?</p>
+                        <p style={{ color: "blue", textAlign: "center", cursor: "pointer", textDecorationLine: "underline" }} onClick={handleResend}>Resend Code?</p>
                     </form>
 
                 </div>

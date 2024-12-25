@@ -2,7 +2,7 @@
 import Image from "next/image";
 import LandingCaurosal from "@/component/productcaurosal";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import styles from "@/app/page.module.css";
+import styler from "@/app/page.module.css";
 import classNames from 'classnames';
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
@@ -61,7 +61,7 @@ export default function Home({ upadteuser, setuser }) {
                 if (data.profile) setProfileImageUrl(`${process.env.NEXT_PUBLIC_BASE_API_URL}${data.profile}`);
                 setLoading(false);
             } catch (error) {
-                console.error("Error details:", error);
+                // console.error("Error details:", error);
                 toast.error("Something went wrong while loading data.");
                 setLoading(false);
             }
@@ -121,7 +121,7 @@ export default function Home({ upadteuser, setuser }) {
                 toast.success('Updated successfully');
             }
         } catch (error) {
-            console.error("Error details:", error);
+            // console.error("Error details:", error);
             toast.error("Something went wrong while updating.");
         }
     };
@@ -132,10 +132,10 @@ export default function Home({ upadteuser, setuser }) {
 
     return (
         <>
-            <h1 style={{ fontSize: "3vw", margin: "2vw" }}>User Details</h1>
-            <p style={{ fontSize: "1.5vw", margin: "2vw" }}>Update your personal details and photo here</p>
+            <h1 style={{ margin: "2vw" }}>User Details</h1>
+            <p style={{ marginLeft: "2vw" }}>Update your personal details and photo here</p>
 
-            <form className={styles.fontp} style={{ display: "flex", flexDirection: "column", alignItems: "center" }} onSubmit={handlesubmit}>
+            <form style={{ display: "flex", flexDirection: "column", alignItems: "center" }} onSubmit={handlesubmit}>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingBottom: "2vw" }}>
                     <Image
                         src={`${profileImageUrl}` || '/profile.png'}
@@ -169,10 +169,9 @@ export default function Home({ upadteuser, setuser }) {
                         type="text"
                         onChange={e => setfirstname(e.target.value)}
                         value={first_name}
-                        className={classNames("form-control", styles.fontp)}
+                        className={classNames("form-control", styler.singlefield)}
                         id="firstname"
                         placeholder="First Name"
-                        style={{ padding: "0.5vw", width: "50vw" }}
                         required
                     />
                 </div><br />
@@ -184,10 +183,9 @@ export default function Home({ upadteuser, setuser }) {
                             type="text"
                             onChange={e => setmiddlename(e.target.value)}
                             value={middle_name}
-                            className={classNames("form-control", styles.fontp)}
+                            className={classNames("form-control", styler.doublefield)}
                             id="middlename"
                             placeholder="Middle Name"
-                            style={{ padding: "0.5vw", width: "24vw" }}
                         />
                     </div><br />
                     <div className="form-group">
@@ -196,11 +194,9 @@ export default function Home({ upadteuser, setuser }) {
                             type="text"
                             onChange={e => setlastname(e.target.value)}
                             value={last_name}
-                            className={classNames("form-control", styles.fontp)}
+                            className={classNames("form-control", styler.doublefield)}
                             id="lastname"
                             placeholder="Last Name"
-                            style={{ padding: "0.5vw", width: "24vw" }}
-
                         />
                     </div><br />
 
@@ -212,10 +208,9 @@ export default function Home({ upadteuser, setuser }) {
                         type="text"
                         onChange={e => setUsername(e.target.value)}
                         value={username}
-                        className={classNames("form-control", styles.fontp)}
+                        className={classNames("form-control", styler.singlefield)}
                         id="username"
                         placeholder="Username"
-                        style={{ padding: "0.5vw", width: "50vw" }}
 
                     />
                 </div><br />
@@ -225,10 +220,10 @@ export default function Home({ upadteuser, setuser }) {
                         type="email"
                         onChange={e => setemail(e.target.value)}
                         value={email}
-                        className={classNames("form-control", styles.fontp)}
+                        className={classNames("form-control", styler.singlefield)}
                         id="email"
                         placeholder="Email"
-                        style={{ padding: "0.5vw", width: "50vw" }}
+
                     />
                 </div><br />
                 <div className="form-group">
@@ -237,10 +232,10 @@ export default function Home({ upadteuser, setuser }) {
                         type="text"
                         onChange={e => setNumber(e.target.value)}
                         value={mobile}
-                        className={classNames("form-control", styles.fontp)}
+                        className={classNames("form-control", styler.singlefield)}
                         id="mobile"
                         placeholder="Phone Number"
-                        style={{ padding: "0.5vw", width: "50vw" }}
+
                     />
                 </div><br />
                 <div className="form-group">
@@ -249,10 +244,10 @@ export default function Home({ upadteuser, setuser }) {
                         type="text"
                         onChange={e => setAge(e.target.value)}
                         value={age}
-                        className={classNames("form-control", styles.fontp)}
+                        className={classNames("form-control", styler.singlefield)}
                         id="age"
                         placeholder="Age"
-                        style={{ padding: "0.5vw", width: "50vw" }}
+
                     />
                 </div><br />
                 <div className="form-group">
@@ -261,10 +256,10 @@ export default function Home({ upadteuser, setuser }) {
                         type="text"
                         onChange={e => setAddress(e.target.value)}
                         value={address}
-                        className={classNames("form-control", styles.fontp)}
+                        className={classNames("form-control", styler.singlefield)}
                         id="address"
                         placeholder="Address"
-                        style={{ padding: "0.5vw", width: "50vw" }}
+
                     />
                 </div><br />
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -274,10 +269,10 @@ export default function Home({ upadteuser, setuser }) {
                             type="text"
                             onChange={e => setState(e.target.value)}
                             value={state}
-                            className={classNames("form-control", styles.fontp)}
+                            className={classNames("form-control", styler.doublefield)}
                             id="state"
                             placeholder="State"
-                            style={{ padding: "0.5vw", width: "24vw" }}
+
                         />
                     </div>
                     <div className="form-group">
@@ -286,10 +281,10 @@ export default function Home({ upadteuser, setuser }) {
                             type="text"
                             onChange={e => setCity(e.target.value)}
                             value={city}
-                            className={classNames("form-control", styles.fontp)}
+                            className={classNames("form-control", styler.doublefield)}
                             id="city"
                             placeholder="City"
-                            style={{ padding: "0.5vw", width: "24vw" }}
+
                         />
                     </div>
                 </div>
@@ -301,10 +296,10 @@ export default function Home({ upadteuser, setuser }) {
                             type="text"
                             onChange={e => setCountry(e.target.value)}
                             value={country}
-                            className={classNames("form-control", styles.fontp)}
+                            className={classNames("form-control", styler.doublefield)}
                             id="country"
                             placeholder="Country"
-                            style={{ padding: "0.5vw", width: "24vw" }}
+
                         />
                     </div>
                     <div className="form-group">
@@ -314,17 +309,17 @@ export default function Home({ upadteuser, setuser }) {
                             onChange={e => setPincode(e.target.value)}
                             value={pincode}
                             placeholder="Pincode"
-                            className={classNames("form-control", styles.fontp)}
+                            className={classNames("form-control", styler.doublefield)}
                             id="pincode"
-                            style={{ padding: "0.5vw", width: "24vw" }}
+
                         />
                     </div>
                 </div>
                 <br />
-                <div style={{ display: "flex", width: "50vw", gap: "1vw" }}>
+                <div className={styler.editbtn}>
                     <button
-                        type="button" // Prevent the button from submitting the form
-                        className={classNames("btn btn-primary btn-block", styles.fontp)}
+                        type="button"
+                        className={classNames("btn btn-primary btn-block")}
                         style={{ borderRadius: "1vw" }}
                         onClick={handlecancel}
                     >
@@ -332,7 +327,7 @@ export default function Home({ upadteuser, setuser }) {
                     </button>
                     <button
                         type="submit"
-                        className={classNames("btn btn-primary btn-block", styles.fontp)}
+                        className={classNames("btn btn-primary btn-block")}
                         style={{ borderRadius: "1vw" }}
                     >
                         Save
