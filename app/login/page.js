@@ -18,6 +18,7 @@ const LoginPage = () => {
                 `${process.env.NEXT_PUBLIC_BASE_API_URL}/app/signin/`,
                 { email, password }
             );
+            console.log(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/signin/`);
             const { session, data, status } = datas.data;
             const { token, refresh } = session;
             const statuscode = datas.status;
