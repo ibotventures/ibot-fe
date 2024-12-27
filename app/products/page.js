@@ -9,12 +9,13 @@ import { Button, Offcanvas, OffcanvasBody } from 'reactstrap';
 import classNames from 'classnames';
 import debounce from "lodash.debounce";
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 export default function Products() {
 
   const [productData, setproductData] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-
+  const router = useRouter();
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -39,10 +40,11 @@ export default function Products() {
 
   const updateFilter = debounce(async (updatedFilter) => {
     try {
-      // console.log("Updated Filters (debounced):", updatedFilter);
+      console.log("Updated Filters (debounced):", updatedFilter);
       const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/productfilter/`, {
         params: {
           category: updatedFilter.age,
+          rating: updatedFilter.rating,
         }
       });
 
@@ -59,9 +61,7 @@ export default function Products() {
     updateFilter(updatedFilter);
   };
 
-  const handleproduct = () => {
-    Router.push('/product')
-  }
+
 
   useEffect(() => {
     const handledata = async (e) => {
@@ -113,7 +113,7 @@ export default function Products() {
           <div className={styles.productwrap}>
             {productData.length ? (
               productData.map((product) => (
-                <Cards key={product.id} product={product} className='container-fluid' onClick={handleproduct} />
+                <Cards key={product.id} product={product} className='container-fluid' />
               ))
             ) : (
               <p style={{ textAlign: 'center' }}>No products found</p>

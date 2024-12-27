@@ -23,7 +23,7 @@ const MyComponent = () => {
 
     useEffect(() => {
         const handledata = async () => {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail`, {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail/`, {
                 params: { id: userId },
             });
             if (response.data.data.profile) {
@@ -124,6 +124,7 @@ const MyComponent = () => {
                                 width: "130px",
                                 height: "130px",
                             }}
+                            unoptimized
                         />
                         <p>{upadteuser}</p>
                     </div>

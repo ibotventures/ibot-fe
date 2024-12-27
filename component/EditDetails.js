@@ -40,7 +40,7 @@ export default function Home({ upadteuser, setuser }) {
                     return;
                 }
 
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail`, {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail/`, {
                     params: { id: userId },
                 });
 
@@ -149,6 +149,7 @@ export default function Home({ upadteuser, setuser }) {
                             width: "150px",
                             height: "150px",
                         }}
+                        unoptimized
                     />
 
                     <input

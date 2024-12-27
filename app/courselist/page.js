@@ -108,7 +108,7 @@ export default function CourseList() {
     const getdetails = async () => {
       try {
         const userId = Cookies.get('userid');
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail/`, {
           params: { id: userId },
         });
 

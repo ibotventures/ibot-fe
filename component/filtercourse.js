@@ -8,12 +8,12 @@ import axios from "axios";
 export default function FilterCourse({ onFilterChange }) {
     const [categor, setcategor] = useState([]);
     useEffect(() => {
-        const getcategory = async () => {
-            const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getcategory`);
+        const listcategory = async () => {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/listcategory/`);
             const data = response.data.data;
             setcategor(data);
         }
-        getcategory();
+        listcategory();
 
     }, []);
     const [filters, setFilters] = useState({

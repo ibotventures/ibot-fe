@@ -61,7 +61,8 @@ export default function Home() {
                             <h2 style={{ paddingBottom: "1vw" }}>Pick Up where you left !</h2>
                             <button style={{ padding: "8px" }} className={classNames("btn btn-primary btn-block")} onClick={() => handleresume()}><FaPlay className="mr-2" style={{ marginRight: "1vw" }} />Resume Me</button>
                         </div>
-                        <Image src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${courseimage}`} width={300} height={100} className="img-fluid" style={{ width: '40vw', maxHeight: '300px' }} alt="banners" />
+                        <Image src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${courseimage}`} width={300} height={100} className="img-fluid" style={{ width: '40vw', maxHeight: '300px' }} alt="banners" unoptimized />
+
                     </div>
                 ) : null}
                 <br />
