@@ -1,17 +1,15 @@
 'use client';
 import Image from "next/image";
-import LandingCaurosal from "@/component/productcaurosal";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styler from "@/app/page.module.css";
 import classNames from 'classnames';
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Input } from "reactstrap";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-export default function Home({ upadteuser, setuser }) {
+export default function Home({ upadteuser, setuser, updateprofile, setprofile }) {
     const [userdetails, setuserdetails] = useState(null);
     const [email, setemail] = useState('');
     const [state, setState] = useState('');
@@ -27,7 +25,7 @@ export default function Home({ upadteuser, setuser }) {
     const [mobile, setNumber] = useState('');
     const [loading, setLoading] = useState(true);
     const [profile, setimage] = useState(null);
-    const [profileImageUrl, setProfileImageUrl] = useState('');
+    const [profileImageUrl, setProfileImageUrl] = useState(updateprofile || '/profile.png');
     const router = useRouter();
 
     useEffect(() => {
@@ -35,12 +33,12 @@ export default function Home({ upadteuser, setuser }) {
             try {
                 const userId = Cookies.get('userid');
                 if (!userId) {
-                    toast.error("User ID not found in cookies.");
+                    toast.error("User not found");
                     setLoading(false);
                     return;
                 }
 
-                const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail/`, {
+                const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail`, {
                     params: { id: userId },
                 });
 
@@ -58,7 +56,11 @@ export default function Home({ upadteuser, setuser }) {
                 setmiddlename(data.middle_name || '');
                 setAddress(data.address || '');
                 setAge(data.age || '');
-                if (data.profile) setProfileImageUrl(`${process.env.NEXT_PUBLIC_BASE_API_URL}${data.profile}`);
+                if (data.profile != '' && data.profile != null) {
+                    setProfileImageUrl(`${process.env.NEXT_PUBLIC_BASE_API_URL}${data.profile}`);
+                } else {
+                    setProfileImageUrl('/profile.png');
+                }
                 setLoading(false);
             } catch (error) {
                 // console.error("Error details:", error);
@@ -77,7 +79,6 @@ export default function Home({ upadteuser, setuser }) {
         if (profile) {
             const newImageUrl = URL.createObjectURL(profile);
             setProfileImageUrl(newImageUrl);
-
             return () => {
                 URL.revokeObjectURL(newImageUrl); // Clean up the object URL
             };
@@ -118,6 +119,7 @@ export default function Home({ upadteuser, setuser }) {
                 setuserdetails(response.data.data);
                 Cookies.set('username', username);
                 setuser(username);
+                setprofile(profileImageUrl);
                 toast.success('Updated successfully');
             }
         } catch (error) {
@@ -138,7 +140,7 @@ export default function Home({ upadteuser, setuser }) {
             <form style={{ display: "flex", flexDirection: "column", alignItems: "center" }} onSubmit={handlesubmit}>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingBottom: "2vw" }}>
                     <Image
-                        src={`${profileImageUrl}` || '/profile.png'}
+                        src={profileImageUrl}
                         className="img-fluid"
                         alt="Profile Image"
                         width={150}
@@ -149,7 +151,6 @@ export default function Home({ upadteuser, setuser }) {
                             width: "150px",
                             height: "150px",
                         }}
-                        unoptimized
                     />
 
                     <input

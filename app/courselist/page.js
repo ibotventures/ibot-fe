@@ -44,9 +44,10 @@ export default function CourseList() {
 
       if (res.status === 200) {
         setCourseData(res.data.data);
+        console.log('Filtered data:', res.data.data);
       }
     } catch (error) {
-      // console.error("Error fetching filtered data:", error);
+      console.error("Error fetching filtered data:", error);
     }
   }, 200);
 
