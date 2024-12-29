@@ -148,7 +148,7 @@ export default function CourseList() {
         <div className={styles.occupy}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>
-              <h1>Our Courses</h1>
+              <h1>Courses</h1>
               {access === 'no' && (
                 <>
                   <p>You haven&apos;t got a Subscription yet. Buy one to access all of our courses.</p>
