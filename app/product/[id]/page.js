@@ -1,5 +1,3 @@
-
-
 'use client';
 import Image from "next/image";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -7,7 +5,7 @@ import { FaStar } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import axios from "axios";
-import { useParams } from 'next/navigation';
+import { useParams,useRouter } from 'next/navigation';
 import styler from '@/app/coursepreview/course.module.css';
 import { Row, Col, Card, CardBody, CardTitle, CardText } from 'reactstrap';
 import classNames from 'classnames';
@@ -15,11 +13,11 @@ import Cookies from "js-cookie";
 export default function Product() {
     const [reviews, setReviews] = useState([]);
     const userCook = Cookies.get('userid');
-    const [rating, setRating] = useState(0); // State to store selected rating
+    const [rating, setRating] = useState(0);
     const [comment, setComment] = useState("");
-    // const [product,setproduct] = useState("");
     const [products, setProduct] = useState(null);
     const params = useParams();
+    const router = useRouter(); 
     const { id } = params;
 
     const fetchReviews = async () => {
@@ -31,15 +29,22 @@ export default function Product() {
             if (response.status == 200) {
                 setReviews(response.data.data);
             }
-            // setLoading(false);
         } catch (error) {
             console.error("Error loading reviews:", error.response?.data || error.message);
             toast.error("Something went wrong while loading reviews");
-            // setLoading(false);
         }
     };
 
     const handlereview = async () => {
+        if(!userCook){
+            toast.error('login to continue');
+            router.push('/login');
+            return;
+        }
+        if (!comment) {
+            toast.error('comment is empty');
+            return;
+        }
         const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/productreviews/`,
             { 'user': userCook, 'product': products.id, 'review': comment, 'rating': rating },
         );
@@ -47,6 +52,15 @@ export default function Product() {
             setReviews(response.data.data);
             setComment("");
             setRating(0);
+        }
+
+    }
+
+    const handlebuy = async () => {
+        if(!userCook){
+            toast.error('login to continue');
+            router.push('/login');
+            return;
         }
 
     }
@@ -79,20 +93,23 @@ export default function Product() {
         <>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '20px' }}>
                 <div style={{ width: '90vw' }}>
+                    <div style={{display:'flex',justifyContent:'center'}}>
                     <Image
                         src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${products.product_image}`}
                         width={500}
                         height={500}
                         alt="Product Image"
                         className="img-fluid"
-                        style={{ width: '90vw', maxHeight: '40vh' }}
+                        style={{ width: '50vw', maxHeight: '500px',minHeight:'200px' }}
                         unoptimized
                     />
+                    </div>
+                   
                     <br />
                     <br />
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <h2>{products.product_name}</h2>
-                        <button className="btn btn-primary">Buy Now {products.price}rs</button>
+                        <button className="btn btn-primary" onClick={handlebuy}>Buy Now {products.price}rs</button>
                     </div>
                     <div style={{ display: 'flex', fontSize: '30px' }}>
                         {Array.from({ length: products.rating }).map((_, index) => (
@@ -182,19 +199,7 @@ export default function Product() {
                                 id="reviews"
                                 name="review[comment]"
                                 required
-                                // className="form-control"
                                 className={classNames('form-control', styler.comment)}
-                                // style={{
-                                //   width: "80%",
-                                //   height: "200px",
-                                //   borderRadius: "10px",
-                                //   border: "none",
-                                //   boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
-                                //   padding: "20px",
-                                //   fontFamily: "'Rubik Doodle Shadow', sans-serif",
-                                //   wordSpacing: "3px",
-                                //   fontSize: "large",
-                                // }}
                                 value={comment}
                                 onChange={(e) => setComment(e.target.value)}
                             ></textarea>
@@ -250,8 +255,6 @@ export default function Product() {
                             )}
                         </Row>
                     </div>
-
-
                 </div>
             </div>
             <br />

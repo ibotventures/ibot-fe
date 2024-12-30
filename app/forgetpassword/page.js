@@ -9,9 +9,12 @@ import { toast } from 'react-toastify';
 
 const ForgetPass = () => {
     const [email, setemail] = useState('');
+    const [loading, setLoading] = useState(false); // Loading state
     const router = useRouter();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Set loading to true when the button is clicked
         try {
             const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/forget/`, { email });
             if (status === 201) {
@@ -28,13 +31,14 @@ const ForgetPass = () => {
             }
         } catch (err) {
             toast.error('Something went wrong, please try again.');
+        } finally {
+            setLoading(false); // Set loading to false after the response
         }
     };
 
     return (
         <>
             <div className={classNames(styles.background)} style={{ display: "flex", justifyContent: "center" }}>
-                {/* <div style={{ backgroundColor: "whitesmoke", width: "50vw", padding: "3vw", borderRadius: "20px", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", margin: "20px", height: "fit-content" }} className='container-fluid'> */}
                 <div className={classNames(styles.registerContainer, 'container-fluid')}>
                     <h2 style={{ paddingBottom: "2vw" }}>Forget Password?</h2>
                     <p>Enter your registered email address to change your password</p>
@@ -49,10 +53,20 @@ const ForgetPass = () => {
                                 placeholder="Email"
                                 style={{ padding: "1vw" }}
                                 required
+                                disabled={loading} // Disable input if loading
                             />
                         </div><br />
-                        <button type="submit" className={classNames("btn btn-primary btn-block")} style={{ width: "100%", borderRadius: "1.3vw" }}>
-                            Send
+                        <button
+                            type="submit"
+                            className={classNames("btn btn-primary btn-block")}
+                            style={{ width: "100%", borderRadius: "1.3vw", display: "flex", alignItems: "center", justifyContent: "center" }}
+                            disabled={loading} // Disable button if loading
+                        >
+                            {loading ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                                "Send"
+                            )}
                         </button>
                         <br />
                         <br />
@@ -64,3 +78,4 @@ const ForgetPass = () => {
 };
 
 export default ForgetPass;
+

@@ -6,10 +6,13 @@ import { toast } from 'react-toastify';
 import classNames from 'classnames';
 import Cookies from 'js-cookie';
 import axios from 'axios';
+
 const ResetPass = () => {
     const [password, setPass] = useState('');
     const [confPassword, setConfPassword] = useState('');
+    const [loading, setLoading] = useState(false); // Loading state
     const router = useRouter();
+
     // Redirect if already logged in
     useEffect(() => {
         const token = Cookies.get('token');
@@ -17,38 +20,42 @@ const ResetPass = () => {
             router.replace('/'); // Prevent going back to login with history
         }
     }, [router]);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true); // Set loading state to true
         try {
             if (password === confPassword) {
-                const email = sessionStorage.getItem('email');
-                const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/updatepassword/`, { email, password });
-                if (status == 201 || status == 200) {
-                    toast.success('Password successfully updated');
-                    sessionStorage.clear();
-                    router.push('/login');
+                if (!(password.length < 6)) {
+                    const email = sessionStorage.getItem('email');
+                    const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/updatepassword/`, { email, password });
+                    if (status === 201 || status === 200) {
+                        toast.success('Password successfully updated');
+                        sessionStorage.clear();
+                        router.push('/login');
+                    } else {
+                        toast.error('Something went wrong, please try again');
+                    }
                 } else {
-                    toast.error('Something went wrong, please try again');
+                    toast.error("The password should be at least 6 characters long");
                 }
             } else {
                 toast.error("The password and confirm password do not match.");
             }
         } catch (err) {
             toast.error("An error occurred. Please try again.");
+        } finally {
+            setLoading(false); // Set loading state to false after the response
         }
     };
 
     return (
         <>
-
-            <div className={classNames(styles.background)} style={{ display: "flex", justifyContent: "center" }} >
-                {/* <div style={{ backgroundColor: "whitesmoke", width: "50vw", padding: "3vw", borderRadius: "20px", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", margin: "20px", height: "fit-content" }} className='container-fluid'> */}
+            <div className={classNames(styles.background)} style={{ display: "flex", justifyContent: "center" }}>
                 <div className={classNames(styles.registerContainer, 'container-fluid')}>
                     <h2 style={{ paddingBottom: "2vw" }}>Reset password</h2>
                     <form onSubmit={handleSubmit}>
-
                         <div className="form-group">
-                            {/* <label htmlFor="password">Password</label> */}
                             <input
                                 type="password"
                                 onChange={e => setPass(e.target.value)}
@@ -58,10 +65,11 @@ const ResetPass = () => {
                                 placeholder="Password"
                                 style={{ padding: "1vw" }}
                                 required
+                                disabled={loading} // Disable input when loading
                             />
-                        </div><br />
+                        </div>
+                        <br />
                         <div className="form-group">
-                            {/* <label htmlFor="password">Password</label> */}
                             <input
                                 type="password"
                                 onChange={e => setConfPassword(e.target.value)}
@@ -71,18 +79,27 @@ const ResetPass = () => {
                                 placeholder="Confirm Password"
                                 style={{ padding: "1vw" }}
                                 required
+                                disabled={loading} // Disable input when loading
                             />
-                        </div><br />
-
-                        <button type="submit" className={classNames("btn btn-primary btn-block")} style={{ width: "100%", borderRadius: "1.3vw" }}>
-                            reset password
+                        </div>
+                        <br />
+                        <button
+                            type="submit"
+                            className={classNames("btn btn-primary btn-block")}
+                            style={{ width: "100%", borderRadius: "1.3vw", display: "flex", alignItems: "center", justifyContent: "center" }}
+                            disabled={loading} // Disable button when loading
+                        >
+                            {loading ? (
+                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                            ) : (
+                                "Reset Password"
+                            )}
                         </button>
                         <br />
                         <br />
                     </form>
                 </div>
             </div>
-
         </>
     );
 }

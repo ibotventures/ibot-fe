@@ -1,11 +1,9 @@
-
 'use client';
 import Image from "next/image";
 import Carousal from "@/component/carousal";
-// import styles from "@/app/page.module.css";
 import { FaPlay, FaClock, FaGraduationCap, FaLaptopCode, FaRobot } from 'react-icons/fa';
 import classNames from 'classnames';
-import { useRouter, useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
@@ -35,8 +33,6 @@ export default function Home() {
             } catch {
                 setis404('no')
             }
-
-
         };
         handlepickup();
 
@@ -67,41 +63,41 @@ export default function Home() {
                 ) : null}
                 <br />
                 <br />
-                <div style={{ textAlign: "center", backgroundColor: "white", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", borderRadius: "2vw" }}>
+                <div style={{ textAlign: "center", backgroundColor: "white", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", borderRadius: "2vw", display: 'flex', justifyContent: "center", flexDirection: 'column', alignItems: "center" }} className="res">
                     <h1 style={{ padding: "2vw" }}>Explore Us</h1>
-                    <div style={{ display: "flex", justifyContent: "center", borderRadius: "2vw" }}>
-                        <div style={{ backgroundColor: "#6AC1FF", padding: "3vw", borderRadius: "0vw 0vw 0vw 2vw", gap: "2vw" }}>
-                            <h2 style={{ padding: "1vw" }}>FOR BUSINESS</h2>
+                    <div style={{ display: "flex", justifyContent: "center", borderRadius: "2vw" }} className="res">
+                        <div style={{ backgroundColor: "#6AC1FF", padding: "3vw", borderRadius: "0vw 0vw 0vw 2vw", gap: "2vw" }} className="res">
+                            <h2 style={{ padding: "1vw" }}>BUY OUR PRODUCTS</h2>
                             <button className={classNames("btn btn-primary")} style={{ padding: "10px", borderRadius: "1.5vw", color: "black", backgroundColor: "whitesmoke", border: "none" }}><a href="/products" style={{ color: "black", textDecoration: "none" }}>OUR PRODUCTS</a></button>
-                            <p style={{ marginTop: "1.6vw" }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et d</p>
+                            <p style={{ marginTop: "1.6vw" }}>"Bring innovation to life with our cutting-edge robot-building kits! Perfect for all skill levels, our products make robotics fun, educational, and easy to explore. Start building your future today!"</p>
                         </div>
-                        <div style={{ padding: "3vw", gap: "2vw" }}>
-                            <h2 style={{ padding: "1vw" }}>FOR LEARNERS</h2>
-                            <button className={classNames("btn btn-primary")} style={{ padding: "10px", borderRadius: "1.5vw", backgroundColor: "#6AC1FF", color: "black", border: "none" }}><a href="/courselist" style={{ color: "black", textDecoration: "none" }}>OUR COURSE</a></button>
-                            <p style={{ marginTop: "1.6vw" }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et d</p>
+                        <div style={{ padding: "3vw", gap: "2vw" }} className="res">
+                            <h2 style={{ padding: "1vw" }}>LEARN FROM OUR COURSES</h2>
+                            <button className={classNames("btn btn-primary")} style={{ padding: "10px", borderRadius: "1.5vw", backgroundColor: "#6AC1FF", color: "black", border: "none" }}><a href="/courselist" style={{ color: "black", textDecoration: "none" }}>OUR COURSES</a></button>
+                            <p style={{ marginTop: "1.6vw" }}>"Learn to build and program robots like a pro with our hands-on courses! Designed for all skill levels, we’ll guide you step-by-step in creating incredible robots using our premium kits."</p>
                         </div>
                     </div>
                 </div>
                 <br />
-                <div style={{ margin: "3vw" }}>
+                <div style={{ margin: "3vw" }} className="res">
                     <h2 style={{ textAlign: "center" }}>Why Study With IBOT</h2>
                     <p style={{ textAlign: "center" }}>Definitely Buy Products and Courses</p>
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "space-evenly", flexWrap: "wrap", gap: '20px' }}>
-                    <div style={{ backgroundColor: "white", borderRadius: "1vw", padding: "2.7vw", textAlign: "center" }}>
+                <div style={{ display: "flex", justifyContent: "space-evenly", flexWrap: "wrap", gap: '20px' }} className="res">
+                    <div style={{ backgroundColor: "white", borderRadius: "1vw", padding: "2.7vw", textAlign: "center" }} className="res">
                         <FaGraduationCap color='#16325B' style={{ marginBottom: "1vw", fontSize: '50px' }} />
                         <p>Learn With Experts</p>
                     </div>
-                    <div style={{ backgroundColor: "white", borderRadius: "1vw", padding: "2.7vw", textAlign: "center" }}>
+                    <div style={{ backgroundColor: "white", borderRadius: "1vw", padding: "2.7vw", textAlign: "center" }} className="res">
                         <FaLaptopCode color='#16325B' style={{ marginBottom: "1vw", fontSize: '50px' }} />
                         <p>Flexible Learning</p>
                     </div>
-                    <div style={{ backgroundColor: "white", borderRadius: "1vw", padding: "2.7vw", textAlign: "center" }}>
+                    <div style={{ backgroundColor: "white", borderRadius: "1vw", padding: "2.7vw", textAlign: "center" }} className="res">
                         <FaClock color='#16325B' style={{ marginBottom: "1vw", fontSize: '50px' }} />
                         <p>Lifetime Access</p>
                     </div>
-                    <div style={{ backgroundColor: "white", borderRadius: "1vw", padding: "2.7vw", textAlign: "center" }}>
+                    <div style={{ backgroundColor: "white", borderRadius: "1vw", padding: "2.7vw", textAlign: "center" }} className="res">
                         <FaRobot color='#16325B' style={{ marginBottom: "1vw", fontSize: '50px' }} />
                         <p>Learn Robotics</p>
                     </div>
@@ -109,39 +105,36 @@ export default function Home() {
                 <br />
                 <br />
 
-                <div style={{ display: "flex", justifyContent: "space-evenly", gap: "2vw", alignItems: "center" }}>
-                    {/* <Image
-                        src={'/lottie.png'}
-                        width={300}
-                        height={400}
-                        style={{ Width: '50vw' }}
-                        className="img-fluid image"
-                        alt="lottie"
-                    /> */}
-                    <Image src={'/lottie.png'} width={300} height={400} style={{ width: "50vw" }} className="img-fluid" alt="lottie" />
-                    <div style={{ width: "50vw" }}>
-                        <h1>Understand STEM through hands-on Learning</h1>
-                        <p>Immerse yourself in the world of STEM through our immersive short courses. Our courses are designed to make complex concepts simple by learning through hands-on activities.</p>
-                        <ul>
-                            <li>Educational Videos</li>
-                            <li>Hands-on Activity</li>
-                            <li>Simplified complex STEM concepts</li>
-                        </ul>
+                <div style={{ display: "flex", justifyContent: "space-evenly", gap: "2vw", alignItems: "center" }} className="res">
+                    <Image src={'/poster.jpeg'} width={500} height={400} style={{ minWidth: "50vw", minHeight: '20vh', maxHeight: '60vh' }} className="imager" alt="lottie" unoptimized />
+                    <div style={{ width: "50vw" }} className="res">
+                        <h2 className="res">Understand STEM through hands-on Learning</h2>
+                        <div className="res">Immerse yourself in the world of STEM through our immersive short courses. Our courses are designed to make complex concepts simple by learning through hands-on activities.</div>
+                        <div className="res">
+                            <ul>
+                                <li>Educational Contents</li>
+                                <li>Hands-on Activity</li>
+                                <li>Simplified complex STEM concepts</li>
+                            </ul>
+                        </div>
+
                     </div>
                 </div>
 
                 <style jsx>{`
     @media (max-width: 768px) {
-        div {
+        .res {
+            display: flex;
             flex-direction: column;
-            // align-items: center;
+            align-items: center;
+            gap: 2vw;
         }
-        div > div {
+        .res > .res {
             width: 90vw;  // Ensure text container has enough space on smaller screens
            
         }
-        img {
-            max-width: 100%;  // Ensure the image resizes correctly on small screens
+        .imager {
+            width: 100vw;  // Ensure the image resizes correctly on small screens
         }
     }
 `}</style>

@@ -1,5 +1,4 @@
 import { useState } from "react";
-// import styles from "@/app/page.module.css";
 import debounce from "lodash.debounce";
 import FilterCourse from "./filtercourse";
 
@@ -9,8 +8,6 @@ export default function CourseFilter({ setFilters }) {
     // Debounced function to update filters
     const updateFilters = debounce((updatedFilters) => {
         setLocalFilters(updatedFilters);
-        // console.log("Updated Filters (debounced):", updatedFilters);
-        // Pass the updated filters to the parent
         if (typeof setFilters === 'function') {
             setFilters(updatedFilters);
         }

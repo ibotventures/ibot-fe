@@ -62,6 +62,10 @@ const MyComponent = () => {
   };
 
   const handlereview = async () => {
+    if (!comment) {
+      toast.error('comment is empty');
+      return;
+    }
     const courseIds = sessionStorage.getItem('course');
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/reviews/`,
       { 'user': userCook, 'course': courseIds, 'review': comment, 'rating': rating },
@@ -167,7 +171,7 @@ const MyComponent = () => {
     // if (Cookies.get('username') == 'Administrator') {
     //   certifyquess();
     // } else {
-      certifyquesuser();
+    certifyquesuser();
     // }
 
   }, [courseData, change]);

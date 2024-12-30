@@ -1,4 +1,3 @@
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Carousel, Container, Row, Col } from 'react-bootstrap';
 import Image from 'next/image';

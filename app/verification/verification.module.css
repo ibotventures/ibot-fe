@@ -1,0 +1,11 @@
+.code{
+    width: 9vw;
+    height: 8vh
+}
+
+@media (max-width: 768px) {
+    .code {
+        width: 16vw;
+        height: 8vh
+    }
+  }

@@ -1,8 +1,6 @@
-
 import React, { useState, useEffect } from "react";
 import { Label, Input, Button } from "reactstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
-// import styles from "@/app/page.module.css";
 import { FaStar } from "react-icons/fa";
 import axios from "axios";
 export default function FilterCourse({ onFilterChange }) {

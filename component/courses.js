@@ -1,11 +1,9 @@
-
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Card, CardBody, CardImg, CardGroup, CardTitle, Progress } from "reactstrap";
 import { FaEye, FaCheck } from "react-icons/fa";
 import Cookies from "js-cookie";
 import axios from "axios";
-// import { useRouter } from "next/navigation";
 
 const MyComponent = () => {
     const [data, setData] = useState({
@@ -33,11 +31,11 @@ const MyComponent = () => {
 
 
     return (
-        <>
-            <div style={{ display: "flex" }}>
+        <div style={{ padding: '20px' }}>
+            <div style={{ display: "flex", gap: '10px' }}>
                 <div>
                     <Image
-                        src={'/profile.png'}
+                        src={`${process.env.NEXT_PUBLIC_BASE_API_URL}/${data.profiles}` || '/profile.png'}
                         className="img-fluid"
                         alt="Profile Image"
                         width={90}
@@ -51,7 +49,7 @@ const MyComponent = () => {
                     />
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-                    <p style={{ padding: "0", margin: "0", fontWeight: "bold" }}>Welcome Jack</p>
+                    <p style={{ padding: "0", margin: "0", fontWeight: "bold" }}>Welcome {data.name}</p>
                     <p style={{ padding: "0", margin: "0" }}>Your Courses Dashboard</p>
                 </div>
             </div>
@@ -87,12 +85,12 @@ const MyComponent = () => {
                     {data.ongoing_courses.length > 0 ? (
                         data.ongoing_courses.map((course, index) => (
                             <Card key={index} style={{
-                                height: "200px", minWidth: '210px',
-                                maxWidth: '250px'
+                                minHeight: "250px", minWidth: '250px',
+                                maxWidth: '250px', maxHeight: '250px'
                             }}>
                                 <CardImg
                                     alt="Card image cap"
-                                    height="90px"
+                                    height="150px"
                                     src={`${process.env.NEXT_PUBLIC_BASE_API_URL}/${course.course_image}`}
                                     top
                                     width="100%"
@@ -115,7 +113,7 @@ const MyComponent = () => {
                 </CardGroup>
             </div>
             <br />
-        </>
+        </div>
     );
 };
 

@@ -1,17 +1,15 @@
 'use client';
 import Image from "next/image";
-import LandingCaurosal from "@/component/productcaurosal";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import styler from "@/app/page.module.css";
 import classNames from 'classnames';
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
-import { Input } from "reactstrap";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 
-export default function Home({ upadteuser, setuser }) {
+export default function Home({ upadteuser, setuser, updateprofile, setprofile }) {
     const [userdetails, setuserdetails] = useState(null);
     const [email, setemail] = useState('');
     const [state, setState] = useState('');
@@ -27,7 +25,7 @@ export default function Home({ upadteuser, setuser }) {
     const [mobile, setNumber] = useState('');
     const [loading, setLoading] = useState(true);
     const [profile, setimage] = useState(null);
-    const [profileImageUrl, setProfileImageUrl] = useState('');
+    const [profileImageUrl, setProfileImageUrl] = useState(updateprofile || '/profile.png');
     const router = useRouter();
 
     useEffect(() => {
@@ -35,7 +33,7 @@ export default function Home({ upadteuser, setuser }) {
             try {
                 const userId = Cookies.get('userid');
                 if (!userId) {
-                    toast.error("User ID not found in cookies.");
+                    toast.error("User not found");
                     setLoading(false);
                     return;
                 }
@@ -58,10 +56,13 @@ export default function Home({ upadteuser, setuser }) {
                 setmiddlename(data.middle_name || '');
                 setAddress(data.address || '');
                 setAge(data.age || '');
-                if (data.profile) setProfileImageUrl(`${process.env.NEXT_PUBLIC_BASE_API_URL}${data.profile}`);
+                if (data.profile != '' && data.profile != null) {
+                    setProfileImageUrl(`${process.env.NEXT_PUBLIC_BASE_API_URL}${data.profile}`);
+                } else {
+                    setProfileImageUrl('/profile.png');
+                }
                 setLoading(false);
             } catch (error) {
-                // console.error("Error details:", error);
                 toast.error("Something went wrong while loading data.");
                 setLoading(false);
             }
@@ -77,7 +78,6 @@ export default function Home({ upadteuser, setuser }) {
         if (profile) {
             const newImageUrl = URL.createObjectURL(profile);
             setProfileImageUrl(newImageUrl);
-
             return () => {
                 URL.revokeObjectURL(newImageUrl); // Clean up the object URL
             };
@@ -86,10 +86,12 @@ export default function Home({ upadteuser, setuser }) {
 
     const handlecancel = () => {
         router.push('/profile');
+        window.location.href = '/profile';
     }
 
     const handlesubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         if (profile) {
             const extension = profile.name.split('.').pop().toLowerCase();
             if (!(['jpg', 'jpeg', 'png', 'gif'].includes(extension))) {
@@ -118,11 +120,13 @@ export default function Home({ upadteuser, setuser }) {
                 setuserdetails(response.data.data);
                 Cookies.set('username', username);
                 setuser(username);
+                setprofile(profileImageUrl);
                 toast.success('Updated successfully');
             }
         } catch (error) {
-            // console.error("Error details:", error);
             toast.error("Something went wrong while updating.");
+        } finally {
+            setLoading(false); // Set loading to false after the response
         }
     };
 
@@ -132,13 +136,13 @@ export default function Home({ upadteuser, setuser }) {
 
     return (
         <>
-            <h1 style={{ margin: "2vw" }}>User Details</h1>
-            <p style={{ marginLeft: "2vw" }}>Update your personal details and photo here</p>
+            <h1 style={{ margin: "1.5vw" }}>User Details</h1>
+            <p style={{ marginLeft: "1.5vw" }}>Update your personal details and photo here</p>
 
             <form style={{ display: "flex", flexDirection: "column", alignItems: "center" }} onSubmit={handlesubmit}>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingBottom: "2vw" }}>
                     <Image
-                        src={`${profileImageUrl}` || '/profile.png'}
+                        src={profileImageUrl}
                         className="img-fluid"
                         alt="Profile Image"
                         width={150}
@@ -149,7 +153,6 @@ export default function Home({ upadteuser, setuser }) {
                             width: "150px",
                             height: "150px",
                         }}
-                        unoptimized
                     />
 
                     <input
@@ -330,8 +333,13 @@ export default function Home({ upadteuser, setuser }) {
                         type="submit"
                         className={classNames("btn btn-primary btn-block")}
                         style={{ borderRadius: "1vw" }}
+                        disabled={loading}
                     >
-                        Save
+                        {loading ? (
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        ) : (
+                            "Save"
+                        )}
                     </button>
                 </div>
                 <br />

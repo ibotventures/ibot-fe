@@ -3,7 +3,6 @@ import {
     Card,
     CardImg,
     CardBody,
-    CardText,
     Button,
 } from 'reactstrap';
 import { FaStar } from "react-icons/fa";
@@ -20,7 +19,7 @@ const Cards = ({ product }) => {
         <Card
             onClick={() => handleproduct(product.id)}
             style={{
-                minWidth: '210px',
+                minWidth: '250px',
                 maxWidth: '250px',
                 border: "none",
                 cursor: "pointer"
@@ -31,6 +30,7 @@ const Cards = ({ product }) => {
                 src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${product.product_image}` || 'profile.png'}
                 top
                 width="100%"
+                height="200px"
             />
             <CardBody style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <div style={{ fontWeight: 'bold' }}>

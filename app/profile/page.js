@@ -6,7 +6,6 @@ import EditDetails from '@/component/EditDetails';
 import '@/app/page.module.css';
 import Delete from '@/component/DeleteAccount';
 import axios from "axios";
-// import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Cookies from "js-cookie";
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -39,7 +38,7 @@ const MyComponent = () => {
     useEffect(() => {
         // Update screen size on window resize
         const handleResize = () => {
-            setIsLargeScreen(window.innerWidth >= 768);
+            setIsLargeScreen(window.innerWidth >= 870);
         };
 
         window.addEventListener('resize', handleResize);
@@ -96,14 +95,18 @@ const MyComponent = () => {
         <>
             <Container fluid>
                 {/* Toggle button for small screens */}
+
                 {!isLargeScreen && (
-                    <Button
-                        className="btn-toggle-sidebar"
-                        onClick={() => setSidebarOpen(!sidebarOpen)}
-                        aria-label="Toggle Sidebar"
-                    >
-                        &#9776; {/* Hamburger icon */}
-                    </Button>
+                    <>
+                        <br />
+                        <Button
+                            className="btn-toggle-sidebar"
+                            onClick={() => setSidebarOpen(!sidebarOpen)}
+                            aria-label="Toggle Sidebar"
+                        >
+                            &#9776; {/* Hamburger icon */}
+                        </Button>
+                    </>
                 )}
 
                 {/* Off-canvas sidebar */}
@@ -111,11 +114,13 @@ const MyComponent = () => {
                     isOpen={sidebarOpen}
                     toggle={() => setSidebarOpen(!sidebarOpen)}
                     className="offcanvas-start"
-                    style={{ overflowY: 'auto' }}
+                    style={{ overflowY: 'auto', paddingLeft: '20px' }}
 
                 >
 
                     <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                        <br />
+                        <br />
                         <Image width={160} height={170} src={updateprofile || '/profile.png'} className="img-fluid" alt="Description of the image"
 
                             style={{
@@ -129,18 +134,20 @@ const MyComponent = () => {
                         <p>{upadteuser}</p>
                     </div>
 
-                    <p onClick={() => { handleTaskClick('purhistory'); setSidebarOpen(!sidebarOpen) }}>purchase history</p>
-                    <p onClick={() => { handleTaskClick('courses'); setSidebarOpen(!sidebarOpen) }}>Courses</p>
-                    <p onClick={() => { handleTaskClick('edit'); setSidebarOpen(!sidebarOpen) }}>Edit  Details</p>
-                    <p onClick={() => { handleTaskClick('delete'); setSidebarOpen(!sidebarOpen) }}>delete Account</p>
+                    <p onClick={() => { handleTaskClick('purhistory'); setSidebarOpen(!sidebarOpen) }} style={{ fontSize: '18px' }}>purchase history</p>
+                    <p onClick={() => { handleTaskClick('courses'); setSidebarOpen(!sidebarOpen) }} style={{ fontSize: '18px' }}>Courses</p>
+                    <p onClick={() => { handleTaskClick('edit'); setSidebarOpen(!sidebarOpen) }} style={{ fontSize: '18px' }}>Edit  Details</p>
+                    <p onClick={() => { handleTaskClick('delete'); setSidebarOpen(!sidebarOpen) }} style={{ fontSize: '18px' }}>delete Account</p>
 
                 </Offcanvas>
 
                 <Row style={{ display: "flex", flex: "1", minHeight: "100vh" }}>
                     {/* Sidebar for large screens */}
                     {isLargeScreen && (
-                        <Col xs="12" md="3" className="border-end" style={{ backgroundColor: "whitesmoke", width: "20vw", fontSize: "1.5vw", flexGrow: "0" }}>
+                        <Col xs="12" md="3" className="border-end" style={{ backgroundColor: "whitesmoke", width: "20vw", fontSize: "1.5vw", flexGrow: "0", paddingLeft: '20px' }}>
                             <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                                <br />
+                                <br />
                                 <Image width={160} height={170} src={updateprofile || '/profile.png'} className="img-fluid" alt="Description of the image"
 
                                     style={{
@@ -155,10 +162,10 @@ const MyComponent = () => {
 
                             <br />
 
-                            <p onClick={() => handleTaskClick('purhistory')}>purchase history</p>
-                            <p onClick={() => handleTaskClick('courses')}>Courses</p>
-                            <p onClick={() => handleTaskClick('edit')}>Edit  Details</p>
-                            <p onClick={() => handleTaskClick('delete')}>delete Account</p>
+                            <p onClick={() => handleTaskClick('purhistory')} style={{ fontSize: '18px' }}>purchase history</p>
+                            <p onClick={() => handleTaskClick('courses')} style={{ fontSize: '18px' }}>Courses</p>
+                            <p onClick={() => handleTaskClick('edit')} style={{ fontSize: '18px' }}>Edit  Details</p>
+                            <p onClick={() => handleTaskClick('delete')} style={{ fontSize: '18px' }}>delete Account</p>
 
                         </Col>
                     )}
