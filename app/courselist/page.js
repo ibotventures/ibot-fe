@@ -1,7 +1,6 @@
 
 'use client';
 import classNames from 'classnames';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "@/app/page.module.css";
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/component/coursefilter';
@@ -147,7 +146,7 @@ export default function CourseList() {
         <div className={styles.occupy}>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <div>
-              <h1>Our Courses</h1>
+              <h1>Courses</h1>
               {access === 'no' && (
                 <>
                   <p>You haven&apos;t got a Subscription yet. Buy one to access all of our courses.</p>

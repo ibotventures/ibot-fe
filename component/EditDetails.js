@@ -1,6 +1,5 @@
 'use client';
 import Image from "next/image";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import styler from "@/app/page.module.css";
 import classNames from 'classnames';
 import { useState, useEffect } from "react";

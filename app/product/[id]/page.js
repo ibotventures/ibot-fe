@@ -1,6 +1,5 @@
 'use client';
 import Image from "next/image";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import { FaStar } from "react-icons/fa";
 import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';

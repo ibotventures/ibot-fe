@@ -1,6 +1,5 @@
 'use client';
 import Image from "next/image";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "@/app/page.module.css";
 import { useRouter } from "next/navigation";
 import classNames from 'classnames';

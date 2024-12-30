@@ -8,7 +8,6 @@ import Delete from '@/component/DeleteAccount';
 import axios from "axios";
 import Image from "next/image";
 import Cookies from "js-cookie";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import Courses from "@/component/courses";
 
 const MyComponent = () => {

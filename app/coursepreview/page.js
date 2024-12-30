@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Accordion, AccordionItem, AccordionHeader, AccordionBody, Container, Row, Col, Button, Offcanvas, Spinner, FormGroup, Input, Label } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from '@/app/page.module.css';
 import { toast } from 'react-toastify';
 // import Image from "next/image";
