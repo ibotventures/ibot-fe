@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Accordion, AccordionItem, AccordionHeader, AccordionBody, Container, Row, Col, Button, Offcanvas, Spinner, FormGroup, Input, Label } from 'reactstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from '@/app/page.module.css';
 import { toast } from 'react-toastify';
 // import Image from "next/image";
@@ -62,6 +61,10 @@ const MyComponent = () => {
   };
 
   const handlereview = async () => {
+    if (!comment) {
+      toast.error('comment is empty');
+      return;
+    }
     const courseIds = sessionStorage.getItem('course');
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/reviews/`,
       { 'user': userCook, 'course': courseIds, 'review': comment, 'rating': rating },
@@ -167,7 +170,7 @@ const MyComponent = () => {
     // if (Cookies.get('username') == 'Administrator') {
     //   certifyquess();
     // } else {
-      certifyquesuser();
+    certifyquesuser();
     // }
 
   }, [courseData, change]);

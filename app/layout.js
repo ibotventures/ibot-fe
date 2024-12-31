@@ -60,7 +60,7 @@ export default function RootLayout({ children }) {
           flex: '1', backgroundColor: "rgba(106, 193, 255, 0.2)", display: 'flex',
           flexDirection: 'column',
           flexGrow: '1',
-          marginTop: "99px"
+          marginTop: "68px"
         }}>
           <ToastContainer position="top-center" />
           {children}

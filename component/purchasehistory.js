@@ -1,5 +1,4 @@
 'use client';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "@/app/page.module.css";
 import { useRouter } from "next/navigation";
 export default function Home() {

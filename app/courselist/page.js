@@ -1,7 +1,6 @@
 
 'use client';
 import classNames from 'classnames';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import styles from "@/app/page.module.css";
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/component/coursefilter';

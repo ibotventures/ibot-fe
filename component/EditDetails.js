@@ -1,6 +1,5 @@
 'use client';
 import Image from "next/image";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import styler from "@/app/page.module.css";
 import classNames from 'classnames';
 import { useState, useEffect } from "react";
@@ -63,7 +62,6 @@ export default function Home({ upadteuser, setuser, updateprofile, setprofile })
                 }
                 setLoading(false);
             } catch (error) {
-                // console.error("Error details:", error);
                 toast.error("Something went wrong while loading data.");
                 setLoading(false);
             }
@@ -87,10 +85,12 @@ export default function Home({ upadteuser, setuser, updateprofile, setprofile })
 
     const handlecancel = () => {
         router.push('/profile');
+        window.location.href = '/profile';
     }
 
     const handlesubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         if (profile) {
             const extension = profile.name.split('.').pop().toLowerCase();
             if (!(['jpg', 'jpeg', 'png', 'gif'].includes(extension))) {
@@ -123,8 +123,9 @@ export default function Home({ upadteuser, setuser, updateprofile, setprofile })
                 toast.success('Updated successfully');
             }
         } catch (error) {
-            // console.error("Error details:", error);
             toast.error("Something went wrong while updating.");
+        } finally {
+            setLoading(false); // Set loading to false after the response
         }
     };
 
@@ -134,8 +135,8 @@ export default function Home({ upadteuser, setuser, updateprofile, setprofile })
 
     return (
         <>
-            <h1 style={{ margin: "2vw" }}>User Details</h1>
-            <p style={{ marginLeft: "2vw" }}>Update your personal details and photo here</p>
+            <h1 style={{ margin: "1.5vw" }}>User Details</h1>
+            <p style={{ marginLeft: "1.5vw" }}>Update your personal details and photo here</p>
 
             <form style={{ display: "flex", flexDirection: "column", alignItems: "center" }} onSubmit={handlesubmit}>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingBottom: "2vw" }}>
@@ -331,8 +332,13 @@ export default function Home({ upadteuser, setuser, updateprofile, setprofile })
                         type="submit"
                         className={classNames("btn btn-primary btn-block")}
                         style={{ borderRadius: "1vw" }}
+                        disabled={loading}
                     >
-                        Save
+                        {loading ? (
+                            <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                        ) : (
+                            "Save"
+                        )}
                     </button>
                 </div>
                 <br />

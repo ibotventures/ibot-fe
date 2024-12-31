@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import Cards from "@/component/Card";
-import Cookies from 'js-cookie';
 import axios from 'axios';
 import styles from "@/app/page.module.css";
 import Sidebar from '@/component/coursefilter';
@@ -9,13 +8,11 @@ import { Button, Offcanvas, OffcanvasBody } from 'reactstrap';
 import classNames from 'classnames';
 import debounce from "lodash.debounce";
 import { toast } from 'react-toastify';
-import { useRouter } from 'next/navigation';
 export default function Products() {
 
   const [productData, setproductData] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const router = useRouter();
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -60,8 +57,6 @@ export default function Products() {
     // Call the debounced update function
     updateFilter(updatedFilter);
   };
-
-
 
   useEffect(() => {
     const handledata = async (e) => {
