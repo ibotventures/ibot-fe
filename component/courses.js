@@ -34,8 +34,20 @@ const MyComponent = () => {
         <div style={{ padding: '20px' }}>
             <div style={{ display: "flex", gap: '10px' }}>
                 <div>
-                    <Image
-                        src={`${process.env.NEXT_PUBLIC_BASE_API_URL}/${data.profiles}` || '/profile.png'}
+                    {!data.profiles ? (<Image
+                        src='/profile.png'
+                        className="img-fluid"
+                        alt="Profiles Image"
+                        width={90}
+                        height={90}
+                        style={{
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            width: "90px",
+                            height: "90px",
+                        }}
+                    />) : (<Image
+                        src={`${process.env.NEXT_PUBLIC_BASE_API_URL}/${data.profiles}`}
                         className="img-fluid"
                         alt="Profile Image"
                         width={90}
@@ -46,11 +58,12 @@ const MyComponent = () => {
                             width: "90px",
                             height: "90px",
                         }}
-                    />
+                    />)}
+         
                 </div>
                 <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
                     <p style={{ padding: "0", margin: "0", fontWeight: "bold" }}>Welcome {data.name}</p>
-                    <p style={{ padding: "0", margin: "0" }}>Your Courses Dashboard</p>
+                    <p style={{ padding: "0", margin: "0" }}>Your Course Dashboard</p>
                 </div>
             </div>
             <br />
@@ -69,7 +82,7 @@ const MyComponent = () => {
                 </div>
                 <div style={{ backgroundColor: "white", padding: "20px", borderRadius: '20px', width: '480px' }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <h3>Completed Courses</h3>
+                        <h4>Completed Courses</h4>
                         <div style={{ backgroundColor: "black", borderRadius: '8px', padding: "8px" }}>
                             <FaCheck style={{ color: "white" }} />
                         </div>
@@ -79,7 +92,7 @@ const MyComponent = () => {
             </div>
             <br />
             <div>
-                <h2>Ongoing Courses by You</h2>
+                <h3>Ongoing Courses by You</h3>
                 <br />
                 <CardGroup style={{ gap: "20px" }}>
                     {data.ongoing_courses.length > 0 ? (
@@ -108,7 +121,23 @@ const MyComponent = () => {
                             </Card>
                         ))
                     ) : (
-                        <p>You haven't started any courses yet</p>
+                        <div style={{display:'flex',flexDirection:'column',alignItems:'center',backgroundColor:'white',width:'100%',padding:'20px'}}>
+                            <Image
+                                src='/empty.png'
+                                className="img-fluid"
+                                alt="Profile Image"
+                                width={90}
+                                height={90}
+                                style={{
+                                    borderRadius: "50%",
+                                    objectFit: "cover",
+                                    width: "150px",
+                                    height: "150px",
+                                }}
+                            />
+                            <p>Courses are Waiting for you...</p>
+                        </div>
+
                     )}
                 </CardGroup>
             </div>

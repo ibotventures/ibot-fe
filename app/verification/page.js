@@ -93,7 +93,7 @@ const Verification = () => {
 
     return (
         <>
-            <div className={classNames(styles.background)} style={{ display: "flex", justifyContent: "center", flex: '1' }} >
+            <div className={classNames(styles.background)} style={{ display: "flex", justifyContent: "center", flex: '1' }}>
                 <div className={classNames(styles.registerContainer, 'container-fluid')}>
                     <h2 style={{ paddingBottom: "2vw" }}>Verification Code</h2>
                     <p>We have sent the verification code to your email address</p>

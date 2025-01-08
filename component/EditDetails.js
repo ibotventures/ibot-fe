@@ -5,8 +5,8 @@ import classNames from 'classnames';
 import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { Spinner } from "reactstrap";
 
 export default function Home({ upadteuser, setuser, updateprofile, setprofile }) {
     const [userdetails, setuserdetails] = useState(null);
@@ -25,7 +25,6 @@ export default function Home({ upadteuser, setuser, updateprofile, setprofile })
     const [loading, setLoading] = useState(true);
     const [profile, setimage] = useState(null);
     const [profileImageUrl, setProfileImageUrl] = useState(updateprofile || '/profile.png');
-    const router = useRouter();
 
     useEffect(() => {
         const handleDetail = async () => {
@@ -83,10 +82,6 @@ export default function Home({ upadteuser, setuser, updateprofile, setprofile })
         }
     }, [profile]);
 
-    const handlecancel = () => {
-        router.push('/profile');
-        window.location.href = '/profile';
-    }
 
     const handlesubmit = async (e) => {
         e.preventDefault();
@@ -129,14 +124,50 @@ export default function Home({ upadteuser, setuser, updateprofile, setprofile })
         }
     };
 
+    const handlecancel = () => {
+        setemail(userdetails.email || '');
+        setUsername(userdetails.username || '');
+        setState(userdetails.state || '');
+        setCountry(userdetails.country || '');
+        setPincode(userdetails.pincode || '');
+        setCity(userdetails.city || '');
+        setNumber(userdetails.mobile || '');
+        setfirstname(userdetails.first_name || '');
+        setlastname(userdetails.last_name || '');
+        setmiddlename(userdetails.middle_name || '');
+        setAddress(userdetails.address || '');
+        setAge(userdetails.age || '');
+        if (userdetails.profile != '' && userdetails.profile != null) {
+            setProfileImageUrl(`${process.env.NEXT_PUBLIC_BASE_API_URL}${userdetails.profile}`);
+        } else {
+            setProfileImageUrl('/profile.png');
+        }
+    }
+
     if (loading) {
-        return <p>Loading....</p>;
+        return (
+
+            <div className="d-flex align-items-center flex-column" style={{ width: '70vw', height: '90vh' }}>
+                {/* <Image
+                    src='/roboload.png'
+                    className="img-fluid"
+                    alt="Profile Image"
+                    width={300}
+                    height={300}
+                />
+                <h4 style={{ textAlign: 'center' }}>"Almost there! Your data is on its way..."</h4> */}
+                <Spinner>
+                    Loading...
+                </Spinner>
+            </div>
+
+        );
     }
 
     return (
         <>
-            <h1 style={{ margin: "1.5vw" }}>User Details</h1>
-            <p style={{ marginLeft: "1.5vw" }}>Update your personal details and photo here</p>
+            <h2 style={{ margin: "1vw" }}>User Details</h2>
+            <p style={{ marginLeft: "1vw" }}>Update your personal details here to keep your account accurate</p>
 
             <form style={{ display: "flex", flexDirection: "column", alignItems: "center" }} onSubmit={handlesubmit}>
                 <div style={{ display: "flex", flexDirection: "column", alignItems: "center", paddingBottom: "2vw" }}>
@@ -149,8 +180,8 @@ export default function Home({ upadteuser, setuser, updateprofile, setprofile })
                         style={{
                             borderRadius: "50%",
                             objectFit: "cover",
-                            width: "150px",
-                            height: "150px",
+                            width: "130px",
+                            height: "130px",
                         }}
                     />
 

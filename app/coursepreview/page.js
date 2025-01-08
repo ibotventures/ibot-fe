@@ -4,7 +4,7 @@ import axios from 'axios';
 import { Accordion, AccordionItem, AccordionHeader, AccordionBody, Container, Row, Col, Button, Offcanvas, Spinner, FormGroup, Input, Label } from 'reactstrap';
 import styles from '@/app/page.module.css';
 import { toast } from 'react-toastify';
-// import Image from "next/image";
+import Image from "next/image";
 import classNames from 'classnames';
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
 import "@cyntler/react-doc-viewer/dist/index.css";
@@ -13,6 +13,7 @@ import { Card, CardBody, CardTitle, CardText } from 'reactstrap';
 import styler from '@/app/coursepreview/course.module.css';
 
 const MyComponent = () => {
+  const [yourreview, setyourreview] = useState([]);
   const [rating, setRating] = useState(0); // State to store selected rating
   const [comment, setComment] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -29,13 +30,11 @@ const MyComponent = () => {
   const [overviewDocs, setOverviewDocs] = useState([]); // Store overview document
   const [contentDocs, setContentDocs] = useState([]); // Store content document
   const [activityDocs, setActivityDocs] = useState([]); // Store activity document
-  // const router = useRouter();
   const [selectedOptions, setSelectedOptions] = useState({}); // Track selected option per question
   const [answerResults, setAnswerResults] = useState({});
   const [userallow, setuserallow] = useState('');
   const [reviews, setReviews] = useState([]);
   const userCook = Cookies.get('userid');
-
   const handleOptionChanges = (taskId, option) => {
     setSelectedOptions(prev => ({
       ...prev,
@@ -43,15 +42,33 @@ const MyComponent = () => {
     }));
   };
 
+  const handledeletereview = async (id) => {
+    try {
+      const res = await axios.delete(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/delcoursereview/${id}/`);
+      if (res.status === 200) {
+        const filteredReviews = reviews.filter(review => review.id !== id);
+        setReviews(filteredReviews);
+        const yourReview = yourreview.filter(review => review.id !== id);
+        setyourreview(yourReview);
+      }
+    } catch (error) {
+      console.error("Error fetching cart data:", error);
+    }
+  }
+
   const fetchReviews = async () => {
     try {
       const courseIds = sessionStorage.getItem('course');
+      const username = Cookies.get('username');
       const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/reviews/`, {
         params: { id: courseIds }
       }
       );
-      if (response.status == 200) {
+
+      if (response.status === 200) {
         setReviews(response.data.data);
+        const yourReview = response.data.data.filter(review => review.username === username);
+        setyourreview(yourReview);
       }
       setLoading(false);
     } catch (error) {
@@ -66,11 +83,14 @@ const MyComponent = () => {
       return;
     }
     const courseIds = sessionStorage.getItem('course');
+    const username = Cookies.get('username');
     const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/reviews/`,
       { 'user': userCook, 'course': courseIds, 'review': comment, 'rating': rating },
     );
     if (response.status == 200) {
       setReviews(response.data.data);
+      const yourReview = response.data.data.filter(review => review.username === username);
+      setyourreview(yourReview);
       setComment("");
       setRating(0);
     }
@@ -87,7 +107,6 @@ const MyComponent = () => {
           { courseid: courseIds },
         );
         setCourseData(response.data.data);
-        // console.log(response.data.data);
         setLoading(false);
       } catch (error) {
         toast.error("Something went wrong while loading course data.");
@@ -141,7 +160,6 @@ const MyComponent = () => {
       });
       if (response.status === 200) {
         setcertifyques(response.data.data[0].questions); // Update state with fetched questions
-        // console.log('Certification Questions:', response.data.data[0].questions);
       }
     } catch (error) {
       // console.error("Error fetching certification questions:", error);
@@ -166,13 +184,7 @@ const MyComponent = () => {
     }
   }
   useEffect(() => {
-
-    // if (Cookies.get('username') == 'Administrator') {
-    //   certifyquess();
-    // } else {
     certifyquesuser();
-    // }
-
   }, [courseData, change]);
 
   // Handle screen resizing
@@ -186,7 +198,6 @@ const MyComponent = () => {
 
   const handleRetest = () => {
     setSelectedOptions({}); // Reset selected options
-    // setAnswerResults({}); // Clear results
     setIsSubmitted(false); // Enable submit button
   };
 
@@ -200,8 +211,6 @@ const MyComponent = () => {
   const handleModuleClick = async (module, index) => {
     const courseIds = sessionStorage.getItem('course');
     const userid = Cookies.get('userid');
-    // console.log(index);
-    // setSidebarOpen(!sidebarOpen);
     if (index == 0 || Cookies.get('username') == 'Administrator') {
       setSelectedModule(module);
       setSelectedTask("overview");
@@ -214,7 +223,6 @@ const MyComponent = () => {
     } else {
       try {
         const previousModule = courseData.modules[index - 1];
-        // const userid = Cookies.get('userid');
         const moduleid = previousModule.id;
         const { data, status } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/canviewmodule/`, {
           params: { userid, moduleid }
@@ -320,7 +328,6 @@ const MyComponent = () => {
           // Check if the key is a percentage
           if (keys.includes('percentage')) {
             const obtainedPercentage = result['percentage'];
-            // console.log(obtainedPercentage);
 
             if (obtainedPercentage < 65) {
               setchange(false);
@@ -328,7 +335,6 @@ const MyComponent = () => {
                 `You need to score more than 65% to pass this assessment. Your percentage: ${obtainedPercentage.toFixed(2)}%`
               );
             } else {
-              // console.log(courseData.modules[courseData.modules.length - 1].id);
               if (moduleId == courseData.modules[courseData.modules.length - 1].id) {
                 setchange(true);
               }
@@ -376,8 +382,6 @@ const MyComponent = () => {
           // Check if the key is a percentage
           if (keys.includes('percentage')) {
             const obtainedPercentage = result['percentage'];
-            // console.log(obtainedPercentage);
-
             if (obtainedPercentage < 65) {
               toast.error(
                 `You need to score more than 65% to pass this Course. Your percentage: ${obtainedPercentage.toFixed(2)}%`
@@ -405,14 +409,15 @@ const MyComponent = () => {
     if (!selectedTask) {
       return (
         <div style={{ margin: "20px" }}>
-          <video
+          {/* <video
             src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${courseData.video}`}
             width="100%"
             height="600px"
             controls
             className="img-fluid"
             style={{ border: '1px solid #ccc' }}
-          />
+          /> */}
+          <iframe width="560" height="315" src={courseData.video} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
         </div>
       );
     }
@@ -421,14 +426,18 @@ const MyComponent = () => {
       case 'video':
         return (
           <div style={{ margin: "20px" }}>
-            <video
+            {/* <video
               src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${courseData.video}`}
               width="100%"
               height="600px"
               controls
               className="img-fluid"
               style={{ border: '1px solid #ccc' }}
-            />
+            /> */}
+            <iframe width="560" height="315" src={courseData.video} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen style={{
+              'width': "100%",
+              'height': "600px"
+            }}></iframe>
           </div>
         );
       case 'overview':
@@ -543,7 +552,6 @@ const MyComponent = () => {
                   <br /><br />
                 </div>
               ))}
-              {/* <button className="btn btn-primary" type="submit">Submit</button> */}
               {!isSubmitted ? (
                 <button className="btn btn-primary" type="button" onClick={(e) => { e.preventDefault(); handleanswer(selectedModule.id); }}>
                   Submit
@@ -566,7 +574,6 @@ const MyComponent = () => {
           <>
             <div style={{ backgroundColor: "whitesmoke", padding: "20px", margin: "20px" }}>
               <h1 style={{ textAlign: "center" }}>{courseData.course_name}</h1>
-              {/* <div style={{ display: "flex", justifyContent: "space-between" }}> */}
               <div className={styler.assess}>
                 <h2>Certification Assessment</h2>
                 <p>marks: {certifyques.length}</p>
@@ -614,7 +621,6 @@ const MyComponent = () => {
                     <br /><br />
                   </div>
                 ))}
-                {/* <button className="btn btn-primary" type="submit">Submit</button> */}
                 {!isSubmitted ? (
                   <button className="btn btn-primary" type="button" onClick={(e) => { e.preventDefault(); handlecertifyanswer(); }}>
                     Submit
@@ -639,7 +645,16 @@ const MyComponent = () => {
   };
 
   if (loading) {
-    return <p>Loading....</p>;
+    return (
+
+      <div className="d-flex align-items-center flex-column justify-content-center" style={{ width: '100vw', height: '90vh' }}>
+        <h4 style={{ textAlign: 'center' }}>"Almost there! Your data is on its way..."</h4>
+        <Spinner>
+          Loading...
+        </Spinner>
+      </div>
+
+    );
   }
 
   return (
@@ -904,19 +919,7 @@ const MyComponent = () => {
                     id="reviews"
                     name="review[comment]"
                     required
-                    // className="form-control"
                     className={classNames('form-control', styler.comment)}
-                    // style={{
-                    //   width: "80%",
-                    //   height: "200px",
-                    //   borderRadius: "10px",
-                    //   border: "none",
-                    //   boxShadow: "0 0 10px rgba(0, 0, 0, 0.3)",
-                    //   padding: "20px",
-                    //   fontFamily: "'Rubik Doodle Shadow', sans-serif",
-                    //   wordSpacing: "3px",
-                    //   fontSize: "large",
-                    // }}
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                   ></textarea>
@@ -930,7 +933,65 @@ const MyComponent = () => {
                   </button>
                 </form>
                 <br />
-
+                <div className="container mt-4">
+                  <h2 className="mb-4">Your reviews</h2>
+                  <Row>
+                    {yourreview.length !== 0 ? (
+                      yourreview.map((review, index) => (
+                        <Col key={index} md="6" lg="4" className="mb-4">
+                          <Card className="shadow-sm">
+                            <CardBody>
+                              <div className="d-flex align-items-center mb-3">
+                                {/* Star Rating */}
+                                {Array(5)
+                                  .fill()
+                                  .map((_, i) => (
+                                    <span
+                                      key={i}
+                                      className={`me-1 ${i < review.rating ? 'text-warning' : 'text-muted'
+                                        }`}
+                                    >
+                                      ★
+                                    </span>
+                                  ))}
+                              </div>
+                              <CardTitle tag="h5">{review.review}</CardTitle>
+                              <CardText className="text-muted">
+                                <strong>createdBy:</strong> {review.username}
+                              </CardText>
+                              <CardText>
+                                <small className="text-muted">
+                                  createdAt: {new Date(review.createdAt).toUTCString()}
+                                </small>
+                              </CardText>
+                              <Button color="danger" outline size="sm" onClick={() => { handledeletereview(review.id) }}>
+                                🗑️ Delete
+                              </Button>
+                            </CardBody>
+                          </Card>
+                        </Col>
+                      ))
+                    ) : (
+                      // <p>No reviews available</p>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white', width: '100%', padding: '20px' }}>
+                        <Image
+                          src='/empty.png'
+                          className="img-fluid"
+                          alt="Profile Image"
+                          width={90}
+                          height={90}
+                          style={{
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            width: "150px",
+                            height: "150px",
+                          }}
+                        />
+                        <p>We are waiting for your stars and reviews</p>
+                      </div>
+                    )}
+                  </Row>
+                </div>
                 <div className="container mt-4">
                   <h2 className="mb-4">Ratings and Reviews</h2>
                   <Row>
@@ -962,15 +1023,29 @@ const MyComponent = () => {
                                   createdAt: {new Date(review.createdAt).toUTCString()}
                                 </small>
                               </CardText>
-                              {/* <Button color="danger" outline size="sm">
-                                🗑️ Delete
-                              </Button> */}
                             </CardBody>
                           </Card>
                         </Col>
                       ))
                     ) : (
-                      <p>No reviews available</p>
+              
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white', width: '100%', padding: '20px' }}>
+                        <Image
+                          src='/empty.png'
+                          className="img-fluid"
+                          alt="Profile Image"
+                          width={90}
+                          height={90}
+                          style={{
+                            borderRadius: "50%",
+                            objectFit: "cover",
+                            width: "150px",
+                            height: "150px",
+                          }}
+                        />
+                        <p>We are waiting for your stars and reviews</p>
+                      </div>
+                      
                     )}
                   </Row>
                 </div>

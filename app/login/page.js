@@ -1,16 +1,28 @@
 'use client';
 import styles from "@/app/page.module.css";
-import React, { useState,useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from "next/navigation";
 import classNames from 'classnames';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 const LoginPage = () => {
     const [email, setemail] = useState('');
     const [password, setPass] = useState('');
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const router = useRouter();
+    const handleactivate = async () => {
+        
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/activateaccount/`, {
+            email:email
+        });
+        if (response.status == 200) {
+            toast.success('Account activated. You can login now');
+            setShowDeleteModal(false);
+        }
 
+    };
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -18,19 +30,23 @@ const LoginPage = () => {
                 `${process.env.NEXT_PUBLIC_BASE_API_URL}/app/signin/`,
                 { email, password }
             );
-            console.log(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/signin/`);
             const { session, data, status } = datas.data;
             const { token, refresh } = session;
             const statuscode = datas.status;
             if (statuscode === 200 && token) {
-                Cookies.set('username',data.username,{expires: 7});
+                Cookies.set('username', data.username, { expires: 7 });
                 Cookies.set('token', token, { expires: 7 });
-                Cookies.set('userid',data.user_id,{expires: 7});
-                // Cookies.set('subscription',data.subscription,{expires: 7});
+                Cookies.set('userid', data.user_id, { expires: 7 });
                 toast.success(`Logged in successfully`);
                 router.push('/');
                 window.location.href = '/';
-            } else {
+            } else if (statuscode === 200) {
+                if (data == 'inactive_user') {
+                    setShowDeleteModal(true);
+                    return;
+                }
+            }
+            else {
                 toast.error(`Check your details, login unsuccessful`);
             }
         } catch (err) {
@@ -45,17 +61,15 @@ const LoginPage = () => {
             router.replace('/'); // Prevent going back to login with history
         }
     }, [router]);
-    
+
     return (
         <>
 
             <div className={classNames(styles.background)} style={{ display: "flex", justifyContent: "center" }} >
-                {/* <div style={{ backgroundColor: "whitesmoke", width: "50vw", padding: "3vw", borderRadius: "20px", boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)", margin: "20px", height: "fit-content" }} className='container-fluid'> */}
                 <div className={classNames(styles.registerContainer, 'container-fluid')}>
                     <h2 style={{ paddingBottom: "2vw" }}>Login</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            {/* <label htmlFor="email">Email</label> */}
                             <input
                                 type="email"
                                 onChange={e => setemail(e.target.value)}
@@ -68,7 +82,6 @@ const LoginPage = () => {
                             />
                         </div><br />
                         <div className="form-group">
-                            {/* <label htmlFor="password">Password</label> */}
                             <input
                                 type="password"
                                 onChange={e => setPass(e.target.value)}
@@ -93,6 +106,14 @@ const LoginPage = () => {
 
                 </div>
             </div>
+            <Modal isOpen={showDeleteModal} toggle={() => setShowDeleteModal(false)}>
+                <ModalHeader toggle={() => setShowDeleteModal(false)}>Your account is inactive</ModalHeader>
+                <ModalBody>You have deactivated your account. Activate your account to continue login</ModalBody>
+                <ModalFooter>
+                    <Button color="danger" onClick={handleactivate}>Activate account</Button>
+                    <Button color="secondary" onClick={() => setShowDeleteModal(false)}>No</Button>
+                </ModalFooter>
+            </Modal>
 
         </>
     );

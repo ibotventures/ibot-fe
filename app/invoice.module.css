@@ -1,0 +1,83 @@
+.invoiceContainer {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.invoiceHeader {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.invoiceHeader h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+.invoiceDetails {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.vendorInfo,
+.customerInfo {
+    width: 100%;
+}
+
+.vendorInfo h3,
+.customerInfo h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.productInfo h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.productTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.productTable th,
+.productTable td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.productTable th {
+    background-color: #f4f4f4;
+}
+
+.invoiceFooter {
+    text-align: right;
+    margin-top: 20px;
+}
+
+.invoiceFooter p {
+    font-weight: bold;
+    margin: 5px 0;
+}
+
+.downloadBtn {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.downloadBtn:hover {
+    background-color: #0056b3;
+}

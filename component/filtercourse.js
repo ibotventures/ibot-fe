@@ -41,8 +41,8 @@ export default function FilterCourse({ onFilterChange }) {
 
     return (
         <div style={{ display: "flex", flexDirection: "column", gap: "1.5vw" }}>
-
-            <h2>Categories</h2>
+            <h2>Filters</h2>
+            <h3>Categories</h3>
             {categor.map(age => (
                 <div key={age}>
                     <Input
@@ -55,7 +55,7 @@ export default function FilterCourse({ onFilterChange }) {
                 </div>
             ))}
 
-            <h2>Review</h2>
+            <h3>Review</h3>
             {[5, 4, 3, 2, 1].map(star => (
                 <div key={star}>
                     <Input

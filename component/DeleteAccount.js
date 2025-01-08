@@ -37,18 +37,34 @@ export default function Home() {
 
     return (
         <>
-            <h1>Delete Account</h1>
-            <p>We're sorry to see you go, but if you're sure you want to delete your account,then give reason:</p>
-            <h3>Reason</h3>
-            <textarea className={styles.delarea} onChange={e => setreason(e.target.value)}
-                value={reason} ></textarea><br />
             <br />
-            <button type="submit" className={classNames("btn btn-primary btn-block")} style={{ borderRadius: "1vw" }} onClick={(e) => {
-                e.stopPropagation();
-                confirmDelete();
-            }}>
-                Delete
-            </button>
+            <h2>Want to delete account?</h2>
+            <br />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white', width: '100%', padding: '20px' }}>
+                <Image
+                    src='/del.png'
+                    className="img-fluid"
+                    alt="Profile Image"
+                    width={90}
+                    height={90}
+                    style={{
+                        borderRadius: "50%",
+                        objectFit: "cover",
+                        width: "200px",
+                        height: "200px",
+                    }}
+                />
+                <p>We value and care about your presence with us, so instead of permanent deletion, your account will be temporarily deactivated—ensuring that all your data will be safely restored if you decide to return.</p>
+                <h5>Give reason why you want to delete your account</h5>
+                <textarea className={styles.delarea} onChange={e => setreason(e.target.value)}
+                    value={reason} ></textarea><br />
+                <Button type="submit" className={classNames("btn btn-danger btn-block")} style={{ borderRadius: "0.5vw" }} onClick={(e) => {
+                    e.stopPropagation();
+                    confirmDelete();
+                }}>
+                    Delete
+                </Button>
+            </div>
 
             <Modal isOpen={showDeleteModal} toggle={() => setShowDeleteModal(false)}>
                 <ModalHeader toggle={() => setShowDeleteModal(false)}>Confirm Deletion</ModalHeader>

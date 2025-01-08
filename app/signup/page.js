@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { toast } from 'react-toastify';
 import classNames from 'classnames';
 import axios from 'axios';
-
+import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
 const SignUpPage = () => {
     const [email, setemail] = useState('');
     const [password, setPass] = useState('');
@@ -15,6 +15,7 @@ const SignUpPage = () => {
     const [mobile, setmobile] = useState('');
     const [isLoading, setIsLoading] = useState(false); // Loading state
     const router = useRouter();
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
 
     useEffect(() => {
         const token = Cookies.get('token');
@@ -22,6 +23,19 @@ const SignUpPage = () => {
             router.replace('/'); // Prevent going back to login with history
         }
     }, [router]);
+
+    const handleactivate = async () => {
+        
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/activateaccount/`, {
+            email:email
+        });
+        if (response.status == 200) {
+            toast.success('Account activated. You can login now');
+            setShowDeleteModal(false);
+            router.push('/login');
+        }
+
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -34,7 +48,10 @@ const SignUpPage = () => {
                     const type = 'send';
                     const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/sendotp/`, { email, username, mobile, password, type });
                     const { data, status } = response;
-
+                    if (data.data === 'inactive_user') {
+                        setShowDeleteModal(true);
+                        return;
+                    }
                     if (data.data === 'email_found') {
                         toast.error("This email already exists. Please try a different email.");
                         setIsLoading(false); // Reset loading
@@ -44,6 +61,11 @@ const SignUpPage = () => {
                     if (data.data === 'username_found') {
                         toast.error("This username is already taken. Please try a different username.");
                         setIsLoading(false); // Reset loading
+                        return;
+                    }
+
+                    if (data.data === 'inactive_user') {
+                        setShowDeleteModal(true);
                         return;
                     }
 
@@ -156,6 +178,14 @@ const SignUpPage = () => {
                     </form>
                 </div>
             </div>
+            <Modal isOpen={showDeleteModal} toggle={() => setShowDeleteModal(false)}>
+                <ModalHeader toggle={() => setShowDeleteModal(false)}>Your account is inactive</ModalHeader>
+                <ModalBody>You have deactivated your account. Activate your account to continue login</ModalBody>
+                <ModalFooter>
+                    <Button color="danger" onClick={handleactivate}>Activate account</Button>
+                    <Button color="secondary" onClick={() => setShowDeleteModal(false)}>No</Button>
+                </ModalFooter>
+            </Modal>
         </>
     );
 }

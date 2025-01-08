@@ -2,11 +2,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-const RazorpayComponent = ({email,username,contact}) => {
-    // const [isSubscribed, setIsSubscribed] = useState(false);
+const RazorpayComponent = ({ email, username, contact, setsubscription }) => {
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
     const [isClient, setIsClient] = useState(false); // Track client-side rendering
-
+    const [subscribe, setsubscribe] = useState([]);
     useEffect(() => {
         setIsClient(true); // Ensure client-side rendering
         // Dynamically load Razorpay script
@@ -24,7 +23,15 @@ const RazorpayComponent = ({email,username,contact}) => {
             });
         };
 
+        const subscriptionget = async () => {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getsubscription/`);
+            setsubscribe(res.data.data);
+        }
+
         loadRazorpayScript()
+            .then(() => {
+                subscriptionget();
+            })
             .then(() => {
                 setIsScriptLoaded(true);  // Razorpay script is loaded
             })
@@ -42,51 +49,46 @@ const RazorpayComponent = ({email,username,contact}) => {
 
         try {
             const user = Cookies.get('userid');
-
-            const response = await axios.post('http://127.0.0.1:8000/app/order/', {
+            const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/order/`, {
                 user_id: user,
-                amount: 10000,  // Amount in INR
+                amount: subscribe.amount * 100,  // Amount in INR
                 currency: 'INR',
-                receipt: 'order_rcptid_11',
+                receipt: `subscription_rcptid_${subscribe.receiptcount}`,
             })
             if (response.data.status.code === 200) {
-                console.log('Order created:', response.data.data);
+                console.log('Order created');
             } else {
                 console.error('Error creating order:', response.data.status.message);
                 return;
             };
 
-            const orderId = response.data.data.id;
-            localStorage.setItem('orderId', orderId);
-
+            const amt = response.data.data.amount;
+            const rpt = response.data.data.receipt;
+            const cur = response.data.data.currency;
             const options = {
                 key: 'rzp_test_88QnZEgha1Ucxs',
-                amount: '150000',
+                amount: response.data.data.amount,
                 currency: 'INR',
-                name: 'Acme Corp',
-                description: 'Test Transaction',
-                image: 'https://example.com/your_logo',
-                order_id: orderId,
+                name: 'MiBot Ventures',
+                // description: 'Test Transaction',
+                // image: 'https://example.com/your_logo',
+                order_id: response.data.data.id,
                 handler: async function (response) {
-                    alert(`Payment ID: ${response.razorpay_payment_id}`);
-                    alert(`Order ID: ${response.razorpay_order_id}`);
-                    alert(`Signature: ${response.razorpay_signature}`);
-
-                    localStorage.setItem('paymentId', response.razorpay_payment_id);
-                    localStorage.setItem('signature', response.razorpay_signature);
 
                     try {
-                        const orderStatusResponse = await axios.post('http://127.0.0.1:8000/app/orderStatus/', {
-                            user_id: user,
-                            orderId: response.razorpay_order_id,
-                            paymentId: response.razorpay_payment_id,
-                            signature: response.razorpay_signature,
-                        });
-                        console.log('Order status response:', orderStatusResponse.data);
 
-                        // sessionStorage.setItem('subscription', 'true');
-                        // setIsSubscribed(true);
+                        const orderStatusResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/orderStatus/`, {
+                            user_id: user,
+                            amount: amt,
+                            currency: cur,
+                            receipt: rpt,
+                            razorpay_order_id: response.razorpay_order_id,
+                            razorpay_payment_id: response.razorpay_payment_id,
+                            razorpay_signature: response.razorpay_signature,
+                        });
+                        // console.log('Order status response:', orderStatusResponse.data);
                         window.alert('Payment successful and subscription updated.');
+                        setsubscription(true);
                     } catch (statusError) {
                         console.error('Error sending order status:', statusError);
                         window.alert('Payment failed');
@@ -124,11 +126,8 @@ const RazorpayComponent = ({email,username,contact}) => {
     return (
         <div>
             <button className="btn btn-primary" id="rzp-button1" onClick={handlePayment}>
-                Buy Subscription 100 rs only
+                Get Subscription Now for Just {subscribe.amount} Rs!
             </button>
-            {/* <button id="rzp-button1" onClick={handlePayment}>
-                Pay with Razorpay
-            </button> */}
         </div>
     );
 };

@@ -4,12 +4,11 @@ import Cards from "@/component/Card";
 import axios from 'axios';
 import styles from "@/app/page.module.css";
 import Sidebar from '@/component/coursefilter';
-import { Button, Offcanvas, OffcanvasBody } from 'reactstrap';
+import { Button, Offcanvas, OffcanvasBody,Spinner } from 'reactstrap';
 import classNames from 'classnames';
 import debounce from "lodash.debounce";
 import { toast } from 'react-toastify';
 export default function Products() {
-
   const [productData, setproductData] = useState([]);
   const [isMobile, setIsMobile] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -111,7 +110,16 @@ export default function Products() {
                 <Cards key={product.id} product={product} className='container-fluid' />
               ))
             ) : (
-              <p style={{ textAlign: 'center' }}>No products found</p>
+              <div style={{ marginBottom: "2rem", paddingLeft: '20px' }}>
+                {/* No data available */}
+                <h4 style={{ textAlign: 'center' }}>"Almost there! Our course data is on its way..."</h4>
+                <div style={{ display: 'flex', justifyContent: 'center' }}>
+                  <Spinner>
+                    Loading...
+                  </Spinner>
+                </div>
+
+              </div>
             )}
           </div>
         </div>

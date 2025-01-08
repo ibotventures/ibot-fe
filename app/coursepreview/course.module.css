@@ -1,28 +1,26 @@
-
 .assess {
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
+}
+
+.comment {
+  width: 80%;
+  height: 200px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  font-family: 'Rubik Doodle Shadow', sans-serif;
+  word-spacing: 3px;
+  font-size: large;
+}
+
+@media (max-width: 768px) {
+  .assess {
+    flex-wrap: wrap;
   }
-  
+
   .comment {
-    width: 80%;
-    height: 200px;
-    border-radius: 10px;
-    border: none;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    padding: 20px;
-    font-family: 'Rubik Doodle Shadow', sans-serif;
-    word-spacing: 3px;
-    font-size: large;
+    width: 100%;
   }
-  
-  @media (max-width: 768px) {
-    .assess {
-      flex-wrap: wrap;
-    }
-  
-    .comment {
-      width: 100%;
-    }
-  }
-  
+}

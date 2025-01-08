@@ -57,7 +57,7 @@ export default function Home() {
                             <h2 style={{ paddingBottom: "1vw" }}>Pick Up where you left !</h2>
                             <button style={{ padding: "8px" }} className={classNames("btn btn-primary btn-block")} onClick={() => handleresume()}><FaPlay className="mr-2" style={{ marginRight: "1vw" }} />Resume Me</button>
                         </div>
-                        <Image src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${courseimage}`} width={300} height={100} className="img-fluid" style={{ width: '40vw', maxHeight: '300px' }} alt="banners" unoptimized />
+                        <Image src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${courseimage}`} width={300} height={100} className="img-fluid" style={{ width: '40vw', maxHeight: '400px',maxWidth:'400px' }} alt="banners" unoptimized />
 
                     </div>
                 ) : null}
@@ -80,8 +80,8 @@ export default function Home() {
                 </div>
                 <br />
                 <div style={{ margin: "3vw" }} className="res">
-                    <h2 style={{ textAlign: "center" }}>Why Study With IBOT</h2>
-                    <p style={{ textAlign: "center" }}>Definitely Buy Products and Courses</p>
+                    <h2 style={{ textAlign: "center" }}>Why Study With MiBOT</h2>
+                    <p style={{ textAlign: "center" }}>You will definitely Buy Products and Courses</p>
                 </div>
 
                 <div style={{ display: "flex", justifyContent: "space-evenly", flexWrap: "wrap", gap: '20px' }} className="res">
@@ -106,7 +106,7 @@ export default function Home() {
                 <br />
 
                 <div style={{ display: "flex", justifyContent: "space-evenly", gap: "2vw", alignItems: "center" }} className="res">
-                    <Image src={'/poster.jpeg'} width={500} height={400} style={{ minWidth: "50vw", minHeight: '20vh', maxHeight: '60vh' }} className="imager" alt="lottie" unoptimized />
+                    <Image src={'/poster.jpeg'} width={500} height={400} style={{ minWidth: "40vw", minHeight: '20vh', maxHeight: '60vh' }} className="imager" alt="lottie" unoptimized />
                     <div style={{ width: "50vw" }} className="res">
                         <h2 className="res">Understand STEM through hands-on Learning</h2>
                         <div className="res">Immerse yourself in the world of STEM through our immersive short courses. Our courses are designed to make complex concepts simple by learning through hands-on activities.</div>

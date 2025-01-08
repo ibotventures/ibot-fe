@@ -24,12 +24,6 @@
 
 /* forms background */
 .background {
-  /* background-image: url('/back.png');
-  background-size: cover;
-  background-position: center;
-  height: 100%;
-  flex-grow: 1; */
-
   display: flex;
   flex-grow: 1;
   /* This ensures the background div grows to occupy the available space */
@@ -40,6 +34,7 @@
   background-position: center;
   width: 100%;
 }
+
 /* forms style */
 .registerContainer {
   width: 50%;
@@ -58,36 +53,7 @@
   }
 }
 
-/* font style */
-.parafont {
-  font-size: 1.5vw;
-}
-
-.landfont {
-  font-size: 4vw;
-}
-
-.fontp {
-  font-size: 1.2vw;
-}
-
-.fonth {
-  font-size: 2vw;
-}
-
 @media (max-width: 768px) {
-  .landfont {
-    font-size: 5vw;
-  }
-
-  .fonth {
-    font-size: 4vw;
-  }
-
-  .fontp {
-    font-size: 3vw;
-  }
-
   .img-fluid {
     width: 100%;
     height: auto;
@@ -100,10 +66,8 @@
   height: fit-content;
   top: 110px;
   right: 10px;
-  /* z-index: 1100; */
   width: fit-content;
-  /* font-size: 1.5vw; */
-
+  
 }
 
 .occupy {
@@ -122,137 +86,11 @@
   }
 
   .sidebar {
-    /* width: 250px;
-    position: fixed;
-    left: 0;
-    top: 0;
-    height: 100%;
-    background-color: #f8f9fa;
-    padding: 20px;*/
-    /* z-index: 1000;  */
     width: 30vw;
     padding-left: 3vw
   }
 
 }
-
-/* .reportCard {
-  width: 300px;
-  background-color: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  text-align: center;
-  font-family: 'Arial', sans-serif;
-}
-
-.chartContainer {
-  position: relative;
-  width: 200px;
-  margin: 0 auto;
-}
-
-.chartCenter {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-}
-
-.chartCenter h2 {
-  margin: 0;
-  font-size: 32px;
-  font-weight: bold;
-}
-
-.chartCenter p {
-  margin: 0;
-  color: gray;
-}
-
-.legend {
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  margin-top: 15px;
-}
-
-.legend div {
-  display: flex;
-  align-items: center;
-}
-
-.legend span {
-  display: inline-block;
-  width: 15px;
-  height: 15px;
-  border-radius: 50%;
-  margin-right: 8px;
-}
-
-.green {
-  background-color: #4CAF50;
-}
-
-.red {
-  background-color: #F44336;
-}
-
-.orange {
-  background-color: #FF9800;
-}
-
-.blue {
-  background-color: #2196F3;
-}
-
-.reportCard {
-  width: 350px;
-  background-color: white;
-  border-radius: 15px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 20px;
-  font-family: 'Arial', sans-serif;
-}
-
-.reportItem {
-  display: flex;
-  align-items: center;
-  margin-top: 15px;
-}
-
-.progressWrapper {
-  width: 60px;
-  height: 60px;
-  margin-right: 15px;
-}
-
-.details {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.details h2 {
-  margin: 0;
-  font-size: 28px;
-  font-weight: bold;
-}
-
-.details p {
-  margin: 0;
-  font-size: 14px;
-  color: gray;
-}
-
-
-.chartContainer {
-  display: flex;
-  justify-content: center;
-  margin-top: 50px;
-} */
-
 
 /* landingpage css */
 .container {
@@ -368,8 +206,6 @@
   text-align: left;
 }
 
-
-
 .carouselContainer {
   position: relative;
   width: 100%;
@@ -455,7 +291,10 @@
 .delarea {
   border: none;
   width: 40vw;
-  height: 20vh
+  height: 15vh;
+  background-color: whitesmoke;
+  border-radius: 10px;
+  padding: 10px;
 }
 
 @media (max-width: 768px) {
@@ -482,8 +321,29 @@
   flex-wrap: wrap;
 }
 
+.navalign {
+  display: flex;
+  justify-content: space-between;
+}
+
 @media (max-width: 768px) {
   .productwrap {
     flex-wrap: wrap;
+  }
+
+  .navalign {
+    justify-content: unset;
+    display: unset;
+  }
+}
+
+/* landing page */
+.landcarousal {
+  height: 180px;
+}
+
+@media (max-width: 768px) {
+  .landcarousal {
+    height: 0vh;
   }
 }

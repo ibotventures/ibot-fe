@@ -1,12 +1,19 @@
-'use client';
-import Landingpage from '@/component/landingpage';
-import Mainhome from '@/component/mainhome';
-import Cookies from 'js-cookie';
+"use client";
+import { useEffect, useState } from "react";
+import Landingpage from "@/component/landingpage";
+import Mainhome from "@/component/mainhome";
+import Cookies from "js-cookie";
 
 export default function Render() {
-    const userId = Cookies.get('userid');
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    // Check for the user ID cookie after the component has mounted
+    const userId = Cookies.get("userid");
     if (userId) {
-        return <Mainhome />;
+      setIsLoggedIn(true);
     }
-    return <Landingpage />;
+  }, []);
+
+  // Default to Landingpage and switch to Mainhome if the cookie exists
+  return isLoggedIn ? <Mainhome /> : <Landingpage />;
 }

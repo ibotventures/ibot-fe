@@ -1,12 +1,12 @@
-
 'use client';
 import classNames from 'classnames';
 import styles from "@/app/page.module.css";
 import React, { useState, useEffect } from 'react';
 import Sidebar from '@/component/coursefilter';
-import { Button, Offcanvas, OffcanvasBody } from 'reactstrap';
+import { Button, Offcanvas, OffcanvasBody, Spinner } from 'reactstrap';
 import { FaHourglass, FaFile, FaListAlt } from 'react-icons/fa';
 import { useRouter } from "next/navigation";
+import { Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Image from 'next/image';
@@ -18,14 +18,16 @@ import styler from '@/app/courselist/courselist.module.css'
 export default function CourseList() {
   const [isOpen, setIsOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [courseData, setCourseData] = useState([]);
   const [access, setAccess] = useState('no');
   const [username, setusername] = useState('');
   const [email, setemail] = useState('');
   const [contact, setcontact] = useState('');
   const router = useRouter();
-
+  // const user = Cookies.get('userid');
+  const [subscription, setsubscription] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -74,7 +76,7 @@ export default function CourseList() {
 
   useEffect(() => {
     const handleCourse = async () => {
-      setLoading(true);
+      // setLoading(true);
       try {
         const courses = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/courselist/`);
         const userid = Cookies.get('userid');
@@ -94,13 +96,14 @@ export default function CourseList() {
       } catch (error) {
         // console.error("Error:", error);
         toast.error("Something went wrong while loading course data.");
-      } finally {
-        setLoading(false);
       }
+      // finally {
+      //   setLoading(false);
+      // }
     };
 
     handleCourse();
-  }, []);
+  }, [subscription]);
 
   useEffect(() => {
 
@@ -129,30 +132,42 @@ export default function CourseList() {
       sessionStorage.setItem('course', courseId);
       router.push('/coursepreview');
     } else if (userid && access === 'no') {
-      toast.error('Get subscription to access course');
+      setShowDeleteModal(true);
     } else {
       toast.error("You haven't logged in yet");
       router.push('/login');
     }
   };
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  // if (loading) {
+  //   return (
+  //       // <p>Loading...</p>
+  //     <div className="d-flex align-items-center flex-column justify-content-center" style={{ width: '100vw', height: '90vh' }}>
+  //       <Image
+  //         src='/roboload.png'
+  //         className="img-fluid"
+  //         alt="Profile Image"
+  //         width={300}
+  //         height={300}
+  //       />
+  //       <h4 style={{textAlign:'center'}}>"Almost there! Your data is on its way..."</h4>
+  //       <Spinner>
+  //         Loading...
+  //       </Spinner>
+  //     </div>
+
+  //   );
+  // }
 
   return (
     <>
-      <div style={{ display: "flex", justifyContent: "space-between", padding: "3.5vw" }}>
+      <div style={{ display: "flex", justifyContent: "space-between", paddingTop: "3vw", paddingRight: '20px' }}>
+
         <div className={styles.occupy}>
+
           <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <div>
+            <div style={{ paddingLeft: '23px' }}>
               <h1>Courses</h1>
-              {access === 'no' && (
-                <>
-                  <p>You haven&apos;t got a Subscription yet. Buy one to access all of our courses.</p>
-                  <RazorpayComponent email={email} username={username} contact={contact} />
-                </>
-              )}
             </div>
 
             {isMobile && (
@@ -165,7 +180,7 @@ export default function CourseList() {
           <br />
           {courseData.length ? (
             courseData.map((course) => (
-              <div key={course.id} style={{ marginBottom: "2rem" }} className='container-fluid'>
+              <div key={course.id} style={{ marginBottom: "2rem", paddingLeft: '20px' }} className='container-fluid'>
                 <div
                   style={{
                     display: "flex",
@@ -216,7 +231,16 @@ export default function CourseList() {
               </div>
             ))
           ) : (
-            <div>No data available</div>
+            <div style={{ marginBottom: "2rem", paddingLeft: '20px' }}>
+              {/* No data available */}
+              <h4 style={{ textAlign: 'center' }}>"Almost there! Our course data is on its way..."</h4>
+              <div style={{ display: 'flex', justifyContent: 'center' }}>
+                <Spinner>
+                  Loading...
+                </Spinner>
+              </div>
+
+            </div>
           )}
         </div>
 
@@ -235,7 +259,30 @@ export default function CourseList() {
           )}
         </div>
       </div>
+
+      <Modal isOpen={showDeleteModal} toggle={() => setShowDeleteModal(false)}>
+        <ModalHeader toggle={() => setShowDeleteModal(false)}>Buy Subscription</ModalHeader>
+        <div style={{ display: 'flex' }}>
+          <Image
+            src='/buy.png'
+            className="img-fluid"
+            alt="Profile Image"
+            width={90}
+            height={90}
+            style={{
+              borderRadius: "50%",
+              objectFit: "cover",
+              width: "150px",
+              height: "150px",
+            }}
+          />
+          <ModalBody>Elevate your skills and unlock your potential—subscribe now to access all our exclusive courses!</ModalBody>
+        </div>
+
+        <ModalFooter>
+          <RazorpayComponent email={email} username={username} contact={contact} setsubscription={setsubscription} />
+        </ModalFooter>
+      </Modal>
     </>
   );
-
 }

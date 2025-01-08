@@ -19,7 +19,7 @@ export default function CourseFilter({ setFilters }) {
     };
 
     return (
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.5vw" }}>
+        <div style={{ display: "flex", flexDirection: "column",marginBottom:'20px' }}>
             <FilterCourse onFilterChange={handleFiltersUpdate} />
         </div>
     );
