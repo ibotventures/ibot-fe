@@ -69,12 +69,12 @@ export default function Home() {
                         <div style={{ backgroundColor: "#6AC1FF", padding: "3vw", borderRadius: "0vw 0vw 0vw 2vw", gap: "2vw" }} className="res">
                             <h2 style={{ padding: "1vw" }}>BUY OUR PRODUCTS</h2>
                             <button className={classNames("btn btn-primary")} style={{ padding: "10px", borderRadius: "1.5vw", color: "black", backgroundColor: "whitesmoke", border: "none" }}><a href="/products" style={{ color: "black", textDecoration: "none" }}>OUR PRODUCTS</a></button>
-                            <p style={{ marginTop: "1.6vw" }}>"Bring innovation to life with our cutting-edge robot-building kits! Perfect for all skill levels, our products make robotics fun, educational, and easy to explore. Start building your future today!"</p>
+                            <p style={{ marginTop: "1.6vw" }}>&quot;Bring innovation to life with our cutting-edge robot-building kits! Perfect for all skill levels, our products make robotics fun, educational, and easy to explore. Start building your future today!&quot;</p>
                         </div>
                         <div style={{ padding: "3vw", gap: "2vw" }} className="res">
                             <h2 style={{ padding: "1vw" }}>LEARN FROM OUR COURSES</h2>
                             <button className={classNames("btn btn-primary")} style={{ padding: "10px", borderRadius: "1.5vw", backgroundColor: "#6AC1FF", color: "black", border: "none" }}><a href="/courselist" style={{ color: "black", textDecoration: "none" }}>OUR COURSES</a></button>
-                            <p style={{ marginTop: "1.6vw" }}>"Learn to build and program robots like a pro with our hands-on courses! Designed for all skill levels, we’ll guide you step-by-step in creating incredible robots using our premium kits."</p>
+                            <p style={{ marginTop: "1.6vw" }}>&quot;Learn to build and program robots like a pro with our hands-on courses! Designed for all skill levels, we’ll guide you step-by-step in creating incredible robots using our premium kits.&quot;</p>
                         </div>
                     </div>
                 </div>
