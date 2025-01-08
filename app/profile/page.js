@@ -96,6 +96,15 @@ const MyComponent = () => {
     const handleTaskClick = (task) => {
         setSelectedTask(task); // Set selected task to display content
     };
+    function checkSubstring(mainString, sub) {
+        // Split the string into an array of words
+        const words = mainString.split("_");
+
+        // Check if the substring is present in any of the words
+        const isPresent = words.some((word) => word.includes(sub));
+
+        return isPresent;
+    }
     const renderContent = () => {
 
         if (!selectedTask) return (
