@@ -8,11 +8,11 @@ import Cookies from 'js-cookie';
 const InvoiceDetails = () => {
   const router = useRouter();
   const invoiceRef = useRef(null);
+  const [emails, setEmails] = useState('');
+  const [phones, setPhones] = useState('');
   const [invoice, setInvoice] = useState([]); // State for parsed invoice data
   // const emails = sessionStorage.getItem('email');
   // const phones = sessionStorage.getItem('phone');
-  const emails = typeof window !== "undefined" ? sessionStorage.getItem('email') : null;
-  const phones = typeof window !== "undefined" ? sessionStorage.getItem('phone') : null;
   // useEffect(() => {
   //   // Parse `invoicedata` from sessionStorage
   //   const invoicedata = sessionStorage.getItem('invoicedata');
@@ -25,6 +25,25 @@ const InvoiceDetails = () => {
       const invoicedata = sessionStorage.getItem('invoicedata');
       if (invoicedata) {
         setInvoice(JSON.parse(invoicedata));
+      }
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // Access sessionStorage safely inside useEffect
+      const invoicedata = sessionStorage.getItem('invoicedata');
+      const email = sessionStorage.getItem('email');
+      const phone = sessionStorage.getItem('phone');
+
+      if (invoicedata) {
+        setInvoice(JSON.parse(invoicedata));
+      }
+      if (email) {
+        setEmails(email);
+      }
+      if (phone) {
+        setPhones(phone);
       }
     }
   }, []);
