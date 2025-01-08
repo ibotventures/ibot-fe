@@ -233,7 +233,7 @@ export default function CourseList() {
           ) : (
             <div style={{ marginBottom: "2rem", paddingLeft: '20px' }}>
               {/* No data available */}
-              <h4 style={{ textAlign: 'center' }}>"Almost there! Our course data is on its way..."</h4>
+              <h4 style={{ textAlign: 'center' }}>&quot;Almost there! Our course data is on its way...&quot;</h4>
               <div style={{ display: 'flex', justifyContent: 'center' }}>
                 <Spinner>
                   Loading...

@@ -648,7 +648,7 @@ const MyComponent = () => {
     return (
 
       <div className="d-flex align-items-center flex-column justify-content-center" style={{ width: '100vw', height: '90vh' }}>
-        <h4 style={{ textAlign: 'center' }}>"Almost there! Your data is on its way..."</h4>
+        <h4 style={{ textAlign: 'center' }}>&quot;Almost there! Your data is on its way...&quot;</h4>
         <Spinner>
           Loading...
         </Spinner>
