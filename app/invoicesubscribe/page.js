@@ -9,16 +9,24 @@ const InvoiceDetails = () => {
   const router = useRouter();
   const invoiceRef = useRef(null);
   const [invoice, setInvoice] = useState([]); // State for parsed invoice data
-  const emails = sessionStorage.getItem('email');
-  const phones = sessionStorage.getItem('phone');
-
+  // const emails = sessionStorage.getItem('email');
+  // const phones = sessionStorage.getItem('phone');
+  const emails = typeof window !== "undefined" ? sessionStorage.getItem('email') : null;
+  const phones = typeof window !== "undefined" ? sessionStorage.getItem('phone') : null;
+  // useEffect(() => {
+  //   // Parse `invoicedata` from sessionStorage
+  //   const invoicedata = sessionStorage.getItem('invoicedata');
+  //   if (invoicedata) {
+  //     setInvoice(JSON.parse(invoicedata)); // Parse and set the invoice object
+  //   }
+  // }, []);
   useEffect(() => {
-    // Parse `invoicedata` from sessionStorage
-    const invoicedata = sessionStorage.getItem('invoicedata');
-    if (invoicedata) {
-      setInvoice(JSON.parse(invoicedata)); // Parse and set the invoice object
+    if (typeof window !== "undefined") {
+      const invoicedata = sessionStorage.getItem('invoicedata');
+      if (invoicedata) {
+        setInvoice(JSON.parse(invoicedata));
+      }
     }
-
   }, []);
 
   const downloadInvoice = () => {
