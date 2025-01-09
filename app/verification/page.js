@@ -1,7 +1,7 @@
 'use client';
 import styles from "@/app/page.module.css";
 import { toast } from 'react-toastify';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { useRouter } from "next/navigation";
 import styler from '@/app/verification/verification.module.css';
@@ -24,6 +24,14 @@ const Verification = () => {
             router.replace('/'); // Prevent going back to login with history
         }
     }, [router]);
+
+    // Refs for input fields
+    const inputRefs = [
+        useRef(null),
+        useRef(null),
+        useRef(null),
+        useRef(null)
+    ];
 
     const handleResend = async (e) => {
         e.preventDefault();
@@ -91,6 +99,20 @@ const Verification = () => {
         }
     };
 
+    const handleChange = (e, idx) => {
+        const value = e.target.value;
+        if (idx === 0) setcode1(value);
+        if (idx === 1) setcode2(value);
+        if (idx === 2) setcode3(value);
+        if (idx === 3) setcode4(value);
+
+        // Move to the next input if the current input is filled
+        if (value && idx < 3) {
+            inputRefs[idx + 1].current.focus();
+        }
+    };
+
+
     return (
         <>
             <div className={classNames(styles.background)} style={{ display: "flex", justifyContent: "center", flex: '1' }}>
@@ -103,17 +125,13 @@ const Verification = () => {
                                 <div className="form-group" key={idx}>
                                     <input
                                         type="text"
-                                        onChange={(e) => {
-                                            if (idx === 0) setcode1(e.target.value);
-                                            if (idx === 1) setcode2(e.target.value);
-                                            if (idx === 2) setcode3(e.target.value);
-                                            if (idx === 3) setcode4(e.target.value);
-                                        }}
+                                        onChange={(e) => handleChange(e, idx)}
                                         value={[code1, code2, code3, code4][idx]}
                                         className={classNames("form-control", styler.code)}
                                         maxLength="1"
                                         required
                                         disabled={loading} // Disable inputs while loading
+                                        ref={inputRefs[idx]} // Assign ref to each input
                                     />
                                 </div>
                             ))}

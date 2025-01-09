@@ -7,10 +7,13 @@ import { toast } from 'react-toastify';
 import classNames from 'classnames';
 import axios from 'axios';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 const SignUpPage = () => {
     const [email, setemail] = useState('');
     const [password, setPass] = useState('');
     const [confPassword, setConfPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(false); // Toggle password visibility
+    const [showConfPassword, setShowConfPassword] = useState(false);
     const [username, setUsername] = useState('');
     const [mobile, setmobile] = useState('');
     const [isLoading, setIsLoading] = useState(false); // Loading state
@@ -25,9 +28,9 @@ const SignUpPage = () => {
     }, [router]);
 
     const handleactivate = async () => {
-        
+
         const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/activateaccount/`, {
-            email:email
+            email: email
         });
         if (response.status == 200) {
             toast.success('Account activated. You can login now');
@@ -140,30 +143,57 @@ const SignUpPage = () => {
                             />
                         </div><br />
                         <div className="form-group">
-                            <input
-                                type="password"
-                                onChange={e => setPass(e.target.value)}
-                                value={password}
-                                className={classNames("form-control")}
-                                id="password"
-                                placeholder="Password"
-                                style={{ padding: "1vw" }}
-                                required
-                            />
+                            <div style={{ position: "relative" }}>
+                                <input
+                                    type={showPassword ? "text" : "password"}
+                                    onChange={e => setPass(e.target.value)}
+                                    value={password}
+                                    className={classNames("form-control")}
+                                    id="password"
+                                    placeholder="Password"
+                                    style={{ padding: "1vw" }}
+                                    required
+                                />
+                                <span
+                                    onClick={() => setShowPassword(!showPassword)}
+                                    style={{
+                                        position: "absolute",
+                                        right: "10px",
+                                        top: "50%",
+                                        transform: "translateY(-50%)",
+                                        cursor: "pointer"
+                                    }}
+                                >
+                                    {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
                         </div><br />
                         <div className="form-group">
-                            <input
-                                type="password"
-                                onChange={e => setConfPassword(e.target.value)}
-                                value={confPassword}
-                                className={classNames("form-control")}
-                                id="conf-password"
-                                placeholder="Confirm Password"
-                                style={{ padding: "1vw" }}
-                                required
-                            />
+                            <div style={{ position: "relative" }}>
+                                <input
+                                    type={showConfPassword ? "text" : "password"}
+                                    onChange={e => setConfPassword(e.target.value)}
+                                    value={confPassword}
+                                    className={classNames("form-control")}
+                                    id="conf-password"
+                                    placeholder="Confirm Password"
+                                    style={{ padding: "1vw" }}
+                                    required
+                                />
+                                <span
+                                    onClick={() => setShowConfPassword(!showConfPassword)}
+                                    style={{
+                                        position: "absolute",
+                                        right: "10px",
+                                        top: "50%",
+                                        transform: "translateY(-50%)",
+                                        cursor: "pointer"
+                                    }}
+                                >
+                                    {showConfPassword ? <FaEyeSlash /> : <FaEye />}
+                                </span>
+                            </div>
                         </div><br />
-
                         <button
                             type="submit"
                             className={classNames("btn btn-primary btn-block")}

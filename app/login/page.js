@@ -7,15 +7,17 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import Cookies from 'js-cookie';
 import { Modal, ModalHeader, ModalBody, ModalFooter, Button } from 'reactstrap';
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 const LoginPage = () => {
     const [email, setemail] = useState('');
     const [password, setPass] = useState('');
+    const [showPassword, setShowPassword] = useState(false); 
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const router = useRouter();
     const handleactivate = async () => {
-        
+
         const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/activateaccount/`, {
-            email:email
+            email: email
         });
         if (response.status == 200) {
             toast.success('Account activated. You can login now');
@@ -81,9 +83,9 @@ const LoginPage = () => {
                                 required
                             />
                         </div><br />
-                        <div className="form-group">
+                        <div className="form-group position-relative">
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"} // Toggle input type
                                 onChange={e => setPass(e.target.value)}
                                 value={password}
                                 className={classNames("form-control")}
@@ -92,6 +94,19 @@ const LoginPage = () => {
                                 style={{ padding: "1vw" }}
                                 required
                             />
+                            {/* Eye icon for toggling */}
+                            <span
+                                onClick={() => setShowPassword(!showPassword)}
+                                style={{
+                                    position: "absolute",
+                                    right: "10px",
+                                    top: "50%",
+                                    transform: "translateY(-50%)",
+                                    cursor: "pointer"
+                                }}
+                            >
+                                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                            </span>
                         </div><br />
                         <a href='/forgetpassword'><p>Forget Password?</p></a>
                         <button type="submit" className={classNames("btn btn-primary btn-block")} style={{ width: "100%", borderRadius: "1.3vw" }}>
