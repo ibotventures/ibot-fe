@@ -1,5 +1,5 @@
 'use client';
-import { useState, useEffect, React } from "react";
+import { useState, useEffect, React, use } from "react";
 import { Container, Offcanvas, Row, Col, Button, Spinner } from "reactstrap";
 import EditDetails from '@/component/EditDetails';
 import '@/app/page.module.css';
@@ -17,7 +17,8 @@ import { AiOutlineUser } from 'react-icons/ai';
 const MyComponent = () => {
     const [selectedTask, setSelectedTask] = useState(null); // For displaying task content
     const [sidebarOpen, setSidebarOpen] = useState(false); // To handle sidebar visibility
-    const [isLargeScreen, setIsLargeScreen] = useState(false); // Initial state without window.innerWidth
+    const [isLargeScreen, setIsLargeScreen] = useState(false);
+    // const [isLargeScreen, setIsLargeScreen] = useState(() => window.innerWidth >= 768);
     const [upadteuser, setuser] = useState(Cookies.get('username'));
     const [emails, setemails] = useState();
     const [phones, setphones] = useState();
@@ -48,6 +49,16 @@ const MyComponent = () => {
         }
     };
 
+    function checkSubstring(mainString, sub) {
+        // Split the string into an array of words
+        const words = mainString.split("_");
+
+        // Check if the substring is present in any of the words
+        const isPresent = words.some((word) => word.includes(sub));
+
+        return isPresent;
+    }
+
     useEffect(() => {
         const user = Cookies.get('userid');
         const transactlist = async () => {
@@ -75,6 +86,7 @@ const MyComponent = () => {
             }
             setemails(response.data.data.email);
             setphones(response.data.data.mobile);
+
         };
         handledata();
     }, []);
@@ -96,15 +108,7 @@ const MyComponent = () => {
     const handleTaskClick = (task) => {
         setSelectedTask(task); // Set selected task to display content
     };
-    function checkSubstring(mainString, sub) {
-        // Split the string into an array of words
-        const words = mainString.split("_");
 
-        // Check if the substring is present in any of the words
-        const isPresent = words.some((word) => word.includes(sub));
-
-        return isPresent;
-    }
     const renderContent = () => {
 
         if (!selectedTask) return (
@@ -321,5 +325,3 @@ const MyComponent = () => {
     );
 };
 export default MyComponent;
-
-

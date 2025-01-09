@@ -19,8 +19,8 @@ export default function LandingPage() {
         {/* Text Section */}
         <div className={styles.textSection}>
           <h1>CODE YOUR VISION BUILD THE FUTURE</h1>
-          <p>MiBot is a leading provider of STEM education products</p><br />
-          {/* <p>MiBOT Ventures, part of the Astra Group of Companies, is an innovative edtech company revolutionizing robotics education and implementation in both the educational and industrial sectors. We develop step-by-step programs to foster critical thinking and creativity in students while applying robotics to drive innovation across industries.</p><br/> */}
+          {/* <p>MiBot is a leading provider of STEM education products</p><br /> */}
+          <p>MiBOT Ventures, part of the Astra Group of Companies, is an innovative edtech company revolutionizing robotics education and implementation in both the educational and industrial sectors. We develop step-by-step programs to foster critical thinking and creativity in students while applying robotics to drive innovation across industries.</p><br/>
           <div className={styles.landcarousal}>
           <LandingCaurosal />
           </div>

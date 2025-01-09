@@ -6,7 +6,6 @@ import { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { Spinner } from "reactstrap";
 
 export default function Home({ upadteuser, setuser, updateprofile, setprofile }) {
     const [userdetails, setuserdetails] = useState(null);
@@ -145,23 +144,7 @@ export default function Home({ upadteuser, setuser, updateprofile, setprofile })
     }
 
     if (loading) {
-        return (
-
-            <div className="d-flex align-items-center flex-column" style={{ width: '70vw', height: '90vh' }}>
-                {/* <Image
-                    src='/roboload.png'
-                    className="img-fluid"
-                    alt="Profile Image"
-                    width={300}
-                    height={300}
-                />
-                <h4 style={{ textAlign: 'center' }}>"Almost there! Your data is on its way..."</h4> */}
-                <Spinner>
-                    Loading...
-                </Spinner>
-            </div>
-
-        );
+        return null;
     }
 
     return (
