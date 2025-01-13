@@ -13,7 +13,7 @@ const Verification = () => {
     const [code2, setcode2] = useState('');
     const [code3, setcode3] = useState('');
     const [code4, setcode4] = useState('');
-    const [type, settype] = useState('send');
+    // const [type, settype] = useState('send');
     const router = useRouter();
     const [loading, setLoading] = useState(false); // Loading state
 
@@ -40,11 +40,10 @@ const Verification = () => {
 
         const email = sessionStorage.getItem('email');
         const username = sessionStorage.getItem('username');
-        settype('resend');
+        // settype('resend');
         try {
-            const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/sendotp/`, { email, username });
+            const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/sendotp/`, { email, username,type:'resend' });
             if (status === 201) {
-
                 const message = `OTP resent successfully to this email address - ${data.data.email}`;
                 toast.success(message);
             } else {
