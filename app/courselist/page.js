@@ -36,7 +36,7 @@ export default function CourseList() {
   const updateFilter = debounce(async (updatedFilter) => {
     try {
       console.log("Updated Filters (debounced):", updatedFilter);
-      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/courses/`, {
+      const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/coursescategory/`, {
         params: {
           category: updatedFilter.age,
           rating: updatedFilter.rating,
@@ -119,7 +119,7 @@ export default function CourseList() {
         setusername(data.username || '');
         setcontact(data.mobile || '');
       } catch (error) {
-
+        // console.error(error);
       }
     }
     getdetails();
@@ -230,18 +230,21 @@ export default function CourseList() {
                 </div>
               </div>
             ))
-          ) : (
-            <div style={{ marginBottom: "2rem", paddingLeft: '20px' }}>
-              {/* No data available */}
-              <h4 style={{ textAlign: 'center' }}>&quot;Almost there! Our course data is on its way...&quot;</h4>
-              <div style={{ display: 'flex', justifyContent: 'center' }}>
-                <Spinner>
-                  Loading...
-                </Spinner>
-              </div>
+          ) : null
+          // (
+          //   // <div style={{ marginBottom: "2rem", paddingLeft: '20px' }}>
+          //   //   {/* No data available */}
+          //   //   <h4 style={{ textAlign: 'center' }}>&quot;Almost there! Our course data is on its way...&quot;</h4>
+          //   //   <div style={{ display: 'flex', justifyContent: 'center' }}>
+          //   //     <Spinner>
+          //   //       Loading...
+          //   //     </Spinner>
+          //   //   </div>
 
-            </div>
-          )}
+          //   // </div>
+          //   <p>no data found</p>
+          // )
+          }
         </div>
 
         <div className={classNames(styles.sidebar)}>
