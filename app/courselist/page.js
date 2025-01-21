@@ -26,8 +26,8 @@ export default function CourseList() {
   const [contact, setcontact] = useState('');
   const router = useRouter();
   // const user = Cookies.get('userid');
-  // const [subscription, setsubscription] = useState(false);
-  const [subscription, setsubscription] = useState(true);
+  const [subscription, setsubscription] = useState(false);
+  // const [subscription, setsubscription] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
