@@ -109,18 +109,20 @@ export default function Products() {
               productData.map((product) => (
                 <Cards key={product.id} product={product} className='container-fluid' />
               ))
-            ) : (
-              <div style={{ marginBottom: "2rem", paddingLeft: '20px' }}>
-                {/* No data available */}
-                <h4 style={{ textAlign: 'center' }}>&quot;Almost there! Our course data is on its way...&quot;</h4>
-                <div style={{ display: 'flex', justifyContent: 'center' }}>
-                  <Spinner>
-                    Loading...
-                  </Spinner>
-                </div>
+            ) : null
+            // (
+            //   <div style={{ marginBottom: "2rem", paddingLeft: '20px' }}>
+            //     {/* No data available */}
+            //     <h4 style={{ textAlign: 'center' }}>&quot;Almost there! Our course data is on its way...&quot;</h4>
+            //     <div style={{ display: 'flex', justifyContent: 'center' }}>
+            //       <Spinner>
+            //         Loading...
+            //       </Spinner>
+            //     </div>
 
-              </div>
-            )}
+            //   </div>
+            // )
+            }
           </div>
         </div>
       </div>
