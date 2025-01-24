@@ -1,7 +1,8 @@
 'use client';
-import { useState, useEffect, React, use } from "react";
+import { useState, useEffect, React } from "react";
 import { Container, Offcanvas, Row, Col, Button, Spinner } from "reactstrap";
 import EditDetails from '@/component/EditDetails';
+import { BsFillAwardFill } from 'react-icons/bs';
 import '@/app/page.module.css';
 import Delete from '@/component/DeleteAccount';
 import axios from "axios";
@@ -13,6 +14,7 @@ import { useRouter } from 'next/navigation';
 import { FaFileInvoiceDollar } from 'react-icons/fa';
 import { MdMenuBook, MdDeleteForever } from 'react-icons/md';
 import { AiOutlineUser } from 'react-icons/ai';
+import { toast } from "react-toastify";
 
 const MyComponent = () => {
     const [selectedTask, setSelectedTask] = useState(null); // For displaying task content
@@ -28,6 +30,7 @@ const MyComponent = () => {
     const router = useRouter();
     const [transac, settransac] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [certificate, setcertificate] = useState([]);
 
     useEffect(() => {
         // Only run the code after the component has mounted
@@ -42,6 +45,10 @@ const MyComponent = () => {
             }
         };
     }, []);
+
+    const handlesmallscreen = () => {
+        toast.error("Can't download in mobile phone. To download use desktop or laptop");
+    };
 
     const handleResize = () => {
         if (typeof window !== 'undefined') {
@@ -75,6 +82,22 @@ const MyComponent = () => {
     }, []);
 
     useEffect(() => {
+        const user = Cookies.get('userid');
+        const certifylist = async () => {
+            const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/issuecertificate/`, {
+                params: {
+                    user_id: user
+                }
+            })
+            if (response.status == 200) {
+                setcertificate(response.data.data);
+                console.log(response.data.data);
+            }
+        };
+        certifylist();
+    }, []);
+
+    useEffect(() => {
         const handledata = async () => {
             const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/getdetail/`, {
                 params: { id: userId },
@@ -104,6 +127,12 @@ const MyComponent = () => {
         sessionStorage.setItem('email', emails);
         sessionStorage.setItem('phone', phones);
     };
+
+    const handledownload = (name, course_name) => {
+        router.push('/certificate');
+        sessionStorage.setItem('name', name);
+        sessionStorage.setItem('course_name', course_name);
+    }
 
     const handleTaskClick = (task) => {
         setSelectedTask(task); // Set selected task to display content
@@ -153,22 +182,128 @@ const MyComponent = () => {
                                             transac.map((transaction, index) => (
                                                 <tr key={index}>
                                                     <td>{transaction.receipt}</td>
-                                                    {checkSubstring(transaction.receipt, 'subscription') ? (
-                                                        <td><Button onClick={() => { handleviewsubscribe(transaction); setLoading(true); }} disabled={loading}>
+                                                    {isLargeScreen ? (
+                                                        checkSubstring(transaction.receipt, 'subscription') ? (
+                                                            <td>
+                                                                <Button
+                                                                    onClick={() => {
+                                                                        handleviewsubscribe(transaction);
+                                                                        setLoading(index); 
+                                                                    }}
+                                                                    disabled={loading === index} 
+                                                                >
+                                                                    {loading === index ? (
+                                                                        <span
+                                                                            className="spinner-border spinner-border-sm"
+                                                                            role="status"
+                                                                            aria-hidden="true"
+                                                                        ></span>
+                                                                    ) : (
+                                                                        'view detail'
+                                                                    )}
+                                                                </Button>
+                                                            </td>
+                                                        ) : (
+                                                            <td>
+                                                                <Button
+                                                                    onClick={() => {
+                                                                        handleviewproduct(transaction);
+                                                                        setLoading(index); 
+                                                                    }}
+                                                                    disabled={loading === index} 
+                                                                >
+                                                                    {loading === index ? (
+                                                                        <span
+                                                                            className="spinner-border spinner-border-sm"
+                                                                            role="status"
+                                                                            aria-hidden="true"
+                                                                        ></span>
+                                                                    ) : (
+                                                                        'view detail'
+                                                                    )}
+                                                                </Button>
+                                                            </td>
+                                                        )
+                                                    ) : (
+                                                        <td>
+                                                            <Button onClick={handlesmallscreen}>
+                                                                Download
+                                                            </Button>
+                                                        </td>
+                                                    )}
+                                                </tr>
+                                            ))
+                                        ) : (
+                                            <tr>
+                                                <td colSpan="2">No transactions available</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+
+                                </Table>
+                            </div>
+                        ) : (
+                            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white', width: '100%', padding: '20px' }}>
+                                <Image
+                                    src='/empty.png'
+                                    className="img-fluid"
+                                    alt="Profile Image"
+                                    width={90}
+                                    height={90}
+                                    style={{
+                                        borderRadius: "50%",
+                                        objectFit: "cover",
+                                        width: "150px",
+                                        height: "150px",
+                                    }}
+                                />
+                                <p>Explore products</p>
+                            </div>
+                        )}
+                    </div>
+                );
+            case 'edit':
+                return (
+                    <div>
+                        <EditDetails upadteuser={upadteuser} setuser={setuser} updateprofile={updateprofile} setprofile={setprofile} />
+                    </div>
+                );
+            case 'certify':
+                return (
+                    // <div>
+                    //     <Certifi />
+                    // </div>
+                    <div>
+                        <br />
+                        <h2>Download Your Certificates</h2>
+                        <br />
+                        {certificate != [] ? (
+                            <div className="table-responsive">
+                                <Table striped bordered hover>
+                                    <thead>
+                                        <tr>
+
+                                            <th>Course Name</th>
+                                            <th>Download</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {certificate != [] ? (
+                                            certificate.certificates.map((certi, index) => (
+                                                <tr key={index}>
+                                                    <td>{certi.course_name}</td>
+                                                    {isLargeScreen ? (
+                                                        <td><Button onClick={() => { handledownload(certificate.user_name, certi.course_name); setLoading(true); }} disabled={loading}>
                                                             {loading ? (
                                                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                             ) : (
-                                                                'view detail'
+                                                                'Download'
                                                             )}
                                                         </Button></td>
                                                     ) : (
-                                                        <td><Button onClick={() => { handleviewproduct(transaction); setLoading(true); }} disabled={loading}>
-
-                                                            {loading ? (
-                                                                <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                            ) : (
-                                                                'view detail'
-                                                            )}
+                                                        <td><Button onClick={handlesmallscreen}>
+                                                            Download
                                                         </Button></td>
                                                     )}
 
@@ -196,12 +331,6 @@ const MyComponent = () => {
                                 <p>Explore products</p>
                             </div>
                         )}
-                    </div>
-                );
-            case 'edit':
-                return (
-                    <div>
-                        <EditDetails upadteuser={upadteuser} setuser={setuser} updateprofile={updateprofile} setprofile={setprofile} />
                     </div>
                 );
             default:
@@ -268,6 +397,10 @@ const MyComponent = () => {
                         <MdDeleteForever size={20} color="grey" title="Delete Account" />
                         <p onClick={() => { handleTaskClick('delete'); setSidebarOpen(!sidebarOpen) }} style={{ fontSize: '18px', cursor: 'pointer' }}>Delete Account</p>
                     </div>
+                    <div style={{ display: 'flex', gap: '10px' }}>
+                        <BsFillAwardFill size={20} color="grey" title="Certificate" />
+                        <p onClick={() => { handleTaskClick('certify'); setSidebarOpen(!sidebarOpen) }} style={{ fontSize: '18px', cursor: 'pointer' }}>Certificates</p>
+                    </div>
                 </Offcanvas>
 
                 <Row style={{ display: "flex", flex: "1", minHeight: "100vh" }}>
@@ -306,6 +439,10 @@ const MyComponent = () => {
                                 <MdDeleteForever size={20} color="grey" title="Delete Account" />
                                 <p onClick={() => handleTaskClick('delete')} style={{ fontSize: '18px', cursor: 'pointer' }}>Delete Account</p>
                             </div>
+                            <div style={{ display: 'flex', gap: '10px' }}>
+                                <BsFillAwardFill size={20} color="grey" title="Certificate" />
+                                <p onClick={() => { handleTaskClick('certify') }} style={{ fontSize: '18px', cursor: 'pointer' }}>Certificates</p>
+                            </div>
                         </Col>
                     )}
 
@@ -323,5 +460,6 @@ const MyComponent = () => {
             </Container >
         </>
     );
+
 };
 export default MyComponent;

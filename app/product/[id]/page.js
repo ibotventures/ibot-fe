@@ -136,7 +136,13 @@ export default function Product() {
                     <br />
                     <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                         <h2>{products?.product_name ? products.product_name : 'fetching...'}</h2>
-                        <button className="btn btn-primary" onClick={handlebuy}>Buy Now {products?.product_name ? products.price : 'fetching...'}rs</button>
+                        <button
+                            className="btn btn-primary"
+                            onClick={handlebuy}
+                            disabled={products?.product_name ? products.stocks <= 0 : true}
+                        >
+                            Buy Now {products?.product_name ? products.price : 'fetching...'}rs
+                        </button>
                     </div>
                     <div style={{ display: 'flex', fontSize: '30px' }}>
                         {Array.from({ length: products?.product_name ? products.rating : 0 }).map((_, index) => (
@@ -153,6 +159,7 @@ export default function Product() {
                         <p><span style={{ fontWeight: 'bold' }}>Level:</span> {products?.product_name ? products.category['level'] : 'fetching...'}</p>
                         <p><span style={{ fontWeight: 'bold' }}>Made in:</span> {products?.product_name ? products.make : 'fetching...'}</p>
                         <p><span style={{ fontWeight: 'bold' }}>Price:</span> {products?.product_name ? products.price : 'fetching...'}rs Only</p>
+                        <p><span style={{ fontWeight: 'bold' }}>Stock Available:</span> {products?.product_name ? products.stocks : 'fetching...'}</p>
                     </div>
                     <div>
 

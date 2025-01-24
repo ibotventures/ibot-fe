@@ -77,7 +77,8 @@ const ResetPass = () => {
                                         right: "10px",
                                         top: "50%",
                                         transform: "translateY(-50%)",
-                                        cursor: "pointer"
+                                        cursor: "pointer",
+                                        zIndex:'200'
                                     }}
                                 >
                                     {showPassword ? <FaEyeSlash /> : <FaEye />}
@@ -103,7 +104,8 @@ const ResetPass = () => {
                                         right: "10px",
                                         top: "50%",
                                         transform: "translateY(-50%)",
-                                        cursor: "pointer"
+                                        cursor: "pointer",
+                                        zIndex:'200'
                                     }}
                                 >
                                     {showConfPassword ? <FaEyeSlash /> : <FaEye />}

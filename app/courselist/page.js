@@ -284,7 +284,7 @@ export default function CourseList() {
         </div>
 
         <ModalFooter>
-          <RazorpayComponent email={email} username={username} contact={contact} setsubscription={setsubscription} />
+          <RazorpayComponent email={email} username={username} contact={contact} setsubscription={setsubscription} setShowDeleteModal={setShowDeleteModal}/>
         </ModalFooter>
       </Modal>
     </>

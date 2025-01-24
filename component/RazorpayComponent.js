@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-const RazorpayComponent = ({ email, username, contact, setsubscription }) => {
+const RazorpayComponent = ({ email, username, contact, setsubscription,setShowDeleteModal }) => {
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
     const [isClient, setIsClient] = useState(false); // Track client-side rendering
     const [subscribe, setsubscribe] = useState([]);
@@ -69,7 +69,7 @@ const RazorpayComponent = ({ email, username, contact, setsubscription }) => {
                 key: 'rzp_test_88QnZEgha1Ucxs',
                 amount: response.data.data.amount,
                 currency: 'INR',
-                name: 'MiBot Ventures',
+                name: 'MiBOT Ventures',
                 // description: 'Test Transaction',
                 // image: 'https://example.com/your_logo',
                 order_id: response.data.data.id,
@@ -89,6 +89,8 @@ const RazorpayComponent = ({ email, username, contact, setsubscription }) => {
                         // console.log('Order status response:', orderStatusResponse.data);
                         window.alert('Payment successful and subscription updated.');
                         setsubscription(true);
+                        setShowDeleteModal(false);
+
                     } catch (statusError) {
                         console.error('Error sending order status:', statusError);
                         window.alert('Payment failed');

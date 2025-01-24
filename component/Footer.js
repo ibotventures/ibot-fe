@@ -11,7 +11,7 @@ const Footer = () => {
                     {/* Logo Section */}
                     <div style={{ flex: "1 1 300px", padding: "10px", textAlign: 'left' }}>
                         <Image src="/mibot.png" width={100} height={100} className='img-fluid' alt='logo' />
-                        <p style={{ paddingTop: '10px' }}>miBot Learning Management System</p>
+                        <p style={{ paddingTop: '10px' }}>MiBOT Learning Management System</p>
                     </div>
 
                     {/* Contact Section */}

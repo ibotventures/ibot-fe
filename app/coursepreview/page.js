@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Accordion, AccordionItem, AccordionHeader, AccordionBody, Container, Row, Col, Button, Offcanvas, Spinner, FormGroup, Input, Label } from 'reactstrap';
 import styles from '@/app/page.module.css';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 import Image from "next/image";
 import classNames from 'classnames';
 import DocViewer, { DocViewerRenderers } from "@cyntler/react-doc-viewer";
@@ -33,6 +34,7 @@ const MyComponent = () => {
   const [selectedOptions, setSelectedOptions] = useState({}); // Track selected option per question
   const [answerResults, setAnswerResults] = useState({});
   const [userallow, setuserallow] = useState('');
+  const router = useRouter();
   const [reviews, setReviews] = useState([]);
   const userCook = Cookies.get('userid');
   const handleOptionChanges = (taskId, option) => {
@@ -391,6 +393,7 @@ const MyComponent = () => {
                 `Congratulations! You passed the test with ${obtainedPercentage.toFixed(2)}%. If you haven't filled your profile details please fill it to get  your digital certificate with your actual
                  Name`
               );
+              router.push('/profile');
             }
           }
         });
@@ -417,7 +420,10 @@ const MyComponent = () => {
             className="img-fluid"
             style={{ border: '1px solid #ccc' }}
           /> */}
-          <iframe width="560" height="315" src={courseData.video} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen></iframe>
+          <iframe width="560" height="315" src={courseData.video} title="YouTube video player" frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen style={{
+            'width': "100%",
+            'height': "600px"
+          }}></iframe>
         </div>
       );
     }
@@ -1028,7 +1034,7 @@ const MyComponent = () => {
                         </Col>
                       ))
                     ) : (
-              
+
                       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white', width: '100%', padding: '20px' }}>
                         <Image
                           src='/empty.png'
@@ -1045,7 +1051,7 @@ const MyComponent = () => {
                         />
                         <p>We are waiting for your stars and reviews</p>
                       </div>
-                      
+
                     )}
                   </Row>
                 </div>

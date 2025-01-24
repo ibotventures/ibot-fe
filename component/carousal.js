@@ -2,31 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { Carousel } from 'react-bootstrap';
 import classNames from 'classnames';
 import Image from 'next/image';
-
-const items = [
-  {
-    src: '/robots.png',
-    altText: 'Slide 1',
-    caption: 'Slide 1',
-    key: 1,
-  },
-  {
-    src: 'https://thumbs.dreamstime.com/z/imagination-work-close-up-shot-yellow-robot-vehicle-made-children-stem-robotics-class-inventions-creativity-184010240.jpg',
-    altText: 'Slide 2',
-    caption: 'Slide 2',
-    key: 2,
-  },
-  {
-    src: 'https://cdn.mos.cms.futurecdn.net/BjQjQxjUpo6jRubZVBtt5W-1200-80.jpg',
-    altText: 'Slide 3',
-    caption: 'Slide 3',
-    key: 3,
-  },
-];
+import axios from 'axios';
 
 function Example(args) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [items,setitems] = useState([]);
   const handleSelect = (selectedIndex) => {
     setActiveIndex(selectedIndex);
   };
@@ -48,13 +29,28 @@ function Example(args) {
     };
   }, []);
 
+  useEffect(() => {
+    const handleAdvertise = async () => {
+      // const userid = Cookies.get('userid');
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/advertise/`);
+        if (response.status === 200) {
+          setitems(response.data.data);
+        }
+      } catch (error) {
+        console.error("Failed to fetch courses:", error);
+      }
+    };
+    handleAdvertise();
+  }, []);
+
   return (
     <>
       {
         isMobile ? (
           <Carousel activeIndex={activeIndex} onSelect={handleSelect} {...args}>
-            {items.map((item) => (
-              <Carousel.Item key={item.key}>
+            {items.map((item,idx) => (
+              <Carousel.Item key={idx}>
                 <div
                   style={{
                     position: 'relative',
@@ -67,7 +63,7 @@ function Example(args) {
                   {/* Background Image */}
                   <div style={{ position: 'absolute', inset: 0 }}>
                     <Image
-                      src={item.src} alt={item.altText}
+                      src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${item.Ad_image}`} alt='image'
                       layout="fill"
                       objectFit="cover"
                       quality={100}
@@ -91,18 +87,18 @@ function Example(args) {
                       borderRadius: '10px',
                     }}
                   >
-                    <h2 style={{ color: '#333', marginBottom: '10px' }}>Build your own robots</h2>
+                    <h2 style={{ color: '#333', marginBottom: '10px' }}>{item.headline}</h2>
                     <p style={{ color: '#555', marginBottom: '20px', fontWeight: 'bold' }}>
-                      Unleash the power of robotics with hands-on learning. Build, code, and innovate for the future of automation!
+                      {item.description}
                     </p>
-                    <button className={classNames('btn', 'btn-primary', 'btn-block')} style={{ padding: '10px 20px' }}>
+                    <button className={classNames('btn', 'btn-primary', 'btn-block')} style={{ padding: '10px 20px'}} onClick={() => window.location.href = item.weburl} >
                       Get Started
                     </button>
                   </div>
                 </div>
-                <Carousel.Caption>
+                {/* <Carousel.Caption>
                   <h3>{item.caption}</h3>
-                </Carousel.Caption>
+                </Carousel.Caption> */}
               </Carousel.Item>
             ))}
           </Carousel>
@@ -110,19 +106,19 @@ function Example(args) {
         ) : (
           <>
             <Carousel activeIndex={activeIndex} onSelect={handleSelect} {...args}>
-              {items.map((item) => (
-                <Carousel.Item key={item.key}>
+              {items.map((item,idx) => (
+                <Carousel.Item key={idx}>
                   <div style={{ display: "flex", justifyContent: "space-between", borderRadius: "20px", backgroundColor: "white" }}>
                     <div style={{ width: "60vw", display: "flex", flexDirection: "column", justifyContent: "center", padding: "30px" }}>
-                      <h2>Build your own robots</h2>
-                      <p>Unleash the power of robotics with hands-on learning. Build, code, and innovate for the future of automation!</p>
-                      <button className={classNames("btn btn-primary btn-block")} style={{ width: "fit-content", padding: "0.7vw" }}>Get Started</button>
+                      <h2>{item.headline}</h2>
+                      <p>{item.description}</p>
+                      <button className={classNames("btn btn-primary btn-block")} style={{ width: "fit-content", padding: "0.7vw",zIndex:'1000' }} onClick={() => window.location.href = item.weburl}>Get Started</button>
                     </div>
-                    <img src={item.src} alt={item.altText} style={{ width: "40vw", borderRadius: "0vw 2vw 2vw 0vw", maxHeight: '500px' }} className='img-fluid' />
+                    <img src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${item.Ad_image}`} alt='image' style={{ width: "40vw", borderRadius: "0vw 2vw 2vw 0vw", maxHeight: '500px' }} className='img-fluid'/>
                   </div>
-                  <Carousel.Caption>
+                  {/* <Carousel.Caption>
                     <h3>{item.caption}</h3>
-                  </Carousel.Caption>
+                  </Carousel.Caption> */}
                 </Carousel.Item>
               ))}
             </Carousel>
@@ -135,10 +131,3 @@ function Example(args) {
 }
 
 export default Example;
-
-
-
-
-
-
-
