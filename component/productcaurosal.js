@@ -13,6 +13,7 @@ const ImageCarousel = () => {
     ];
 
     const [isLargeScreen, setIsLargeScreen] = useState(true);
+    const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
         const handleResize = () => {
@@ -27,8 +28,23 @@ const ImageCarousel = () => {
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
-    if (!isLargeScreen) {
-        return null; // Do not render on small screens
+    useEffect(() => {
+        // Ensure all images are loaded before displaying the carousel
+        let loadedCount = 0;
+        images.forEach(src => {
+            const img = new window.Image(); // Use built-in Image constructor
+            img.src = src;
+            img.onload = () => {
+                loadedCount += 1;
+                if (loadedCount === images.length) {
+                    setIsLoaded(true);
+                }
+            };
+        });
+    }, [images]);
+
+    if (!isLargeScreen || !isLoaded) {
+        return null; // Do not render on small screens or while loading
     }
 
     const chunkArray = (arr, size) => {
@@ -43,10 +59,10 @@ const ImageCarousel = () => {
 
     return (
         <Container className="py-4">
-            <Carousel 
-                indicators={false} 
-                interval={3000} 
-                controls={true} 
+            <Carousel
+                indicators={false}
+                interval={3000}
+                controls={true}
                 className="w-100"
             >
                 {groupedImages.map((group, idx) => (
@@ -54,11 +70,11 @@ const ImageCarousel = () => {
                         <Row className="justify-content-center">
                             {group.map((image, index) => (
                                 <Col key={index} xs={12} sm={6} md={4} className="d-flex justify-content-center">
-                                    <Image 
-                                        src={image} 
-                                        alt={`Slide ${index}`} 
-                                        width={150} 
-                                        height={150} 
+                                    <Image
+                                        src={image}
+                                        alt={`Slide ${index}`}
+                                        width={150}
+                                        height={150}
                                         className="img-fluid"
                                     />
                                 </Col>
@@ -72,5 +88,10 @@ const ImageCarousel = () => {
 };
 
 export default ImageCarousel;
+
+
+
+          
+
 
           
