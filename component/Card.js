@@ -45,7 +45,7 @@ const Cards = ({ product }) => {
 
                 </div>
                 <Button>
-                    ${product.price}
+                    {product.price}rs
                 </Button>
             </CardBody>
         </Card>
