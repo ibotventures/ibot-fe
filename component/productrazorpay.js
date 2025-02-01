@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Button, Spinner } from 'react-bootstrap';
 import Cookies from 'js-cookie';
+import { toast } from 'react-toastify';
 
 const RazorpayComponent = ({ email, username, contact, total }) => {
     const [isScriptLoaded, setIsScriptLoaded] = useState(false);
@@ -65,6 +66,14 @@ const RazorpayComponent = ({ email, username, contact, total }) => {
     };
 
     const handlePayment = async () => {
+        const user = Cookies.get('userid');
+        const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/checkstocks/`,{'user':user});
+        console.log(res.data.data);
+        if (res.data.data == 'no stock') {
+            toast.error('Sold Out');
+            return;
+        }
+
         if (!isScriptLoaded) {
             console.error('Razorpay script is not loaded yet.');
             return;
@@ -94,7 +103,7 @@ const RazorpayComponent = ({ email, username, contact, total }) => {
                 key: 'rzp_test_88QnZEgha1Ucxs',
                 amount: response.data.data.amount,
                 currency: 'INR',
-                name: 'MiBot Ventures',
+                name: 'MiBOT Ventures',
                 order_id: response.data.data.id,
                 handler: async function (response) {
                     try {
@@ -138,10 +147,12 @@ const RazorpayComponent = ({ email, username, contact, total }) => {
                 console.error('Razorpay is not available.');
                 setIsProcessing(false); // Stop loading state
             }
+            setIsProcessing(false);
         } catch (error) {
             console.error('Error creating order:', error);
             setIsProcessing(false); // Stop loading state
         }
+
     };
 
     if (!isClient) {

@@ -135,7 +135,7 @@ const CartPage = () => {
                                                         type="number"
                                                         value={productsselected.quantity}
                                                         className="mx-2"
-                                                        style={{ width: "50px" }}
+                                                        style={{ width: "100px" }}
                                                         onChange={(e) => {
                                                             const updatedQuantity = e.target.value;
                                                             setData((prevData) =>

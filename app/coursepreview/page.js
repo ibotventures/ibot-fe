@@ -12,6 +12,7 @@ import "@cyntler/react-doc-viewer/dist/index.css";
 import Cookies from 'js-cookie';
 import { Card, CardBody, CardTitle, CardText } from 'reactstrap';
 import styler from '@/app/coursepreview/course.module.css';
+import { FiSend } from "react-icons/fi";
 
 const MyComponent = () => {
   const [yourreview, setyourreview] = useState([]);
@@ -37,12 +38,33 @@ const MyComponent = () => {
   const router = useRouter();
   const [reviews, setReviews] = useState([]);
   const userCook = Cookies.get('userid');
+  const [activities, setimage] = useState(null);
   const handleOptionChanges = (taskId, option) => {
     setSelectedOptions(prev => ({
       ...prev,
       [taskId]: option
     }));
   };
+
+  const handleactivity = async (modid) => {
+    try {
+      const courseIds = sessionStorage.getItem('course');
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/activityuploading/`,
+        { 'user': userCook, 'course': courseIds, 'module': modid, 'userupload': activities }, {
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'multipart/form-data',
+        }
+      }
+      );
+      if (response.status == 201) {
+        toast.success('Successfully uploaded');
+      }
+
+    } catch (error) {
+      console.error("Error uploading:", error);
+    }
+  }
 
   const handledeletereview = async (id) => {
     try {
@@ -506,6 +528,21 @@ const MyComponent = () => {
                 style={{ width: "100%", maxHeight: "600px", overflow: 'auto', border: '1px solid #ccc' }}
               />
             )}
+            <br />
+            <div style={{display:'flex',gap:'10px'}}>
+              <input
+                type="file"
+                accept="profile/*"
+                onChange={e => setimage(e.target.files[0])}
+                style={{ display: "none" }}
+                id="fileUpload"
+              />
+
+              <label htmlFor="fileUpload" className="btn btn-primary" style={{ cursor: "pointer" }}>
+                Upload your work
+              </label>
+              <button className='btn btn-primary' onClick={(e) => { e.preventDefault(); handleactivity(selectedModule.id); }}><FiSend className="mr-2" /></button>
+            </div>
           </div>
         );
 
