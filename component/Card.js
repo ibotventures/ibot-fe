@@ -18,8 +18,8 @@ const Cards = ({ product }) => {
         <Card
             onClick={() => handleproduct(product.id)}
             style={{
-                minWidth: '250px',
-                maxWidth: '250px',
+                minWidth: '290px',
+                maxWidth: '290px',
                 border: "none",
                 cursor: "pointer"
             }}
