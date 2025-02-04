@@ -339,11 +339,11 @@
 
 /* landing page */
 .landcarousal {
-  height: 180px;
+  height: 200px;
 }
 
-@media (max-width: 768px) {
+/* @media (max-width: 768px) {
   .landcarousal {
     height: 0vh;
   }
-}
+} */

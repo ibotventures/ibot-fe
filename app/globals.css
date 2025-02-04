@@ -230,3 +230,7 @@ screen and (min-resolution: 192dpi) {
   -webkit-transition: background-position .7s;
   transition: background-position .7s;
 }
+
+#file-name{
+  display: none;
+}

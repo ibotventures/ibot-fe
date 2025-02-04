@@ -28,13 +28,13 @@ const MyComponent = () => {
   const [courseData, setCourseData] = useState(''); // State to store course data
   const [certifyques, setcertifyques] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [change, setchange] = useState(false);
+  // const [change, setchange] = useState(false);
   const [overviewDocs, setOverviewDocs] = useState([]); // Store overview document
   const [contentDocs, setContentDocs] = useState([]); // Store content document
   const [activityDocs, setActivityDocs] = useState([]); // Store activity document
   const [selectedOptions, setSelectedOptions] = useState({}); // Track selected option per question
   const [answerResults, setAnswerResults] = useState({});
-  const [userallow, setuserallow] = useState('');
+  // const [userallow, setuserallow] = useState('');
   const router = useRouter();
   const [reviews, setReviews] = useState([]);
   const userCook = Cookies.get('userid');
@@ -191,25 +191,25 @@ const MyComponent = () => {
     }
   };
 
-  const certifyquesuser = async () => {
-    try {
-      const lastmod = courseData.modules[courseData.modules.length - 1];
-      const moduleid = lastmod.id;
-      const userid = Cookies.get('userid');
-      const { data, status } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/canviewmodule/`, {
-        params: { userid, moduleid }
-      });
-      if (status == 200) {
-        certifyquess();
-        setuserallow(userid);
-      }
-    } catch (e) {
-      setuserallow('');
-    }
-  }
-  useEffect(() => {
-    certifyquesuser();
-  }, [courseData, change]);
+  // const certifyquesuser = async () => {
+  //   try {
+  //     const lastmod = courseData.modules[courseData.modules.length - 1];
+  //     const moduleid = lastmod.id;
+  //     const userid = Cookies.get('userid');
+  //     const { data, status } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/canviewmodule/`, {
+  //       params: { userid, moduleid }
+  //     });
+  //     if (status == 200) {
+  //       certifyquess();
+  //       setuserallow(userid);
+  //     }
+  //   } catch (e) {
+  //     setuserallow('');
+  //   }
+  // }
+  // useEffect(() => {
+  //   certifyquesuser();
+  // }, [courseData, change]);
 
   // Handle screen resizing
   useEffect(() => {
@@ -269,23 +269,36 @@ const MyComponent = () => {
   };
 
   const handlecertify = async (task) => {
-    const userid = Cookies.get('userid');
-    const courseIds = sessionStorage.getItem('course');
-    if (!isLargeScreen) {
-      setSidebarOpen(!sidebarOpen);
-    }
-
-    const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
-      userid, courseIds, task: "certifyques", moduleid: null
-    });
-    if (status == 200) {
-      if (task == 'certifyques') {
-        if (isSubmitted) {
-          handleRetest();
-        }
+    try {
+      const userid = Cookies.get('userid');
+      const courseIds = sessionStorage.getItem('course');
+      const lastmod = courseData.modules[courseData.modules.length - 1];
+      const moduleid = lastmod.id;
+      if (!isLargeScreen) {
+        setSidebarOpen(!sidebarOpen);
       }
+
+      const { data, status } = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/canviewmodule/`, {
+        params: { userid, moduleid }
+      });
+      if (status == 200) {
+        certifyquess();
+        const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/tasktracking/`, {
+          userid, courseIds, task: "certifyques", moduleid: null
+        });
+        if (status == 200) {
+          if (task == 'certifyques') {
+            if (isSubmitted) {
+              handleRetest();
+            }
+          }
+        }
+        setSelectedTask(task);
+        // setuserallow(userid);
+      }
+    } catch (e) {
+      toast.error("Complete all the assessment to access the certification test");
     }
-    setSelectedTask(task);
   }
 
   const handleTaskClick = async (task, module) => {
@@ -307,12 +320,20 @@ const MyComponent = () => {
       }
       if (task == 'assessment') {
         if (data.data.activity == 1) {
-          setSelectedTask(task);
+          const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/isuploadedactivity/`, {
+            userid, courseIds, moduleid: module
+          });
+          if(data.data == "allow"){
+            setSelectedTask(task);
+          }else{
+            toast.error('Upload your activity to access the assessment');
+          }
         } else {
           toast.error('Not yet completed the previous task');
         }
       }
     } else {
+
       setSelectedTask(task);
     }
 
@@ -354,14 +375,14 @@ const MyComponent = () => {
             const obtainedPercentage = result['percentage'];
 
             if (obtainedPercentage < 65) {
-              setchange(false);
+              // setchange(false);
               toast.error(
                 `You need to score more than 65% to pass this assessment. Your percentage: ${obtainedPercentage.toFixed(2)}%`
               );
             } else {
-              if (moduleId == courseData.modules[courseData.modules.length - 1].id) {
-                setchange(true);
-              }
+              // if (moduleId == courseData.modules[courseData.modules.length - 1].id) {
+              //   setchange(true);
+              // }
               toast.success(
                 `Congratulations! You passed the assessment with ${obtainedPercentage.toFixed(2)}%. You can now access the next module.`
               );
@@ -529,7 +550,7 @@ const MyComponent = () => {
               />
             )}
             <br />
-            <div style={{display:'flex',gap:'10px'}}>
+            <div style={{ display: 'flex', gap: '10px' }}>
               <input
                 type="file"
                 accept="profile/*"
@@ -771,7 +792,7 @@ const MyComponent = () => {
           ) : (
             <p>No modules found.</p>
           )}
-          {Cookies.get('userid') === userallow ? (
+          {/* {Cookies.get('userid') === userallow ? ( */}
             <Accordion open={openAccordion} toggle={toggleAccordion}>
               <AccordionItem>
                 <AccordionHeader targetId="certify">
@@ -784,7 +805,7 @@ const MyComponent = () => {
                 </AccordionBody>
               </AccordionItem>
             </Accordion>
-          ) : null}
+          {/* ) : null} */}
           <br />
         </Offcanvas>
 
@@ -844,20 +865,20 @@ const MyComponent = () => {
               ) : (
                 <p>No modules found.</p>
               )}
-              {Cookies.get('userid') === userallow ? (
-                <Accordion open={openAccordion} toggle={toggleAccordion}>
-                  <AccordionItem>
-                    <AccordionHeader targetId="certify">
-                      Certification Test
-                    </AccordionHeader>
-                    <AccordionBody accordionId="certify">
-                      <div className={styles.taskbox} onClick={() => handlecertify("certifyques")}>
-                        Certificate Assessment
-                      </div>
-                    </AccordionBody>
-                  </AccordionItem>
-                </Accordion>
-              ) : null}
+              {/* {Cookies.get('userid') === userallow ? ( */}
+              <Accordion open={openAccordion} toggle={toggleAccordion}>
+                <AccordionItem>
+                  <AccordionHeader targetId="certify">
+                    Certification Test
+                  </AccordionHeader>
+                  <AccordionBody accordionId="certify">
+                    <div className={styles.taskbox} onClick={() => handlecertify("certifyques")}>
+                      Certificate Assessment
+                    </div>
+                  </AccordionBody>
+                </AccordionItem>
+              </Accordion>
+              {/* ) : null} */}
               <br />
             </Col>
           )}

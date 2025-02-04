@@ -55,7 +55,7 @@ export default function Home() {
                     rel="stylesheet"
                 />
             </Head>
-            <div style={{ width: '100vw', height: '100vh', display: 'flex', justifyContent: 'center' }}>
+            <div style={{ width: '100vw', display: 'flex', justifyContent: 'center' }}>
                 <div className={styles.container} ref={invoiceRef} >
                     <div className={styles.name}>{name}</div>
                     <div className={styles.message}>This is to certify that {name} has successfully completed the {coursename} at MiBOT Ventures</div>

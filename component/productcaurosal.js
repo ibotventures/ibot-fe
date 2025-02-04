@@ -43,9 +43,9 @@ const ImageCarousel = () => {
         });
     }, [images]);
 
-    if (!isLargeScreen || !isLoaded) {
-        return null; // Do not render on small screens or while loading
-    }
+    // if (!isLargeScreen || !isLoaded) {
+    //     return null; // Do not render on small screens or while loading
+    // }
 
     const chunkArray = (arr, size) => {
         const result = [];
@@ -55,7 +55,10 @@ const ImageCarousel = () => {
         return result;
     };
 
-    const groupedImages = chunkArray(images, 3);
+    // const groupedImages = chunkArray(images, 3);
+    // Before fully loaded, always use chunk size 1
+    const chunkSize = isLoaded ? (isLargeScreen ? 3 : 1) : 1;
+    const groupedImages = chunkArray(images, chunkSize);
 
     return (
         <Container className="py-4">
@@ -91,7 +94,7 @@ export default ImageCarousel;
 
 
 
-          
 
 
-          
+
+
