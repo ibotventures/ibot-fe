@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import styles from '@/app/invoice.module.css';
 import Cookies from 'js-cookie';
+import Image from "next/image";
 const InvoiceDetails = () => {
   const router = useRouter();
   const invoiceRef = useRef(null);
