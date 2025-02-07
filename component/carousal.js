@@ -112,7 +112,7 @@ function Example(args) {
                     <div style={{ width: "60vw", display: "flex", flexDirection: "column", justifyContent: "center", padding: "30px" }}>
                       <h2>{item.headline}</h2>
                       <p>{item.description}</p>
-                      <button className={classNames("btn btn-primary btn-block")} style={{ width: "fit-content", padding: "0.7vw",zIndex:'1000' }} onClick={() => window.location.href = item.weburl}>Get Started</button>
+                      <button className={classNames("btn btn-primary btn-block")} style={{ width: "fit-content", padding: "0.7vw",zIndex:'2' }} onClick={() => window.location.href = item.weburl}>Get Started</button>
                     </div>
                     <img src={`${process.env.NEXT_PUBLIC_BASE_API_URL}${item.Ad_image}`} alt='image' style={{ width: "40vw", borderRadius: "0vw 2vw 2vw 0vw", maxHeight: '500px' }} className='img-fluid'/>
                   </div>

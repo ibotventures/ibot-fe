@@ -1,15 +1,44 @@
 .container {
   position: relative;
   width: 565px;
-  height: 800px;
-  background-image: url('/certificate.png');
-  /* background-color: blue; */
+  height: auto;
+  aspect-ratio: 565 / 800;
+  background-image: url('/certify.jpeg');
   background-size: contain;
   background-repeat: no-repeat;
-  /* background-position: center; */
+  background-position: center;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: auto;
+}
+
+.wanttohide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  min-height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
+
+@media (max-width: 600px) {
+  .container {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  .full {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: left;
+    flex-direction: column;
+    width: 100%;
+  }
 }
 
 .name {
@@ -19,7 +48,6 @@
   transform: translate(-50%, -50%);
   font-family: 'Alex Brush', cursive;
   font-size: 2.5rem;
-  /* font-size: 6vw; */
   color: #068cdc;
   text-align: center;
   white-space: nowrap;
@@ -32,7 +60,6 @@
   transform: translate(-50%, -50%);
   font-family: 'Tex Gyre Termes';
   font-size: 1.2rem;
-  /* font-size: 3vw; */
   max-width: 500px; 
   min-width: 500px;
   text-align: center;
@@ -43,6 +70,7 @@
   margin: 20px auto;
   padding: 10px 20px;
   background-color: #007bff;
+  height: fit-content;
   color: #fff;
   border: none;
   border-radius: 5px;
@@ -53,3 +81,6 @@
 .downloadBtn:hover {
   background-color: #0056b3;
 }
+
+
+

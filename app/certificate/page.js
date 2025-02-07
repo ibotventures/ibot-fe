@@ -1,11 +1,11 @@
-'use client'
+'use client';
 import styles from '@/app/certificate/certifi.module.css';
 import Head from 'next/head';
-import { useRef,useState,useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
-export default function Home() {
 
+export default function Home() {
     const [name, setName] = useState('');
     const [coursename, setCourseName] = useState('');
     const invoiceRef = useRef(null);
@@ -19,7 +19,6 @@ export default function Home() {
     }, []);
 
     const downloadInvoice = () => {
-        // Temporarily hide the download button
         const downloadButton = document.querySelector(`.${styles.downloadBtn}`);
         if (downloadButton) {
             downloadButton.style.display = 'none';
@@ -30,42 +29,44 @@ export default function Home() {
             html2canvas(invoiceElement).then((canvas) => {
                 const imgData = canvas.toDataURL('image/png');
                 const pdf = new jsPDF('p', 'mm', 'a4');
-                const imgWidth = 190; // Fit width to A4
-                const pageHeight = 297; // A4 page height
+                const imgWidth = 190;
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
-                let position = 10; // Starting Y position
+                let position = 10;
 
                 pdf.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
-                pdf.save('invoice.pdf');
+                pdf.save('certificate.pdf');
 
-                // Reset the button visibility after the PDF is generated
                 if (downloadButton) {
                     downloadButton.style.display = 'block';
                 }
-                
             });
         }
     };
 
     return (
-        <>
+        <div className={styles.wanttohide}>
             <Head>
                 <link
                     href="https://fonts.googleapis.com/css2?family=Tex+Gyre+Termes&display=swap"
                     rel="stylesheet"
                 />
             </Head>
-            <div style={{ width: '100vw', display: 'flex', justifyContent: 'center' }}>
-                <div className={styles.container} ref={invoiceRef} >
-                    <div className={styles.name}>{name}</div>
-                    <div className={styles.message}>This is to certify that {name} has successfully completed the {coursename} at MiBOT Ventures</div>
-                </div>
-
+            <div className={styles.full}>
+                <h3>Download Your Certificate</h3>
+                <p>Congratulations on completing your course! You can download your certificate below.</p>
+                <p>Click the button below to download your certificate and celebrate your achievement!</p>
+                <button className={styles.downloadBtn} onClick={downloadInvoice}>
+                    Download
+                </button>
             </div>
-            <button className={styles.downloadBtn} onClick={downloadInvoice}>
-                Download
-            </button>
-
-        </>
+            <div style={{ width: '565px', height: '800px' }}>
+                <div className={styles.container} ref={invoiceRef}>
+                    <div className={styles.name}>{name}</div>
+                    <div className={styles.message}>
+                        This is to certify that {name} has successfully completed the {coursename} at MiBOT Ventures
+                    </div>
+                </div>
+            </div>
+        </div>
     );
 }

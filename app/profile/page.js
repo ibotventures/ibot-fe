@@ -46,9 +46,9 @@ const MyComponent = () => {
         };
     }, []);
 
-    const handlesmallscreen = () => {
-        toast.error("Can't download in mobile phone. To download use desktop or laptop");
-    };
+    // const handlesmallscreen = () => {
+    //     toast.error("Can't download in mobile phone. To download use desktop or laptop");
+    // };
 
     const handleResize = () => {
         if (typeof window !== 'undefined') {
@@ -182,8 +182,8 @@ const MyComponent = () => {
                                             transac.map((transaction, index) => (
                                                 <tr key={index}>
                                                     <td>{transaction.receipt}</td>
-                                                    {isLargeScreen ? (
-                                                        checkSubstring(transaction.receipt, 'subscription') ? (
+                                                    {/* {isLargeScreen ? ( */}
+                                                    {checkSubstring(transaction.receipt, 'subscription') ? (
                                                             <td>
                                                                 <Button
                                                                     onClick={() => {
@@ -224,13 +224,14 @@ const MyComponent = () => {
                                                                 </Button>
                                                             </td>
                                                         )
-                                                    ) : (
+                                                    }
+                                                    {/* ) : (
                                                         <td>
                                                             <Button onClick={handlesmallscreen}>
                                                                 Download
                                                             </Button>
                                                         </td>
-                                                    )}
+                                                    )} */}
                                                 </tr>
                                             ))
                                         ) : (
@@ -270,9 +271,6 @@ const MyComponent = () => {
                 );
             case 'certify':
                 return (
-                    // <div>
-                    //     <Certifi />
-                    // </div>
                     <div>
                         <br />
                         <h2>Download Your Certificates</h2>
@@ -293,7 +291,7 @@ const MyComponent = () => {
                                             certificate.certificates.map((certi, index) => (
                                                 <tr key={index}>
                                                     <td>{certi.course_name}</td>
-                                                    {isLargeScreen ? (
+                                                    {/* {isLargeScreen ? ( */}
                                                         <td><Button onClick={() => { handledownload(certificate.user_name, certi.course_name); setLoading(true); }} disabled={loading}>
                                                             {loading ? (
                                                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
@@ -301,11 +299,11 @@ const MyComponent = () => {
                                                                 'Download'
                                                             )}
                                                         </Button></td>
-                                                    ) : (
-                                                        <td><Button onClick={handlesmallscreen}>
-                                                            Download
+                                                     {/* ) : (
+                                                         <td><Button onClick={handlesmallscreen}>
+                                                             Download
                                                         </Button></td>
-                                                    )}
+                                                     )} */}
 
                                                 </tr>
                                             ))
