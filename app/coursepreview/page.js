@@ -125,6 +125,23 @@ const MyComponent = () => {
 
   }
 
+  const certifyquess = async () => {
+    try {
+      const courseIds = sessionStorage.getItem('course');
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/certifications/`, {
+        params: {
+          course_id: courseIds,
+        },
+      });
+      if (response.status === 200) {
+        setcertifyques(response.data.data[0].questions); // Update state with fetched questions
+      }
+    } catch (error) {
+      // console.error("Error fetching certification questions:", error);
+      toast.error("Failed to load certification questions.");
+    }
+  };
+
   useEffect(() => {
     // Set the screen size state correctly on initial render
     setIsLargeScreen(window.innerWidth >= 768);
@@ -163,6 +180,9 @@ const MyComponent = () => {
           setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}${response.data.data.content}` }]);
           setActivityDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}${response.data.data.activity}` }]);
         } else if (response.status == 201) {
+          if(response.data.data == "certifyques"){
+            certifyquess();
+          }
           setSelectedTask(response.data.data);
         }
       } catch (error) {
@@ -178,22 +198,7 @@ const MyComponent = () => {
   }, []);
 
 
-  const certifyquess = async () => {
-    try {
-      const courseIds = sessionStorage.getItem('course');
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/certifications/`, {
-        params: {
-          course_id: courseIds,
-        },
-      });
-      if (response.status === 200) {
-        setcertifyques(response.data.data[0].questions); // Update state with fetched questions
-      }
-    } catch (error) {
-      // console.error("Error fetching certification questions:", error);
-      toast.error("Failed to load certification questions.");
-    }
-  };
+
 
   // const certifyquesuser = async () => {
   //   try {
@@ -371,7 +376,7 @@ const MyComponent = () => {
       if (response.status === 200) {
         const results = response.data.data; // assuming data is an array of results
         const newResults = {};
-        results.forEach((result)=>{
+        results.forEach((result) => {
           const taskId = Object.keys(result)[0];
           const status = result[taskId];
           newResults[taskId] = status;
@@ -429,7 +434,11 @@ const MyComponent = () => {
       if (response.status === 200) {
         const results = response.data.data; // assuming data is an array of results
         const newResults = {};
-
+        results.forEach((result)=>{
+          const taskId = Object.keys(result)[0];
+          const status = result[taskId];
+          newResults[taskId] = status;
+        })
         results.forEach((result) => {
           const keys = Object.keys(result);
 
@@ -613,7 +622,7 @@ const MyComponent = () => {
                                 ? 'green'
                                 : answerResults[task.id] === 'wrong' && selectedOptions[task.id] === option
                                   ? 'red'
-                                  :'inherit',
+                                  : 'inherit',
                           }}
                         >
                           {option}
