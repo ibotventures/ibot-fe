@@ -48,6 +48,10 @@ const MyComponent = () => {
 
   const handleactivity = async (modid) => {
     try {
+      if (!activities) {
+        toast.error('Please upload your work');
+        return;
+      }
       const courseIds = sessionStorage.getItem('course');
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/activityuploading/`,
         { 'user': userCook, 'course': courseIds, 'module': modid, 'userupload': activities }, {
@@ -223,6 +227,7 @@ const MyComponent = () => {
   const handleRetest = () => {
     setSelectedOptions({}); // Reset selected options
     setIsSubmitted(false); // Enable submit button
+    setAnswerResults({});
   };
 
   const toggleAccordion = (id) => {
@@ -323,9 +328,9 @@ const MyComponent = () => {
           const { data, status } = await axios.post(`${process.env.NEXT_PUBLIC_BASE_API_URL}/app/isuploadedactivity/`, {
             userid, courseIds, moduleid: module
           });
-          if(data.data == "allow"){
+          if (data.data == "allow") {
             setSelectedTask(task);
-          }else{
+          } else {
             toast.error('Upload your activity to access the assessment');
           }
         } else {
@@ -366,7 +371,11 @@ const MyComponent = () => {
       if (response.status === 200) {
         const results = response.data.data; // assuming data is an array of results
         const newResults = {};
-
+        results.forEach((result)=>{
+          const taskId = Object.keys(result)[0];
+          const status = result[taskId];
+          newResults[taskId] = status;
+        })
         results.forEach((result) => {
           const keys = Object.keys(result);
 
@@ -550,7 +559,7 @@ const MyComponent = () => {
               />
             )}
             <br />
-            <div style={{ display: 'flex', gap: '10px' }}>
+            <div style={{ display: 'flex', gap: '10px', justifyContent: 'center' }}>
               <input
                 type="file"
                 accept="profile/*"
@@ -559,10 +568,10 @@ const MyComponent = () => {
                 id="fileUpload"
               />
 
-              <label htmlFor="fileUpload" className="btn btn-primary" style={{ cursor: "pointer" }}>
+              <label htmlFor="fileUpload" style={{ cursor: "pointer", padding: "12px 20px", borderRadius: "5px", backgroundColor: "#007bff", color: "#fff", fontSize: "16px" }}>
                 Upload your work
               </label>
-              <button className='btn btn-primary' onClick={(e) => { e.preventDefault(); handleactivity(selectedModule.id); }}><FiSend className="mr-2" /></button>
+              <button className='btn' onClick={(e) => { e.preventDefault(); handleactivity(selectedModule.id); }} style={{ padding: "12px 20px", borderRadius: "5px", backgroundColor: "#28a745", color: "#fff", fontSize: '16px' }}><FiSend className="mr-2" /> Send</button>
             </div>
           </div>
         );
@@ -604,7 +613,7 @@ const MyComponent = () => {
                                 ? 'green'
                                 : answerResults[task.id] === 'wrong' && selectedOptions[task.id] === option
                                   ? 'red'
-                                  : 'inherit',
+                                  :'inherit',
                           }}
                         >
                           {option}
@@ -793,18 +802,18 @@ const MyComponent = () => {
             <p>No modules found.</p>
           )}
           {/* {Cookies.get('userid') === userallow ? ( */}
-            <Accordion open={openAccordion} toggle={toggleAccordion}>
-              <AccordionItem>
-                <AccordionHeader targetId="certify">
-                  Certification Test
-                </AccordionHeader>
-                <AccordionBody accordionId="certify">
-                  <div className={styles.taskbox} onClick={() => handlecertify("certifyques")}>
-                    Certificate Assessment
-                  </div>
-                </AccordionBody>
-              </AccordionItem>
-            </Accordion>
+          <Accordion open={openAccordion} toggle={toggleAccordion}>
+            <AccordionItem>
+              <AccordionHeader targetId="certify">
+                Certification Test
+              </AccordionHeader>
+              <AccordionBody accordionId="certify">
+                <div className={styles.taskbox} onClick={() => handlecertify("certifyques")}>
+                  Certificate Assessment
+                </div>
+              </AccordionBody>
+            </AccordionItem>
+          </Accordion>
           {/* ) : null} */}
           <br />
         </Offcanvas>
