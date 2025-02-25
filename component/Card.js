@@ -45,7 +45,7 @@ const Cards = ({ product }) => {
 
                 </div>
                 <Button>
-                    {product.price}rs
+                    Rs. {parseFloat(product.price).toFixed(0)}
                 </Button>
             </CardBody>
         </Card>

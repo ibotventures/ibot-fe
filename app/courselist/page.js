@@ -91,7 +91,6 @@ export default function CourseList() {
             setAccess('yes');
           }
         }
-        console.log(courses.data.data);
         setCourseData(courses.data.data);
 
       } catch (error) {

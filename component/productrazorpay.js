@@ -39,7 +39,7 @@ const RazorpayComponent = ({ email, username, contact, total }) => {
                     setbuyercount(response.data.data);
                 }
             } catch (error) {
-                console.error('Error fetching buyer count:', error);
+                // console.error('Error fetching buyer count:', error);
             }
         };
 
@@ -61,7 +61,7 @@ const RazorpayComponent = ({ email, username, contact, total }) => {
                 transact: transacid
             });
         } catch (error) {
-            console.error('Error updating cart:', error);
+            // console.error('Error updating cart:', error);
         }
     };
 

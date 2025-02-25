@@ -96,6 +96,11 @@ export default function Product() {
 
     }
 
+    const handleeditreview = async (ids,ratings,comments) => {
+        const type = 'product';
+        router.push(`/editreview/${id}/${ids}?type=${type}&ratings=${ratings}&comments=${comments}`);
+    }
+
     useEffect(() => {
         const handleproduct = async () => {
             try {
@@ -105,7 +110,6 @@ export default function Product() {
 
                 if (response.status === 200) {
                     setProduct(response.data.data);
-                    console.log("Product Image URL:", `${process.env.NEXT_PUBLIC_BASE_API_URL}${response.data.data.product_image}`);
                 }
             } catch (error) {
                 // console.error("Error fetching product data:", error);
@@ -141,7 +145,7 @@ export default function Product() {
                             onClick={handlebuy}
                             disabled={products?.product_name ? products.stocks <= 0 : true}
                         >
-                            Buy Now {products?.product_name ? products.price : 'fetching...'}rs
+                            Buy Now Rs. {products?.product_name ? parseFloat(products.price).toFixed(0) : 'fetching...'}
                         </button>
                     </div>
                     <div style={{ display: 'flex', fontSize: '30px' }}>
@@ -158,7 +162,7 @@ export default function Product() {
                         <p><span style={{ fontWeight: 'bold' }}>Age category:</span> {products?.product_name ? products.category['start_age'] : 'fetching...'}-{products?.product_name ? products.category['end_age'] : 'fetching...'}</p>
                         <p><span style={{ fontWeight: 'bold' }}>Level:</span> {products?.product_name ? products.category['level'] : 'fetching...'}</p>
                         <p><span style={{ fontWeight: 'bold' }}>Made in:</span> {products?.product_name ? products.make : 'fetching...'}</p>
-                        <p><span style={{ fontWeight: 'bold' }}>Price:</span> {products?.product_name ? products.price : 'fetching...'}rs Only</p>
+                        <p><span style={{ fontWeight: 'bold' }}>Price:</span> Rs.{products?.product_name ? parseFloat(products.price).toFixed(0) : 'fetching...'} Only</p>
                         <p><span style={{ fontWeight: 'bold' }}>Stock Available:</span> {products?.product_name ? products.stocks : 'fetching...'}</p>
                     </div>
                     <div>
@@ -277,8 +281,11 @@ export default function Product() {
                                                         createdAt: {new Date(review.createdAt).toUTCString()}
                                                     </small>
                                                 </CardText>
-                                                <Button color="danger" outline size="sm" onClick={() => { handledeletereview(review.id) }}>
+                                                {/* <Button color="danger" outline size="sm" onClick={() => { handledeletereview(review.id) }}>
                                                     🗑️ Delete
+                                                </Button> */}
+                                                <Button color="danger" outline size="sm" onClick={() => { handleeditreview(review.id,review.rating,review.review) }}>
+                                                    edit
                                                 </Button>
                                             </CardBody>
                                         </Card>

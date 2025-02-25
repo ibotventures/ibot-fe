@@ -39,7 +39,7 @@ const CartPage = () => {
                     setreload(false);
                 }
             } catch (error) {
-                console.error("Error fetching cart data:", error);
+                // console.error("Error fetching cart data:", error);
             }
         };
         cartget();
@@ -73,7 +73,7 @@ const CartPage = () => {
                 setreload(true);
             }
         } catch (error) {
-            console.error("Error fetching cart data:", error);
+            // console.error("Error fetching cart data:", error);
         }
     };
 
@@ -95,7 +95,7 @@ const CartPage = () => {
                 setreload(true);
             }
         } catch (error) {
-            console.error("Error fetching cart data:", error);
+            // console.error("Error fetching cart data:", error);
         }
     };
 

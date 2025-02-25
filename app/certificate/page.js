@@ -54,7 +54,7 @@ export default function Home() {
             <div className={styles.full}>
                 <h3>Download Your Certificate</h3>
                 <p>Congratulations on completing your course! You can download your certificate below.</p>
-                <p>Click the button below to download your certificate and celebrate your achievement!</p>
+                {/* <p>Click the button below to download your certificate and celebrate your achievement!</p> */}
                 <button className={styles.downloadBtn} onClick={downloadInvoice}>
                     Download
                 </button>

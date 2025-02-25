@@ -34,7 +34,7 @@ const MyComponent = () => {
         <div style={{ padding: '20px' }}>
             <div style={{ display: "flex", gap: '10px' }}>
                 <div>
-                    {!data.profiles ? (<Image
+                    {!data.profile ? (<Image
                         src='/profile.png'
                         className="img-fluid"
                         alt="Profiles Image"
@@ -47,7 +47,7 @@ const MyComponent = () => {
                             height: "90px",
                         }}
                     />) : (<Image
-                        src={`${process.env.NEXT_PUBLIC_BASE_API_URL}/${data.profiles}`}
+                        src={`${process.env.NEXT_PUBLIC_BASE_API_URL}/${data.profile}`}
                         className="img-fluid"
                         alt="Profile Image"
                         width={90}

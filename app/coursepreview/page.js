@@ -66,8 +66,14 @@ const MyComponent = () => {
       }
 
     } catch (error) {
-      console.error("Error uploading:", error);
+      // console.error("Error uploading:", error);
     }
+  }
+
+  const handleeditreview = async (ids, ratings, comments) => {
+    const id = sessionStorage.getItem('course');
+    const type = 'course';
+    router.push(`/editreview/${id}/${ids}?type=${type}&ratings=${ratings}&comments=${comments}`);
   }
 
   const handledeletereview = async (id) => {
@@ -180,7 +186,7 @@ const MyComponent = () => {
           setContentDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}${response.data.data.content}` }]);
           setActivityDocs([{ uri: `${process.env.NEXT_PUBLIC_BASE_API_URL}${response.data.data.activity}` }]);
         } else if (response.status == 201) {
-          if(response.data.data == "certifyques"){
+          if (response.data.data == "certifyques") {
             certifyquess();
           }
           setSelectedTask(response.data.data);
@@ -434,7 +440,7 @@ const MyComponent = () => {
       if (response.status === 200) {
         const results = response.data.data; // assuming data is an array of results
         const newResults = {};
-        results.forEach((result)=>{
+        results.forEach((result) => {
           const taskId = Object.keys(result)[0];
           const status = result[taskId];
           newResults[taskId] = status;
@@ -644,7 +650,7 @@ const MyComponent = () => {
                   type="button"
                   onClick={handleRetest}
                 >
-                  Take Retest
+                  Take Re-test
                 </button>
               )}
             </form>
@@ -713,7 +719,7 @@ const MyComponent = () => {
                     type="button"
                     onClick={handleRetest}
                   >
-                    Take Retest
+                    Take Re-test
                   </button>
                 )}
               </form>
@@ -1046,8 +1052,11 @@ const MyComponent = () => {
                                   createdAt: {new Date(review.createdAt).toUTCString()}
                                 </small>
                               </CardText>
-                              <Button color="danger" outline size="sm" onClick={() => { handledeletereview(review.id) }}>
+                              {/* <Button color="danger" outline size="sm" onClick={() => { handledeletereview(review.id) }}>
                                 🗑️ Delete
+                              </Button> */}
+                              <Button color="danger" outline size="sm" onClick={() => { handleeditreview(review.id, review.rating, review.review) }}>
+                                edit
                               </Button>
                             </CardBody>
                           </Card>

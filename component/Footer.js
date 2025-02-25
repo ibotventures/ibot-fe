@@ -25,29 +25,30 @@ const Footer = () => {
                             203/A, Hebbal Industrial Area,<br />
                             Belavadi Post, Mysore, KA 570018
                         </p>
+                        <p style={{ fontSize: '12px', lineHeight: '1.5' }}>Enquiry Mail: <a href="mailto:info@mi-bot.com" target="_blank" rel="noopener noreferrer">info@mi-bot.com</a></p>
                     </div>
 
                     {/* Social Media Section */}
                     <div style={{ flex: "1 1 300px", padding: "10px", textAlign: 'left' }}>
                         <h6>CONNECT WITH US</h6>
                         <div style={{ display: 'flex', gap: '15px', marginTop: '10px' }}>
-                            <a href="https://www.facebook.com/MiBOTVentures/" target="_blank" rel="noopener noreferrer">
-                                <FaFacebookF color='white' size={20} />
-                            </a>
-                            <a href="mailto:info@mi-bot.com" target="_blank" rel="noopener noreferrer">
+                            {/* <a href="mailto:info@mi-bot.com" target="_blank" rel="noopener noreferrer">
                                 <FaMailBulk color='white' size={20} />
-                            </a>
-                            <a href="https://www.threads.net/@mibotventures" target="_blank" rel="noopener noreferrer">
-                                <TbBrandThreads color='white' size={20} />
-                            </a>
-                            <a href="https://www.linkedin.com/company/mibotventures" target="_blank" rel="noopener noreferrer">
-                                <FaLinkedinIn color="white" size={20} />
+                            </a> */}
+                            <a href="https://www.instagram.com/mibotventures" target="_blank" rel="noopener noreferrer">
+                                <FaInstagram color='white' size={20} />
                             </a>
                             <a href="https://www.youtube.com/@MiBOTVentures" target="_blank" rel="noopener noreferrer">
                                 <FaYoutube color='white' size={20} />
                             </a>
-                            <a href="https://www.instagram.com/mibotventures" target="_blank" rel="noopener noreferrer">
-                                <FaInstagram color='white' size={20} />
+                            <a href="https://www.facebook.com/share/18tahxGVgf/" target="_blank" rel="noopener noreferrer">
+                                <FaFacebookF color='white' size={20} />
+                            </a>
+                            <a href="https://www.linkedin.com/company/mibotventures" target="_blank" rel="noopener noreferrer">
+                                <FaLinkedinIn color="white" size={20} />
+                            </a>
+                            <a href="https://www.threads.net/@mibotventures" target="_blank" rel="noopener noreferrer">
+                                <TbBrandThreads color='white' size={20} />
                             </a>
                         </div>
                     </div>

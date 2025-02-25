@@ -91,7 +91,6 @@ const MyComponent = () => {
             })
             if (response.status == 200) {
                 setcertificate(response.data.data);
-                console.log(response.data.data);
             }
         };
         certifylist();
@@ -292,8 +291,8 @@ const MyComponent = () => {
                                                 <tr key={index}>
                                                     <td>{certi.course_name}</td>
                                                     {/* {isLargeScreen ? ( */}
-                                                        <td><Button onClick={() => { handledownload(certificate.user_name, certi.course_name); setLoading(true); }} disabled={loading}>
-                                                            {loading ? (
+                                                        <td><Button onClick={() => { handledownload(certificate.user_name, certi.course_name); setLoading(index); }} disabled={loading === index} >
+                                                            {loading === index ? (
                                                                 <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                                             ) : (
                                                                 'Download'
@@ -393,7 +392,7 @@ const MyComponent = () => {
                     </div>
                     <div style={{ display: 'flex', gap: '10px' }}>
                         <MdDeleteForever size={20} color="grey" title="Delete Account" />
-                        <p onClick={() => { handleTaskClick('delete'); setSidebarOpen(!sidebarOpen) }} style={{ fontSize: '18px', cursor: 'pointer' }}>Delete Account</p>
+                        <p onClick={() => { handleTaskClick('delete'); setSidebarOpen(!sidebarOpen) }} style={{ fontSize: '18px', cursor: 'pointer' }}>Remove Account</p>
                     </div>
                     <div style={{ display: 'flex', gap: '10px' }}>
                         <BsFillAwardFill size={20} color="grey" title="Certificate" />
@@ -435,7 +434,7 @@ const MyComponent = () => {
                             </div>
                             <div style={{ display: 'flex', gap: '10px' }}>
                                 <MdDeleteForever size={20} color="grey" title="Delete Account" />
-                                <p onClick={() => handleTaskClick('delete')} style={{ fontSize: '18px', cursor: 'pointer' }}>Delete Account</p>
+                                <p onClick={() => handleTaskClick('delete')} style={{ fontSize: '18px', cursor: 'pointer' }}>Remove Account</p>
                             </div>
                             <div style={{ display: 'flex', gap: '10px' }}>
                                 <BsFillAwardFill size={20} color="grey" title="Certificate" />

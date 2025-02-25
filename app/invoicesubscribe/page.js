@@ -177,7 +177,7 @@ const InvoiceDetails = () => {
       </div>
 
       <footer className={styles.invoiceFooter}>
-        <p>Invoice was created on a computer and is valid without the signature and seals.</p>
+        <p>Invoice was created on a computer and is valid without the signature and seal.</p>
       </footer>
 
       <button className={styles.downloadBtn} onClick={downloadInvoice}>

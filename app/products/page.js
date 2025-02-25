@@ -48,7 +48,7 @@ export default function Products() {
         setproductData(res.data.data);
       }
     } catch (error) {
-      console.error("Error fetching filtered data:", error);
+      // console.error("Error fetching filtered data:", error);
     }
   }, 200);
 

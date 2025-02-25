@@ -38,7 +38,7 @@ export default function Home() {
     return (
         <>
             <br />
-            <h2>Want to delete account?</h2>
+            <h2>Do you want to Remove your account?</h2>
             <br />
             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: 'white', width: '100%', padding: '20px' }}>
                 <Image
@@ -55,7 +55,7 @@ export default function Home() {
                     }}
                 />
                 <p>We value and care about your presence with us, so instead of permanent deletion, your account will be temporarily deactivated—ensuring that all your data will be safely restored if you decide to return.</p>
-                <h5>Give reason why you want to delete your account</h5>
+                <h5>Give reason why you want to remove your account</h5>
                 <textarea className={styles.delarea} onChange={e => setreason(e.target.value)}
                     value={reason} ></textarea><br />
                 <Button type="submit" className={classNames("btn btn-danger btn-block")} style={{ borderRadius: "0.5vw" }} onClick={(e) => {
